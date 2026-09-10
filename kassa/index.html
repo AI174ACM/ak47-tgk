@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Касса</title>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#1C5CAB">
+<meta name="apple-mobile-web-app-title" content="Касса">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%231C5CAB%27/%3E%3Ctext x=%2732%27 y=%2741%27 font-family=%27Arial,Helvetica,sans-serif%27 font-weight=%27700%27 font-size=%2724%27 text-anchor=%27middle%27 fill=%27%23fff%27%3E%D0%92%D0%93%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 fill=%27%231C5CAB%27/%3E%3Ctext x=%2732%27 y=%2741%27 font-family=%27Arial,Helvetica,sans-serif%27 font-weight=%27700%27 font-size=%2724%27 text-anchor=%27middle%27 fill=%27%23fff%27%3E%D0%92%D0%93%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#F2F4F3;--surface:#FFFFFF;--ink:#131A1E;--ink-2:#4E5A60;--ink-3:#7F8B91;--line:#DDE2E1;--accent:#1C5CAB;--accent-soft:#E3ECF8;--crit:#d03b3b;
+  --shadow:0 1px 2px rgba(19,26,30,.05),0 8px 24px -12px rgba(19,26,30,.12)}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0F1214;--surface:#181C1F;--ink:#F2F4F3;--ink-2:#B9C2C7;--ink-3:#7F8B91;--line:#2A3135;--accent:#5598e7;--accent-soft:#1B2A3E;--crit:#e05a5a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6)}}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Golos Text",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.45;
+  display:flex;align-items:center;justify-content:center;padding:24px 16px;min-height:100vh}
+.card{width:100%;max-width:440px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:28px 24px}
+.brand{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.logo{width:48px;height:48px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:Geologica,system-ui,sans-serif;font-weight:700;font-size:18px;letter-spacing:.02em;flex:none}
+h1{font-family:Geologica,system-ui,sans-serif;font-weight:600;font-size:20px;margin:0;line-height:1.2}
+.sub{color:var(--ink-3);font-size:13px;margin-top:3px}
+p{margin:0 0 14px;color:var(--ink-2)}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;padding:15px 18px;border-radius:12px;border:0;background:var(--accent);color:#fff;
+  font:inherit;font-weight:600;font-size:16px;text-decoration:none;cursor:pointer}
+.btn:active{opacity:.85}
+.field{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;font-size:15px;margin-bottom:12px}
+.field:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.err{color:var(--crit);font-size:14px;margin:-4px 0 12px}
+.hint{color:var(--ink-3);font-size:13px;margin-top:16px}
+.spin{width:22px;height:22px;border:3px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:r .8s linear infinite;flex:none}
+@keyframes r{to{transform:rotate(360deg)}}
+.row{display:flex;align-items:center;gap:12px;color:var(--ink-2)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">
+    <div class="logo">ВГ</div>
+    <div><h1>Касса ИП Гостюхин</h1><div class="sub">живые цифры из таблицы</div></div>
+  </div>
+
+  <div id="go" hidden>
+    <div class="row" style="margin-bottom:18px"><div class="spin"></div><div>Открываю кассу… первое открытие занимает до 15 секунд.</div></div>
+    <a id="golink" class="btn" href="#">Открыть кассу</a>
+    <div class="hint">Если страница не открылась сама, нажмите кнопку. Ключ запомнен в этом браузере: в следующий раз хватит адреса <b>ak47-tgk.ru/kassa</b>.</div>
+  </div>
+
+  <div id="gate" hidden>
+    <p>Вставьте сюда свою ссылку на кассу целиком. Ключ из неё запомнится, дальше открывать можно по адресу <b>ak47-tgk.ru/kassa</b>.</p>
+    <input id="key" class="field" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Ссылка или ключ">
+    <div id="err" class="err" hidden>В ссылке нет ключа. Скопируйте её целиком, как получили.</div>
+    <button id="ok" class="btn" type="button">Открыть кассу</button>
+    <div class="hint">Ссылку выдаёт Антон Мельников лично. Без неё касса не откроется.</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var FRONT = 'https://script.google.com/macros/s/AKfycbzN87QK-Btz0zSxfuqgOrpEIOBwNz-bbxROQv1HSzNf1JCAhCNQ6Qu3EEVVmlRqIb5F/exec';
+  var LS = 'kassa_key';
+  function $(id) { return document.getElementById(id); }
+  function pick(s) { s = (s || '').trim(); var m = /[?&#]k=([^&#\s]+)/.exec(s); if (m) return m[1]; if (/^[A-Za-z0-9_\-]{8,}$/.test(s)) return s; return ''; }
+  function remember(k) { try { localStorage.setItem(LS, k); } catch (e) {} }
+  function stored() { try { return localStorage.getItem(LS) || ''; } catch (e) { return ''; } }
+  function target(k) { var u = FRONT + '?k=' + encodeURIComponent(k); if (/[?&]view=gost/.test(location.search)) u += '&view=gost'; return u; }
+  function open(k) {
+    remember(k);
+    var u = target(k);
+    $('golink').href = u;
+    $('gate').hidden = true; $('go').hidden = false;
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    setTimeout(function () { location.replace(u); }, 150);
+  }
+  var k = pick(location.search) || pick(location.hash) || stored();
+  if (k) { open(k); return; }
+  $('gate').hidden = false;
+  $('ok').onclick = function () {
+    var v = pick($('key').value);
+    if (!v) { $('err').hidden = false; $('key').focus(); return; }
+    $('err').hidden = true; open(v);
+  };
+  $('key').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('ok').click(); });
+})();
+</script>
+</body>
+</html>
