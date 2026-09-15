@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Касса</title>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#07090F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Касса">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAKMklEQVR4nO3deVCU9x3H8d+zu9yysuFalw2XHAUBDwRHlNN4mw4eCIIdZ2qmY3pMapqmTduYSXqkHSfTpjkm/+TopE3qERgt2mo1oxKVYqiKFxrigQgo1A0KgsCyHYeZjBP9Pr+H3X32+T34ef0pD6zGt8/ze37P7/lFsq/dxgAexvDQXwVAHCAHZw4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gIQ4gmZgOlUy1/uW5ufLHvL+3ZdOHJ7z4oSvmxL6+IVfmgM3bz/x5x7mx/liDJGXEh2Unh6fazbGRIdGWIHOwX0iAyWQymAzSB/u+fOVvJ5lGdBlHRVEC95iVc+N+t+XUwKCTicpqCfre4uTlc+IizAHUMQaJaUh/cYSHBsyfPol7mDnYb1mufftnV5iQKosTXl47LdDfyASmvzHHyvw4k1HRb7uyOJEJ6emlqX/4brbgZegyjoqCeIVH5qSEJ8eYmWAWZtteKM9keqCzOLKTxvb3XVXMH534UuTEwM1PzZQ0HUmM2zgqipSeNkatnBMX4CfQ2XtTZZZlgj/TCT3FERJoenLW42P6lrAJ/ktzY5gYpk9+rDQvVuHBzhHXsHPE5WIa0tPdypOzHg8JHPNvuKo4sfpwKxPAT1dNkfmqy8VqG9p2NbSduuy47hi4O6T9TbhpHF9TRuWmRiTZQlvabzNNTU205GdEU1/t6Rt85p1j+090MJHo5rKSZDNnJ4W7970i3NNuWJpKfcnlYj98u0G0MvQUx5pCd04bo1bNjfM3afkntVqCFmWTQ5+/fvrlgaZOJh59xGEyGlbMjXP72y0T/Jfk2pl2KosTTMaH378OO11v7GxmQtJHHPOnT5J5AMEY++QwZ5q8UsHjGJUYDdIa+tP/eayt42Y/E5JhHDxpu31n6JcfHO++dVfmmNlpkYnWUKaFedMmWS1B1Fc//PQiE5UO4rBaggozyXE+Y/fuAPsGhncc5dyvVmo0W7ruicnUly5f761v7mKi0kEcZQXxRtlH16PXlO11nCvLqvw4P58PS5NsoTJ3sNvqrmg7zaXvOCSJ86StrftOw/luxtjpK181X+2ROTI8NGDRTF/Plq5fmEw9SXG5mCCzc3qNIy8tKjYqROaAmiOtX//j467e8PFzuMiJgWX55E1WfXNXW3cfE5jocVTwpjeq77tPqTnS6hyRO03npUXFR09gvvKjb39L5rHfRwcuMbEJHYc52G9xjtyFoOmS4/558RtfDdSdvi5zvCT5bliaajd/Zx45M+voHdzd0MbEJnQcy/Ni5R+4f/LAdWQbb1halh+vcCGZJ5JjzO9tnCPzQe/sOj84PMLEZtLv9Maw07Wz/uo3fnFPY/vtO0OhwX7Ud0WYAxZl22pV+FdrMkqJ1tDMhLCFM2xLcu0yd1hdPQPv721hwhM3joy4sIy4MJkDDp2+/uDE190hZ21Dm8yM5L0Jj5JENeLYuDx94/J07mEuF3v+3cZ+gZfF6+Cywn3/4MFrisIry9x0zh2Qepwjruffbdx3XLgHsHqKI8DPWDpbbtFX78Dw3v+2P/RLxy50t97o4wxLtXjU0nGzf83vD/39oOg3KaLHsSQnZmKI3FrL3Q1tMi8scSc8VhfEU49JVdLTN/iDt+qPnhN3slw3cVQU8q4pso9ht3/GmZaOnBg4f7qN+dDEEP/qF4urXyzKTLAwnRAxjtiokNlpkTIHdNzsrz93b8qccrWr79iFbs5saYkGy8NyUiJqXy75/jJyVZhQRIyjoiBe/s2OmiOt3HXZ3GFpfkaUPUKDYalBkl4oz3ypaioTnnBxGA1SGe+dNuo+5X61soOS0b+kSrdWLHvFU4uS1y9MZmITLo7CzGiZpTGjT18vXLvF/Tm9/UN7Gh9+O/O18kJy9Z4bXqs+m7Fh57KX9r9WfdbRO8g9/ldrMuUncjRn0N30hvLH3NvqLssfEBUWOG8a/4V9hUZGXD19gycvOv5Uc3bBL/59sZPzMoTJaHj96VwfzOWPkxlSJdsrbKrM2lSZ5a1PrCpO5J5g3NDp6F//x6O7XikJDpD7L5wSY96wJOXNf2CBsVe3V/CWwqzomPBgNX5yS/utzdvPcA97pjRNpd+A5wzj5uUU9xgkuaXhHnpvT8s52cVpjLFAf+PPVmcwIQkUx8zk8CSbBttplBdy1qi6bcTl+vVHTdzDSmfHijkzZtDRrKhKrJagEu8NS7+h7vR1+fVHo896fl4m4slDlDhCAk3LZmn2Upqqa0tf3Xqau8S8IDM6JyWCCcag6+0VvKUoy2pTbVR46pKj5kirhxs0PNJxuLe9grcYDVK54q3G3PDqllPc/TZmp0Xmpcs9UXpE4/BkewVvqSiMN6i2V1eno3/rIc6MHGPsuZVinTxMuriDrW/uKvvtQU8+Yt0Tk3+zbrrMAbbw4OKpVvU2yXi79sKaokT52fqclIiCzOhDpzgD2EfozKFkewXuI1aumiOt3N2MVR2WtnX37ajnjzx+skKgk4f2cSyYwdleoX/Q6fkrHrfuDO0+dk3+mBLZ1+E99+bO89zblhlJj5VMtTIxGMSf3vjX59d6B4Y9/6CPeW+Y3RuWqjlF29J+a0/jNR2NPDSOw2oJKpDdXsEr15RR9c1d3CelFYUJ6g1LGWNKNvHJTLAsmOHTJYyCxrGat71Cp6P/8Jkb3vq4LQc5twz2iODCLE6snmi65OBOmDLGnl2RLsIux1rGIUmMO7tQfZi/IlC5rXVXhp2cn1al8taDbyg4eUyJC1vs890ixIqDu72CkpcMxqS7Z4B7szpv2qSosECmmqPnuj7/4n/cw55dMUXVC5zocXC3Vzh50fGFghWB3h2WmoxSucqPAN9SsLon1W7W8GGTxnFwt1fw+mlj1IGmTu7ufZVFnOXvHtp3vONsa4+Sl2+1PXkYhN1eYdg5wt0Dzg3OERd3bak9IqSA3sjLZyePJFtoad7Y/kcA4yQO7kLi/Sc6lazhdsPHBy5zx7hVKr/yVPuftkudvdzDflyartJCJCUk+9ptWn02CE77GVIQFuIAEuIAxAFjhzMHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHkBAHMMr/AQ+ipWnj3aIiAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
+<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260915-2225). -->
+<style>
+:root{
+  color-scheme:dark;
+  --ground:#07090F;--ink:#F3F6F9;--muted:rgba(243,246,249,.64);--faint:rgba(243,246,249,.42);
+  --card:rgba(255,255,255,.07);--card-solid:rgba(255,255,255,.17);--line:rgba(255,255,255,.13);--sep:rgba(255,255,255,.08);
+  --accent:#8AB8F5;--in:#3F86DD;--out:rgba(243,246,249,.36);--grid:rgba(255,255,255,.08);
+  --tab:rgba(24,28,38,.58);--tab-on:rgba(255,255,255,.14);--seg:rgba(255,255,255,.08);
+  --good-bg:rgba(76,213,143,.15);--good:#86E3B2;--warn-bg:rgba(255,190,70,.15);--warn:#FFD084;--bad-bg:rgba(255,110,100,.16);--bad:#FFA39B;
+  --c-gost:#3F86DD;--c-bryl:#D95A28;--c-petr:#17A673;--c-adm:#BD8400;--c-tax:#7C8893;--c-oth:#56616B;
+  --num:Unbounded,Geologica,system-ui,sans-serif;--head:Geologica,system-ui,sans-serif;
+  --r:22px;--blur:24px;
+  --top:env(safe-area-inset-top,0px);--bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--ground);color:var(--ink);overflow:hidden;overscroll-behavior:none}
+body{font:15px/1.35 'Golos Text',-apple-system,system-ui,sans-serif;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit}
+[hidden]{display:none!important}
+
+.bg{position:fixed;inset:-12%;z-index:0;pointer-events:none;background:
+  radial-gradient(55% 32% at 8% 2%,rgba(42,120,214,.55),transparent),
+  radial-gradient(45% 30% at 100% 38%,rgba(235,104,52,.30),transparent),
+  radial-gradient(52% 32% at 0% 88%,rgba(27,175,122,.24),transparent),var(--ground);
+  animation:drift 30s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(-5%,4%)}}
+
+#app{position:fixed;top:0;bottom:0;left:0;right:0;margin:0 auto;max-width:520px;z-index:1}
+.views{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(var(--top) + 14px) 16px calc(var(--bottom) + 112px)}
+.views::-webkit-scrollbar{display:none}
+.views.in{animation:fadein .22s ease-out}
+@keyframes fadein{from{opacity:.25;transform:translateY(6px)}to{opacity:1;transform:none}}
+.topfade{position:absolute;top:0;left:0;right:0;height:calc(var(--top) + 10px);z-index:5;background:rgba(7,9,15,.4);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent);pointer-events:none}
+
+.tabbar{position:absolute;left:12px;right:12px;bottom:max(10px,calc(var(--bottom) - 6px));z-index:6;display:flex;gap:2px;padding:5px;border-radius:32px;
+  background:var(--tab);border:1px solid var(--line);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);
+  box-shadow:0 14px 34px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08)}
+.tab{flex:1;appearance:none;border:0;background:transparent;color:var(--muted);font:500 10.5px/1.1 'Golos Text',sans-serif;display:flex;flex-direction:column;
+  align-items:center;gap:3px;padding:7px 2px 6px;border-radius:26px;cursor:pointer;transition:background .2s,color .2s;-webkit-user-select:none;user-select:none}
+.tab svg{width:23px;height:23px}
+.tab[aria-selected="true"]{color:var(--accent);background:var(--tab-on)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.sheet{position:absolute;inset:0;z-index:8;overflow:hidden;background:var(--ground);transform:translateX(100%);visibility:hidden;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),visibility 0s linear .34s;box-shadow:-12px 0 30px rgba(0,0,0,.4)}
+.sheet.open{transform:none;visibility:visible;transition:transform .34s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.sheet .bg{position:absolute}
+.sheet .views{padding-bottom:calc(var(--bottom) + 40px)}
+.back{appearance:none;background:var(--tab);border:1px solid var(--line);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);color:var(--accent);
+  font:500 15px 'Golos Text',sans-serif;padding:6px 14px 6px 9px;border-radius:999px;cursor:pointer;display:inline-flex;gap:4px;align-items:center;margin:0 0 8px}
+.back svg{width:9px;height:15px}
+
+.lt{margin:4px 4px 14px}
+.lt h1{font-family:var(--head);font-weight:700;font-size:31px;letter-spacing:-.025em;margin:0;line-height:1.1;display:flex;align-items:center;gap:10px;text-wrap:balance}
+.lt h1.long{font-size:24px}
+.lt p{margin:4px 0 0;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.stack{display:flex;flex-direction:column;gap:10px}
+.g{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.09);
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(170%);backdrop-filter:blur(var(--blur)) saturate(170%)}
+.pad{padding:15px 16px}
+.tile{appearance:none;display:block;width:100%;text-align:left;cursor:pointer;transition:transform .15s}
+.tile:active,button.row:active{transform:scale(.985)}
+.tile-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sec{margin:16px 6px 0;font-size:13px;font-weight:600;color:var(--muted);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sec button{appearance:none;border:0;background:none;color:var(--accent);font:500 13px 'Golos Text',sans-serif;cursor:pointer;padding:0}
+.lbl{font-size:13px;color:var(--muted)}
+.mt4{margin-top:4px}.mt8{margin-top:8px}.mt12{margin-top:12px}
+.num{font-family:var(--num);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.035em;white-space:nowrap}
+.big{font-size:27px;line-height:1.15;margin-top:3px}
+.big.s{font-size:22px}
+.mid{font-size:14.5px;line-height:1.2;margin-top:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row{display:flex;align-items:center;gap:12px;padding:11px 14px;width:100%;appearance:none;border:0;background:transparent;text-align:left;min-height:52px}
+button.row{cursor:pointer;transition:transform .15s}
+button.g.row{border:1px solid var(--line)}
+.list .row+.row{border-top:1px solid var(--sep)}
+.list.inset{margin:8px -16px -15px}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-weight:500;font-size:15px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t span{display:block;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.row.wrap .t b,.row.wrap .t span{white-space:normal;overflow:visible}
+.row .v{font-variant-numeric:tabular-nums;font-weight:500;font-size:15px;white-space:nowrap;text-align:right}
+.row .v small{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:1px}
+.plus{color:var(--good)}
+.chev{color:var(--muted);opacity:.55;width:7px;height:12px;flex:none}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.chip.good{background:var(--good-bg);color:var(--good)}.chip.warn{background:var(--warn-bg);color:var(--warn)}.chip.bad{background:var(--bad-bg);color:var(--bad)}
+.chip.info{background:var(--seg);color:var(--muted)}
+.ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.ic.good{background:var(--good-bg);color:var(--good)}.ic.warn{background:var(--warn-bg);color:var(--warn)}.ic.bad{background:var(--bad-bg);color:var(--bad)}
+.dateb{width:44px;height:46px;border-radius:12px;background:var(--seg);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
+.dateb b{font-family:var(--num);font-size:15px;line-height:1;font-weight:600}
+.dateb span{font-size:10.5px;color:var(--muted);margin-top:4px}
+.seg{display:flex;padding:3px;border-radius:12px;background:var(--seg)}
+.seg button{flex:1;appearance:none;border:0;background:transparent;color:var(--muted);font:500 13.5px 'Golos Text',sans-serif;padding:7px 6px;border-radius:9px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--card-solid);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:1px}
+.chips::-webkit-scrollbar{display:none}
+.chips button{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 13.5px 'Golos Text',sans-serif;padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:transparent}
+.bar{height:8px;border-radius:4px;background:var(--seg);overflow:hidden;margin-top:7px}
+.bar i{display:block;height:100%;border-radius:4px;background:var(--in)}
+.split{display:flex;gap:2px;height:14px;margin:2px 0 4px}
+.split i{display:block;height:100%;min-width:3px}
+.split i:first-child{border-radius:4px 0 0 4px}.split i:last-child{border-radius:0 4px 4px 0}.split i:only-child{border-radius:4px}
+.mswitch{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.mswitch b{font-family:var(--head);font-weight:600;font-size:17px}
+.mswitch button{appearance:none;border:0;width:34px;height:34px;border-radius:50%;background:var(--seg);color:var(--ink);cursor:pointer;display:grid;place-items:center;flex:none}
+.mswitch button:disabled{opacity:.3;cursor:default}
+.mswitch svg{width:8px;height:14px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.readout{font-size:13px;margin:8px 0 2px;min-height:18px}
+.chart svg{width:100%;height:auto;display:block;overflow:visible;margin-top:6px}
+.gl{stroke:var(--grid);stroke-width:1}
+.ax{fill:var(--muted);font-size:10px;font-family:'Golos Text',sans-serif}
+.ax.on{fill:var(--ink);font-weight:600}
+.bin{fill:var(--in)}.bout{fill:var(--out)}
+.hit{fill:transparent;cursor:pointer}
+.dim{opacity:.3}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;font-size:13.5px;margin-top:10px}
+.cal .h{color:var(--muted);font-size:11px;padding-bottom:4px}
+.cal .d{padding:7px 0;border-radius:10px;font-variant-numeric:tabular-nums;appearance:none;border:0;background:transparent;font:inherit;color:inherit}
+.cal .past{color:var(--faint)}
+.cal .today{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.cal button.busy{color:#fff;font-weight:600;cursor:pointer}
+.small{font-size:12.5px;color:var(--muted);margin:2px 6px 0;line-height:1.45}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:999px;background:var(--seg);color:var(--muted);white-space:nowrap}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.spin{width:11px;height:11px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--accent);border-radius:50%;animation:r .8s linear infinite}
+@keyframes r{to{transform:rotate(360deg)}}
+.more{appearance:none;border:0;background:none;color:var(--accent);font:500 14px 'Golos Text',sans-serif;padding:12px;width:100%;cursor:pointer}
+.preview{appearance:none;display:flex;align-items:center;gap:8px;width:100%;margin:0 0 12px;padding:9px 14px;border-radius:14px;border:1px solid var(--line);
+  background:var(--warn-bg);color:var(--warn);font:500 13.5px 'Golos Text',sans-serif;cursor:pointer;text-align:left}
+.preview svg{width:8px;height:13px;flex:none}
+
+/* заставка, вход по ссылке, ошибка */
+.shell{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:calc(var(--top) + 24px) 20px calc(var(--bottom) + 24px)}
+.shell .card{position:relative;width:100%;max-width:400px;padding:26px 22px}
+.brand{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.logo{width:50px;height:50px;border-radius:14px;background:linear-gradient(150deg,#4A92E6,#1C5CAB);color:#fff;display:grid;place-items:center;font-family:var(--num);font-weight:600;font-size:16px;flex:none;
+  box-shadow:0 8px 24px rgba(42,120,214,.45)}
+.brand h2{font-family:var(--head);font-weight:700;font-size:20px;margin:0;line-height:1.2}
+.brand .lbl{margin-top:2px}
+.shell p{margin:0 0 14px;color:var(--muted)}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;padding:15px 18px;border-radius:14px;border:0;background:var(--in);color:#fff;font-weight:600;font-size:16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--line);margin-top:10px}
+.field{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.25);color:var(--ink);font:16px 'Golos Text',sans-serif;margin-bottom:12px}
+.field:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.err{color:var(--bad);font-size:14px;margin:-4px 0 12px}
+.loadrow{display:flex;align-items:center;gap:12px;color:var(--muted)}
+.loadrow .spin{width:22px;height:22px;border-width:3px;flex:none}
+
+@media (prefers-reduced-motion:reduce){.bg{animation:none}.views.in{animation:none}.sheet,.sheet.open{transition:none}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+
+<div id="app" hidden>
+  <div class="topfade"></div>
+  <main id="views" class="views"></main>
+  <nav id="tabbar" class="tabbar" role="tablist" aria-label="Разделы"></nav>
+  <section id="sheet" class="sheet" aria-hidden="true"><div class="bg"></div><div id="sheetViews" class="views"></div></section>
+</div>
+
+<div id="shell" class="shell">
+  <div class="card g">
+    <div class="brand"><div class="logo">АК</div><div><h2>Касса ИП Гостюхин</h2><div class="lbl">живые цифры из таблицы</div></div></div>
+    <div id="s-load"><div class="loadrow"><div class="spin"></div><div>Открываю кассу… первое открытие занимает до 20 секунд.</div></div></div>
+    <div id="s-gate" hidden>
+      <p>Вставьте сюда свою ссылку на кассу целиком. Ключ из неё запомнится, дальше касса будет открываться сама.</p>
+      <input id="key" class="field" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Ссылка или ключ">
+      <div id="gateerr" class="err" hidden>В ссылке нет ключа. Скопируйте её целиком, как получили.</div>
+      <button id="ok" class="btn" type="button">Открыть кассу</button>
+      <p class="lbl mt12" style="margin:14px 0 0">Ссылку выдаёт Антон Мельников лично.</p>
+    </div>
+    <div id="s-fail" hidden>
+      <p id="failtext">Не получилось получить цифры.</p>
+      <button id="retry" class="btn" type="button">Попробовать ещё раз</button>
+      <button id="forget" class="btn ghost" type="button">Ввести другую ссылку</button>
+    </div>
+  </div>
+</div>
+
+<script id="testdata" type="application/json">null</script>
+<script>
+(function () {
+'use strict';
+const DATA_URL = 'https://script.google.com/macros/s/AKfycbwx8r4nKNHThs8vxuW87kl3GVC83iAIz2VwQPQg_M0gY9HSo6tp_hV5oRNgb6BAsBtN/exec', USE_SW = false;
+const LS_KEY = 'kassa_key', LS_DATA = 'kassa_app_data', LS_TS = 'kassa_app_ts';
+const TIMEOUT = 45000;
+
+/* ───────── помощники ───────── */
+const $ = id => document.getElementById(id);
+const NB = ' ';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = n => Math.round(Math.abs(n || 0)).toLocaleString('ru-RU');
+const rub = n => ((n || 0) <= -0.5 ? '−' : '') + fmt(n) + NB + '₽';
+const plus = n => '+' + fmt(n) + NB + '₽';
+const minus = n => '−' + fmt(n) + NB + '₽';
+const sum = (a, f) => a.reduce((s, x) => s + (f ? f(x) : x), 0);
+const pct = x => (x * 100).toLocaleString('ru-RU', { maximumFractionDigits: x < 0.1 ? 1 : 0 }) + NB + '%';
+const MON = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+const MONS = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+const MONF = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+const MONG = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+const dm = s => s ? (+s.slice(8, 10)) + ' ' + MONG[+s.slice(5, 7) - 1] : '';
+const dmy = s => s ? s.slice(8, 10) + '.' + s.slice(5, 7) + '.' + s.slice(0, 4) : '';
+const ym = s => (s || '').slice(0, 7);
+const byDate = (a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
+const tourIso = t => { const d = String(t.date || '').slice(0, 10); return d.slice(6, 10) + '-' + d.slice(3, 5) + '-' + d.slice(0, 2); };
+const datesIn = name => { const out = [], re = /(\d{2})\.(\d{2})\.(\d{4})/g; let m; while ((m = re.exec(name || ''))) out.push(m[3] + '-' + m[2] + '-' + m[1]); return out; };
+const bigCls = s => s.length > 12 ? ' s' : '';
+function compact(v) {
+  const a = Math.abs(v);
+  if (a >= 1e6) return (v / 1e6).toLocaleString('ru-RU', { maximumFractionDigits: a >= 1e7 ? 0 : 1 }) + NB + 'млн';
+  if (a >= 1e3) return Math.round(v / 1e3) + NB + 'тыс';
+  return String(Math.round(v));
+}
+function niceStep(x) { const p = Math.pow(10, Math.floor(Math.log10(x || 1))), f = x / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
+function opTitle(n) {
+  const parts = String(n || '').split(' — '), a = parts[0], b = parts.slice(1).join(' — ');
+  if (b && /ТБанк|Точка|банк/i.test(a)) return b.replace(/^Оплата по карте\s*\S*\s*/i, '').replace(/\s+[A-Z]{3}$/, '') || a;
+  return a || b;
+}
+
+const I = {
+  home: '<path d="M3.5 10.5 12 3.6l8.5 6.9V19a1.5 1.5 0 0 1-1.5 1.5h-4.2v-5.6H9.2v5.6H5A1.5 1.5 0 0 1 3.5 19z"/>',
+  wallet: '<rect x="3" y="5.5" width="18" height="14" rx="3.2"/><path d="M3 10h18M15.5 14.8h2.5"/>',
+  ticket: '<path d="M3.5 7h17v3.2a1.8 1.8 0 0 0 0 3.6V17h-17v-3.2a1.8 1.8 0 0 0 0-3.6z"/><path d="M14 7.5v9" stroke-dasharray="1.6 2.2"/>',
+  people: '<circle cx="9" cy="8.2" r="3.2"/><path d="M3.3 19.5c.6-3.2 2.9-5 5.7-5s5.1 1.8 5.7 5"/><circle cx="17.2" cy="9.2" r="2.5"/><path d="M16.6 14.4c2.3.2 3.7 1.8 4.1 4.4"/>',
+  more: '<circle cx="5.5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="18.5" cy="12" r="1.5" fill="currentColor"/>',
+  cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="3.2"/><path d="M3.5 10h17M8.2 3v4M15.8 3v4"/>',
+  list: '<path d="M9 6.5h11.5M9 12h11.5M9 17.5h11.5"/><circle cx="4.6" cy="6.5" r=".9" fill="currentColor"/><circle cx="4.6" cy="12" r=".9" fill="currentColor"/><circle cx="4.6" cy="17.5" r=".9" fill="currentColor"/>',
+  pie: '<path d="M11 4.1a8.4 8.4 0 1 0 8.9 8.9H11z"/><path d="M14 3.2a7.6 7.6 0 0 1 6.8 6.8H14z"/>'
+};
+const icon = k => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + I[k] + '</svg>';
+const chev = '<svg class="chev" viewBox="0 0 7 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l5 5-5 5"/></svg>';
+const chevL = '<svg viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 1.5 1.5 7.5l6 6"/></svg>';
+const chevR = '<svg viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 1.5l6 6-6 6"/></svg>';
+const col = k => 'var(--c-' + (k || 'oth') + ')';
+
+/* ───────── справочники ───────── */
+const CAT2ENT = {
+  'Перевод на физлицо Гостюхин': 'gost', 'Личные траты Гостюхин': 'gost', 'Займ Брылину': 'gost',
+  'ИП Брылин': 'bryl', 'Петрушенко': 'petr', 'Админ (Мельников)': 'adm', 'Админ (офис)': 'adm',
+  'Налоги': 'tax', 'НДС': 'tax', 'Менеджер': 'oth', 'Банк и сервисы': 'oth', 'Прочее (с оборотки)': 'oth', 'Возврат контрагенту': 'oth', 'Доп. расходы концертов': 'oth'
+};
+const WHO = [
+  [/^Гостюхин/, 'gost', 'Гостюхин', 'переводы, личные траты, займ Брылину', ['Перевод на физлицо Гостюхин', 'Личные траты Гостюхин', 'Займ Брылину']],
+  [/^ИП Брылин/, 'bryl', 'Брылин', 'ИП, выплаты за концерты', ['ИП Брылин']],
+  [/^Петрушенко/, 'petr', 'Петрушенко', 'концертный директор', ['Петрушенко']],
+  [/^Админ/, 'adm', 'Админ', 'Мельников и офис', ['Админ (Мельников)', 'Админ (офис)']],
+  [/^Налоги/, 'tax', 'Налоги', 'УСН и взносы', ['Налоги']],
+  [/^НДС/, 'tax', 'НДС', 'налог на добавленную стоимость', ['НДС']],
+  [/^Менеджер/, 'oth', 'Менеджер', 'выплаты менеджеру', ['Менеджер']],
+  [/^Оборотка/, 'oth', 'Оборотка', 'банк, сервисы, возвраты, прочее', ['Банк и сервисы', 'Прочее (с оборотки)', 'Возврат контрагенту']],
+  [/^Доп/, 'oth', 'Доп. расходы концертов', '', ['Доп. расходы концертов']]
+];
+const PT = { card: ['Переводы на карту', 'gost'], pers: ['Личные траты с карты ИП', 'petr'], loan: ['Займ Брылину', 'adm'] };
+const CAT2PT = { 'Перевод на физлицо Гостюхин': 'card', 'Личные траты Гостюхин': 'pers', 'Займ Брылину': 'loan' };
+const KIND = [
+  { key: 'tour', label: 'Туры', c: 'gost', test: p => /^Тур|АК47-ТГК Осень 2026/.test(p) },
+  { key: 'conc', label: 'Концерты и корпоративы', c: 'petr', test: p => /^Концерты/.test(p) },
+  { key: 'mon', label: 'Монетизация', c: 'bryl', test: p => /^Монетизация/.test(p) },
+  { key: 'show', label: 'Шоу и реклама', c: 'adm', test: p => /^Шоу/.test(p) },
+  { key: 'oth', label: 'Возвраты и прочее', c: 'oth', test: () => true }
+];
+const kindOf = p => KIND.find(k => k.test(p || ''));
+const CTYPE = t => /Тур/.test(t) ? ['тур', 'gost'] : /Корпоратив|Фест|Реклама/.test(t) ? [String(t).toLowerCase(), 'bryl'] : ['концерт', 'petr'];
+
+/* ───────── состояние ───────── */
+const S = { role: null, view: null, tab: null, seg: 'ahead', month: null, year: null, gyear: null, gbar: null, showAll: false, net: 'ok', fetchedAt: 0 };
+let D = null, M = null, G = null;
+const STACK = [];
+const TABS = {
+  full: [['home', 'Главная', 'home'], ['money', 'Деньги', 'wallet'], ['concerts', 'Концерты', 'ticket'], ['people', 'Люди', 'people'], ['more', 'Ещё', 'more']],
+  gost: [['me', 'Главная', 'home'], ['calendar', 'Календарь', 'cal'], ['payouts', 'Выплаты', 'list'], ['share', 'Доля', 'pie']]
+};
+
+/* ───────── модели ───────── */
+function concertFrom2026(c, i) {
+  return { id: 'c' + i, date: c.date, city: c.city, cp: c.cp, type: c.type || 'Концерт', price: c.sum || 0, gost: c.gost || 0, bryl: c.bryl || 0, petr: c.petr || 0,
+    adm: c.adm || 0, mgr: c.mgr || 0, nds: c.nds || 0, usn: c.usn || 0, extra: c.extra || 0, obor: c.obor || 0, split: !!c.split, tour: false };
+}
+function concertFromTour(t, i) {
+  return { id: 't' + i, date: tourIso(t), city: t.city, cp: 'Тур осень 2026', type: 'Тур', price: t.price || 0, gost: t.gost || 0, bryl: t.bryl || 0, petr: t.petr || 0,
+    adm: t.adm || 0, mgr: 0, nds: 0, usn: 0, extra: 0, obor: 0, split: true, tour: true };
+}
+function allConcerts(d) {
+  const a = (d.concerts2026 || []).map(concertFrom2026).concat((d.tour2026 || []).map(concertFromTour)).filter(c => /^\d{4}-\d{2}-\d{2}$/.test(c.date));
+  const today = d.today;
+  return {
+    list: a,
+    upcoming: a.filter(c => c.date >= today && !/11-2026/.test(c.cp || '')).sort(byDate),
+    past: a.filter(c => c.date < today && !/11-2026/.test(c.cp || '')).sort(byDate).reverse()
+  };
+}
+function monthsUpTo(today) {
+  const cy = +today.slice(0, 4), cm = +today.slice(5, 7), out = [];
+  for (let y = 2024; y <= cy; y++) for (let m = (y === 2024 ? 9 : 1); m <= (y === cy ? cm : 12); m++) out.push(y + '-' + String(m).padStart(2, '0'));
+  return out;
+}
+function modelFull(d) {
+  const incomes = d.incomes.slice().sort(byDate), payments = d.payments.slice().sort(byDate);
+  const months = monthsUpTo(d.today);
+  const inc = {}, out = {};
+  months.forEach(m => { inc[m] = 0; out[m] = 0; });
+  incomes.forEach(i => { const k = ym(i.date); if (k in inc) inc[k] += i.sum; });
+  payments.forEach(p => { const k = ym(p.date); if (k in out) out[k] += p.sum; });
+  const people = (d.balances || []).map(b => {
+    const w = WHO.find(x => x[0].test(b.who)) || [null, 'oth', b.who, '', []];
+    return { who: b.who, c: w[1], name: w[2], sub: w[3], cats: w[4], accrued: b.accrued, paid: b.paid, debt: b.debt };
+  }).filter(p => p.accrued > 0 || p.paid > 0);
+  const ops = incomes.map(i => ({ kind: 'in', date: i.date, title: String(i.name).split(' — ')[0], sub: i.cp, sum: i.sum, ref: i }))
+    .concat(payments.map(p => ({ kind: 'out', date: p.date, title: opTitle(p.name), sub: p.cat, sum: p.sum, ref: p })))
+    .sort(byDate).reverse();
+  const conc = allConcerts(d);
+  return { incomes, payments, months, inc, out, people, ops, conc, curY: d.today.slice(0, 4) };
+}
+function slimForGost(d) {
+  const cats = { 'Перевод на физлицо Гостюхин': 1, 'Личные траты Гостюхин': 1, 'Займ Брылину': 1 };
+  return {
+    incomes: d.incomes.filter(i => i.gost !== 0).map(i => ({ name: i.name, cp: i.cp, date: i.date, sum: i.sum, gost: i.gost, project: i.project })),
+    payments: d.payments.filter(p => cats[p.cat]),
+    concerts2026: (d.concerts2026 || []).map(c => ({ date: c.date, city: c.city, cp: c.cp, sum: c.sum, gost: c.gost, type: c.type, split: c.split })),
+    tour2026: (d.tour2026 || []).map(t => ({ date: t.date, city: t.city, price: t.price, gost: t.gost })),
+    today: d.today, asOf: d.asOf, generated: d.generated
+  };
+}
+function modelGost(d) {
+  const accruals = d.incomes.filter(i => i.gost !== 0).map(i => ({ date: i.date, name: i.name, cp: i.cp, sum: i.sum || 0, gost: i.gost, project: i.project || 'Без проекта' }));
+  /* Зачёт 13.07.2026 без движения по счёту ИП — как в прежнем экране Гостюхина (регламент 08, «Решения»). */
+  accruals.push({ date: '2026-07-13', name: 'Зачёт: кэш с корпоративов (Москва 21.06, Петербург 10.10) закрыл долг ИП перед Петрушенко', cp: 'без движения по счёту ИП', sum: 0, gost: 1955000, project: 'Зачёт (кэш с корпоративов)' });
+  accruals.sort(byDate);
+  const payouts = d.payments.filter(p => CAT2PT[p.cat]).map(p => ({ date: p.date, name: p.name, sum: p.sum, type: CAT2PT[p.cat], note: p.note })).sort(byDate);
+  const total = sum(accruals, a => a.gost) - sum(payouts, p => p.sum);
+  const advances = accruals.filter(a => datesIn(a.name).some(x => x > d.today));
+  const advSum = sum(advances, a => a.gost);
+  const years = []; for (let y = 2024; y <= +d.today.slice(0, 4); y++) years.push(String(y));
+  return { accruals, payouts, total, advances, advSum, earned: Math.max(0, total - advSum), over: Math.max(0, advSum - total), conc: allConcerts(d), years, curY: d.today.slice(0, 4) };
+}
+function gostYear(y) {
+  const inY = s => y === 'all' || s.slice(0, 4) === y;
+  const before = s => y !== 'all' && s.slice(0, 4) < y;
+  const accY = G.accruals.filter(a => inY(a.date)), payY = G.payouts.filter(p => inY(p.date));
+  const open = sum(G.accruals.filter(a => before(a.date)), a => a.gost) - sum(G.payouts.filter(p => before(p.date)), p => p.sum);
+  return { accY, payY, open, accrued: sum(accY, a => a.gost), paid: sum(payY, p => p.sum) };
+}
+
+/* ───────── общие блоки ───────── */
+function netLine() {
+  if (S.net === 'loading') return '<span class="pill"><span class="spin"></span>обновляю цифры</span>';
+  if (S.net === 'offline') return '<span class="pill warn">нет связи · цифры от ' + esc(D.generated || '') + '</span>';
+  return '';
+}
+function lt(title, sub, withNet) {
+  return '<div class="lt"><h1' + (String(title).replace(/<[^>]+>/g, '').length > 18 ? ' class="long"' : '') + '>' + title + '</h1>' +
+    ((sub || withNet) ? '<p>' + (sub ? '<span>' + esc(sub) + '</span>' : '') + (withNet ? netLine() : '') + '</p>' : '') + '</div>';
+}
+const sec = (t, go) => '<div class="sec"><span>' + esc(t) + '</span>' + (go ? '<button data-tab="' + go[0] + '">' + esc(go[1]) + '</button>' : '') + '</div>';
+const backBtn = '<button class="back" data-back>' + chevL + 'Назад</button>';
+function dateBadge(s) { return '<div class="dateb"><b>' + (+s.slice(8, 10)) + '</b><span>' + MON[+s.slice(5, 7) - 1] + '</span></div>'; }
+function splitBlock(parts, total) {
+  parts = parts.filter(p => p[2] > 0.5);
+  if (!parts.length) return '';
+  const t = total || sum(parts, p => p[2]);
+  return '<div class="g pad"><div class="split">' + parts.map(p => '<i style="flex:' + p[2] + ';background:' + col(p[1]) + '"></i>').join('') + '</div>' +
+    '<div class="list inset">' + parts.map(p => '<div class="row"><span class="dot" style="background:' + col(p[1]) + '"></span><div class="t"><b>' + esc(p[0]) + '</b></div><div class="v">' + rub(p[2]) + '<small>' + pct(p[2] / t) + '</small></div></div>').join('') + '</div></div>';
+}
+function hbars(rows) {
+  const max = Math.max(1, ...rows.map(r => r.v));
+  return '<div class="g list">' + rows.map(r => (r.open ? '<button class="row" data-open="' + r.open + '">' : '<div class="row">') +
+    (r.c ? '<span class="dot" style="background:' + col(r.c) + '"></span>' : '') +
+    '<div class="t"><b>' + esc(r.name) + '</b><div class="bar"><i style="width:' + (r.v / max * 100).toFixed(1) + '%;background:' + col(r.c || 'gost') + '"></i></div></div>' +
+    '<div class="v">' + rub(r.v) + (r.sub ? '<small>' + esc(r.sub) + '</small>' : '') + '</div>' + (r.open ? chev + '</button>' : '</div>')).join('') + '</div>';
+}
+function barChart(labels, series, sel, attr, ids) {
+  const W = 340, H = 176, L = 40, B = 22, T = 10, n = labels.length;
+  const max = Math.max(1, ...series.flatMap(s => s.values));
+  const step = niceStep(max / 3), top = Math.ceil(max / step) * step;
+  const y = v => T + (H - T - B) * (1 - v / top);
+  const slot = (W - L) / n, gap = 2;
+  const bw = Math.max(3, Math.min(14, (slot * 0.72 - gap * (series.length - 1)) / series.length));
+  const gw = bw * series.length + gap * (series.length - 1);
+  let g = '';
+  for (let v = 0; v <= top + 1e-6; v += step) { const yy = y(v).toFixed(1); g += '<line class="gl" x1="' + L + '" x2="' + W + '" y1="' + yy + '" y2="' + yy + '"/><text class="ax" x="' + (L - 6) + '" y="' + (+yy + 3.5) + '" text-anchor="end">' + esc(v ? compact(v) : '0') + '</text>'; }
+  const every = n > 12 ? Math.ceil(n / 8) : 1;
+  labels.forEach((lab, i) => {
+    const x0 = L + slot * i + (slot - gw) / 2;
+    g += '<g' + (sel != null && sel !== i ? ' class="dim"' : '') + '>';
+    series.forEach((s, k) => {
+      const v = s.values[i]; if (!(v > 0)) return;
+      const h = y(0) - y(v), r = Math.min(4, h, bw / 2), x = x0 + k * (bw + gap), yy = y(v), b0 = y(0);
+      g += '<path class="' + s.cls + '" d="M' + x.toFixed(1) + ',' + b0.toFixed(1) + 'V' + (yy + r).toFixed(1) + 'Q' + x.toFixed(1) + ',' + yy.toFixed(1) + ' ' + (x + r).toFixed(1) + ',' + yy.toFixed(1) +
+        'H' + (x + bw - r).toFixed(1) + 'Q' + (x + bw).toFixed(1) + ',' + yy.toFixed(1) + ' ' + (x + bw).toFixed(1) + ',' + (yy + r).toFixed(1) + 'V' + b0.toFixed(1) + 'Z"/>';
+    });
+    g += '</g>';
+    if (i % every === 0 || sel === i) g += '<text class="ax' + (sel === i ? ' on' : '') + '" x="' + (L + slot * i + slot / 2).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="middle">' + esc(lab) + '</text>';
+    g += '<rect class="hit" ' + attr + '="' + (ids ? ids[i] : i) + '" x="' + (L + slot * i).toFixed(1) + '" y="0" width="' + slot.toFixed(1) + '" height="' + H + '"/>';
+  });
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Диаграмма по месяцам">' + g + '</svg>';
+}
+function yearChips(attr, cur, years) {
+  return '<div class="chips">' + years.concat(['all']).map(y => '<button ' + attr + '="' + y + '" aria-pressed="' + (y === cur) + '">' + (y === 'all' ? 'Всё время' : y) + '</button>').join('') + '</div>';
+}
+function checksOk() { const c = D.checks || {}; return Math.abs(c.diff || 0) < 0.01 && Math.abs(c.uncat || 0) < 0.01 && !c.control; }
+
+/* ───────── экраны: общий формат ───────── */
+function concertRow(c, gostView) {
+  const [tl] = CTYPE(c.type);
+  const right = gostView
+    ? (c.split ? '<div class="v">' + rub(c.gost) + '<small>вам</small></div>' : '<div class="v"><small>после оплаты</small></div>')
+    : (!c.split ? '<span class="chip warn">… не разнесён</span>' : '<div class="v">' + rub(c.price) + '<small>' + esc(tl) + '</small></div>');
+  return '<button class="row" data-open="concert:' + c.id + '">' + dateBadge(c.date) + '<div class="t"><b>' + esc(c.city) + '</b><span>' + esc(c.cp) + '</span></div>' + right + chev + '</button>';
+}
+function payPurpose(p) {
+  const n = String(p.note || '').split(/[;(]/)[0].trim();
+  if (n) return n;
+  const parts = String(p.name || '').split(' — ');
+  return parts.length > 1 ? parts.slice(1).join(' — ') : parts[0];
+}
+function opRow(o, i, title) {
+  return '<button class="row" data-open="op:' + i + '"><div class="t"><b>' + esc(title || o.title) + '</b><span>' + esc(dm(o.date)) + ' · ' + esc(o.sub) + '</span></div><div class="v' + (o.kind === 'in' ? ' plus' : '') + '">' + (o.kind === 'in' ? plus(o.sum) : minus(o.sum)) + '</div>' + chev + '</button>';
+}
+const SCREENS = {
+  home() {
+    const c = D.cash, owedT = sum(D.owed || [], o => o.sum), ok = checksOk(), next = M.conc.upcoming[0];
+    return lt('Касса', 'по выпискам на ' + D.asOf, true) + '<div class="stack">' +
+      '<button class="g pad tile" data-open="bank"><div class="tile-h"><span class="lbl">В банках</span>' + chev + '</div><div class="num big' + bigCls(rub(c.total)) + '">' + rub(c.total) + '</div>' +
+      '<div class="lbl mt4">ТБанк ' + rub(c.tbank) + ' · Точка ' + rub(c.tochka) + '</div></button>' +
+      '<div class="two"><button class="g pad tile" data-open="free"><div class="tile-h"><span class="lbl">Свободно</span>' + chev + '</div><div class="num mid">' + rub(c.free) + '</div></button>' +
+      '<button class="g pad tile" data-open="owed"><div class="tile-h"><span class="lbl">Нам должны</span>' + chev + '</div><div class="num mid">' + rub(owedT) + '</div></button></div>' +
+      '<button class="g row" data-tab="people"><div class="t"><b>Долги всем</b><span>участникам, налоги, Гостюхину</span></div><div class="v">' + rub(c.debts_all) + '</div>' + chev + '</button>' +
+      '<button class="g row" data-tab="more"><span class="ic ' + (ok ? 'good">✓' : 'bad">!') + '</span><div class="t"><b>' + (ok ? 'Касса сходится с банками' : 'Есть расхождения') + '</b><span>' +
+      (ok ? 'расхождение 0 ₽ · все платежи разнесены' : 'откройте проверки') + '</span></div>' + chev + '</button>' +
+      (next ? sec('Ближайший концерт', ['concerts', 'Все']) + '<div class="g list">' + concertRow(next) + '</div>' : '') +
+      sec('Последние операции', ['money', 'Деньги']) + '<div class="g list">' + M.ops.slice(0, 5).map((o, i) => opRow(o, i)).join('') + '</div></div>';
+  },
+  money() {
+    const mi = S.month, m = M.months[mi];
+    const pays = M.payments.filter(p => ym(p.date) === m), incs = M.incomes.filter(i => ym(i.date) === m);
+    const byC = {}; pays.forEach(p => { const k = p.cat || 'Без категории'; byC[k] = byC[k] || { v: 0, n: 0 }; byC[k].v += p.sum; byC[k].n++; });
+    const cats = Object.entries(byC).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' оп.', c: CAT2ENT[k] || 'oth', open: 'cat:' + encodeURIComponent(k) })).sort((a, b) => b.v - a.v);
+    const start = Math.max(0, mi - 5), win = M.months.slice(start, mi + 1);
+    const ids = win.map((_, i) => start + i);
+    const title = MONF[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+    return lt('Деньги', 'приходы и оплаты по счетам ИП') + '<div class="stack">' +
+      '<div class="g pad"><div class="mswitch"><button data-month="-1" aria-label="Предыдущий месяц"' + (mi === 0 ? ' disabled' : '') + '>' + chevL + '</button><b>' + title + '</b>' +
+      '<button data-month="1" aria-label="Следующий месяц"' + (mi === M.months.length - 1 ? ' disabled' : '') + '>' + chevR + '</button></div>' +
+      '<div class="two mt12"><div><div class="lbl">Пришло</div><div class="num mid plus">' + plus(M.inc[m]) + '</div></div><div><div class="lbl">Ушло</div><div class="num mid">' + minus(M.out[m]) + '</div></div></div></div>' +
+      '<div class="g pad chart"><div class="legend"><span><i style="background:var(--in)"></i>Пришло</span><span><i style="background:var(--out)"></i>Ушло</span><span style="margin-left:auto">нажмите на месяц</span></div>' +
+      barChart(win.map(x => MONS[+x.slice(5, 7) - 1]), [{ cls: 'bin', values: win.map(x => M.inc[x]) }, { cls: 'bout', values: win.map(x => M.out[x]) }], mi - start, 'data-mbar', ids) + '</div>' +
+      sec('Куда ушли') + (cats.length ? hbars(cats) : '<p class="small">Оплат в этом месяце не было.</p>') +
+      sec('Откуда пришли') + (incs.length ? '<div class="g list">' + incs.slice().reverse().map(i => { const k = M.ops.findIndex(o => o.ref === i); return opRow(M.ops[k], k); }).join('') + '</div>' : '<p class="small">Приходов в этом месяце не было.</p>') + '</div>';
+  },
+  concerts() {
+    const list = S.seg === 'ahead' ? M.conc.upcoming : M.conc.past;
+    return lt('Концерты', S.seg === 'ahead' ? list.length + ' дат впереди · по договорам ' + rub(sum(list, c => c.price)) : 'прошедшие концерты 2026 года') + '<div class="stack">' +
+      '<div class="seg"><button data-seg="ahead" aria-pressed="' + (S.seg === 'ahead') + '">Впереди</button><button data-seg="past" aria-pressed="' + (S.seg === 'past') + '">Прошли</button></div>' +
+      (list.length ? '<div class="g list">' + list.map(c => concertRow(c)).join('') + '</div>' : '<p class="small">Здесь пока пусто.</p>') + '</div>';
+  },
+  people() {
+    const rows = M.people.filter(p => p.c !== 'oth' || p.name === 'Менеджер').slice().sort((a, b) => (Math.abs(b.debt) >= 1) - (Math.abs(a.debt) >= 1) || b.debt - a.debt);
+    return lt('Люди', 'кому сколько к выплате') + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Долги всем</div><div class="num big' + bigCls(rub(D.cash.debts_all)) + '">' + rub(D.cash.debts_all) + '</div><div class="lbl mt4">участникам, налоги, НДС и Гостюхину</div></div>' +
+      '<div class="g list">' + rows.map(p => { const i = M.people.indexOf(p);
+        const v = Math.abs(p.debt) < 1 ? '<span class="chip good">✓ закрыто</span>' : p.debt < 0 ? '<div class="v">' + rub(-p.debt) + '<small>переплата</small></div>' : '<div class="v">' + rub(p.debt) + '<small>к выплате</small></div>';
+        return '<button class="row" data-open="person:' + i + '"><span class="dot" style="background:' + col(p.c) + '"></span><div class="t"><b>' + esc(p.name) + '</b><span>' + esc(p.sub) + '</span></div>' + v + chev + '</button>'; }).join('') + '</div>' +
+      '<p class="small">Начислено и выплачено считаются с сентября 2024 года, по листу «Сверка».</p></div>';
+  },
+  more() {
+    const c = D.checks || {}, y = S.year;
+    const incY = M.incomes.filter(i => y === 'all' || i.date.slice(0, 4) === y);
+    const parts = [['Гостюхин', 'gost', sum(incY, i => i.gost)], ['Брылин', 'bryl', sum(incY, i => i.bryl)], ['Петрушенко', 'petr', sum(incY, i => i.petr)], ['Админ', 'adm', sum(incY, i => i.adm)],
+      ['Налоги и НДС', 'tax', sum(incY, i => i.nds + i.usn)], ['Менеджер и оборотка', 'oth', sum(incY, i => i.mgr + i.extra + i.obor)]];
+    const byP = {}; incY.forEach(i => { const k = i.project || 'Без проекта'; byP[k] = byP[k] || { v: 0, n: 0 }; byP[k].v += i.sum; byP[k].n++; });
+    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: 'gost' })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    const ck = (ok, t, okT, badT) => '<div class="row"><span class="ic ' + (ok ? 'good">✓' : 'bad">!') + '</span><div class="t"><b>' + t + '</b><span>' + (ok ? okT : badT) + '</span></div></div>';
+    const obor = M.people.findIndex(p => p.name === 'Оборотка');
+    const years = []; for (let k = 2024; k <= +M.curY; k++) years.push(String(k));
+    return lt('Ещё') + '<div class="stack">' + sec('Проверки таблицы') + '<div class="g list">' +
+      ck(Math.abs(c.diff || 0) < 0.01, 'Деньги в банках = долги + оборотка', 'расхождение 0 ₽', 'расхождение ' + rub(c.diff)) +
+      ck(Math.abs(c.uncat || 0) < 0.01, 'Все платежи с категорией', 'без категории — 0', 'без категории ' + rub(c.uncat)) +
+      ck(!c.control, 'Реестр, колонка «Контроль»', 'все строки ✓', c.control + ' строк без ✓') + '</div>' +
+      sec('Кому пошли деньги') + yearChips('data-year', y, years) + (sum(parts, p => p[2]) > 0 ? splitBlock(parts) : '<p class="small">Приходов за этот период нет.</p>') +
+      sec('Приходы по проектам') + (prow.length ? hbars(prow) : '<p class="small">Приходов за этот период нет.</p>') +
+      sec('Прочее') + '<div class="g list">' +
+      (obor >= 0 ? '<button class="row" data-open="person:' + obor + '"><span class="dot" style="background:' + col('oth') + '"></span><div class="t"><b>Оборотка</b><span>банк, сервисы, возвраты, прочее</span></div><div class="v">' + rub(M.people[obor].debt) + '</div>' + chev + '</button>' : '') +
+      (S.role === 'admin' ? '<button class="row" data-gostview><span class="dot" style="background:' + col('gost') + '"></span><div class="t"><b>Экран Гостюхина</b><span>посмотреть, что видит он</span></div>' + chev + '</button>' : '') +
+      '<button class="row" data-refresh><div class="t"><b>Обновить цифры</b><span>прочитаны ' + esc(D.generated || '') + '</span></div>' + (S.net === 'loading' ? '<span class="spin"></span>' : '') + '</button></div>' +
+      '<p class="small">Данные: Google-таблица «ИП Гостюхин» — реестр приходов, журнал оплат, «Сверка», «Концерты 2026», лист тура осени 2026.</p></div>';
+  },
+
+  /* ───────── экраны: формат Гостюхина ───────── */
+  me() {
+    const F = gostYear(G.curY), up = G.conc.upcoming.slice(0, 3), tot = G.total;
+    const partE = Math.min(G.earned, Math.max(tot, 0)), partA = Math.min(G.advSum, Math.max(tot, 0));
+    return previewBar() + lt('Моя касса', 'по выпискам на ' + D.asOf, true) + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Мой остаток на ИП</div><div class="num big' + bigCls(rub(tot)) + '">' + rub(tot) + '</div><div class="lbl mt4">начислено, но ещё не выведено</div></div>' +
+      '<button class="g pad tile" data-open="adv"><div class="tile-h"><span class="lbl">Из него сейчас</span>' + chev + '</div>' +
+      (partE + partA > 0 ? '<div class="split mt8">' + (partE > 0 ? '<i style="flex:' + partE + ';background:var(--c-gost)"></i>' : '') + (partA > 0 ? '<i style="flex:' + partA + ';background:var(--c-adm)"></i>' : '') + '</div>' : '') +
+      '<div class="list inset" style="margin-bottom:-15px"><div class="row"><span class="dot" style="background:var(--c-gost)"></span><div class="t"><b>Отработано, можно выводить</b></div><div class="v">' + rub(partE) + '</div></div>' +
+      '<div class="row"><span class="dot" style="background:var(--c-adm)"></span><div class="t"><b>Аванс за концерты впереди</b></div><div class="v">' + rub(partA) + '</div></div></div></button>' +
+      (G.over > 0 ? '<p class="small">Авансов больше остатка на ' + rub(G.over) + ': часть денег за будущие концерты уже выведена.</p>' : '') +
+      sec(G.curY + ' год', ['share', 'Доля']) + '<div class="g list">' +
+      '<div class="row"><div class="t"><b>На начало года</b></div><div class="v">' + rub(F.open) + '</div></div>' +
+      '<button class="row" data-tab="share"><div class="t"><b>Начислено</b></div><div class="v plus">' + plus(F.accrued) + '</div>' + chev + '</button>' +
+      '<button class="row" data-tab="payouts"><div class="t"><b>Выплачено</b></div><div class="v">' + minus(F.paid) + '</div>' + chev + '</button></div>' +
+      (up.length ? sec('Ближайшие концерты', ['calendar', 'Календарь']) + '<div class="g list">' + up.map(c => concertRow(c, true)).join('') + '</div>' : '') + '</div>';
+  },
+  calendar() {
+    const ev = {};
+    G.conc.list.filter(c => !/11-2026/.test(c.cp || '')).forEach(c => { (ev[c.date] = ev[c.date] || []).push(c); });
+    const today = D.today, y0 = +today.slice(0, 4), m0 = +today.slice(5, 7);
+    let cal = '';
+    for (let k = 0; k < 4; k++) {
+      const y = y0 + Math.floor((m0 - 1 + k) / 12), m = ((m0 - 1 + k) % 12) + 1, mm = y + '-' + String(m).padStart(2, '0');
+      const lead = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7, days = new Date(Date.UTC(y, m, 0)).getUTCDate();
+      const cnt = Object.keys(ev).filter(d => d.startsWith(mm)).length;
+      let cells = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(w => '<div class="h">' + w + '</div>').join('');
+      for (let i = 0; i < lead; i++) cells += '<div></div>';
+      for (let d = 1; d <= days; d++) {
+        const iso = mm + '-' + String(d).padStart(2, '0'), e = ev[iso];
+        const cls = (iso < today ? ' past' : '') + (iso === today ? ' today' : '');
+        cells += e ? '<button class="d busy' + cls + '" style="background:' + col(CTYPE(e[0].type)[1]) + '" data-open="concert:' + e[0].id + '" aria-label="' + esc(dm(iso) + ', ' + e[0].city) + '">' + d + '</button>'
+          : '<div class="d' + cls + '">' + d + '</div>';
+      }
+      cal += '<div class="g pad"><div class="mswitch"><b>' + MONF[m - 1] + (y !== y0 ? ' ' + y : '') + '</b><span class="lbl">' + (cnt ? cnt + ' ' + (cnt === 1 ? 'дата' : cnt < 5 ? 'даты' : 'дат') : 'свободно') + '</span></div><div class="cal">' + cells + '</div></div>';
+    }
+    return previewBar() + lt('Календарь', G.conc.upcoming.length + ' концертов впереди') + '<div class="stack">' +
+      '<div class="legend" style="margin:0 6px"><span><i style="background:var(--c-gost)"></i>тур</span><span><i style="background:var(--c-petr)"></i>концерт</span><span><i style="background:var(--c-bryl)"></i>корпоратив, фест</span></div>' +
+      cal + '<p class="small">Нажмите на дату, чтобы открыть концерт.</p></div>';
+  },
+  payouts() {
+    const y = S.gyear, F = gostYear(y), months = y === 'all' ? monthsUpTo(D.today) : monthsUpTo(D.today).filter(m => m.slice(0, 4) === y);
+    const vals = months.map(m => sum(F.payY.filter(p => ym(p.date) === m), p => p.sum));
+    const sel = S.gbar != null && S.gbar < months.length ? S.gbar : null;
+    const rows = F.payY.slice().reverse(), shown = S.showAll ? rows : rows.slice(0, 30);
+    const byT = Object.keys(PT).map(k => ({ name: PT[k][0], c: PT[k][1], v: sum(F.payY.filter(p => p.type === k), p => p.sum) })).filter(r => r.v > 0);
+    const rm = sel != null ? months[sel] : null;
+    return previewBar() + lt('Выплаты', 'что перевели и потратили с карты ИП') + '<div class="stack">' + yearChips('data-gyear', y, G.years) +
+      '<div class="g pad"><div class="lbl">Выплачено ' + (y === 'all' ? 'за всё время' : 'за ' + y + ' год') + '</div><div class="num big' + bigCls(rub(F.paid)) + '">' + rub(F.paid) + '</div></div>' +
+      (byT.length ? hbars(byT) : '') +
+      (months.length ? '<div class="g pad chart"><div class="readout">' + (rm ? '<b>' + MONF[+rm.slice(5, 7) - 1] + ' ' + rm.slice(0, 4) + '</b> · ' + rub(vals[sel]) : 'По месяцам · нажмите на столбик') + '</div>' +
+        barChart(months.map(m => MONS[+m.slice(5, 7) - 1]), [{ cls: 'bin', values: vals }], sel, 'data-gbar') + '</div>' : '') +
+      sec('Операции · ' + rows.length) + (rows.length ? '<div class="g list">' + shown.map(p => '<div class="row"><span class="dot" style="background:' + col(PT[p.type][1]) + '"></span><div class="t"><b>' + esc(opTitle(p.name)) + '</b><span>' + esc(dm(p.date)) + ' · ' + esc(PT[p.type][0]) + '</span></div><div class="v">' + minus(p.sum) + '</div></div>').join('') + '</div>' +
+        (rows.length > shown.length ? '<button class="more" data-more>Показать все ' + rows.length + '</button>' : '') : '<p class="small">Выплат за этот период нет.</p>') + '</div>';
+  },
+  share() {
+    const y = S.gyear, F = gostYear(y), months = y === 'all' ? monthsUpTo(D.today) : monthsUpTo(D.today).filter(m => m.slice(0, 4) === y);
+    const vals = months.map(m => sum(F.accY.filter(a => ym(a.date) === m), a => a.gost));
+    const sel = S.gbar != null && S.gbar < months.length ? S.gbar : null, rm = sel != null ? months[sel] : null;
+    const kinds = KIND.map(k => [k.label, k.c, sum(F.accY.filter(a => kindOf(a.project) === k), a => a.gost)]);
+    const byP = {}; F.accY.forEach(a => { const k = kindOf(a.project).key === 'oth' ? 'Возвраты и прочее' : a.project; byP[k] = byP[k] || { v: 0, n: 0, c: kindOf(a.project).c }; byP[k].v += a.gost; byP[k].n++; });
+    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: o.c })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    return previewBar() + lt('Моя доля', 'из чего сложились начисления') + '<div class="stack">' + yearChips('data-gyear', y, G.years) +
+      '<div class="g pad"><div class="lbl">Начислено ' + (y === 'all' ? 'за всё время' : 'за ' + y + ' год') + '</div><div class="num big' + bigCls(rub(F.accrued)) + '">' + rub(F.accrued) + '</div></div>' +
+      sec('По типу дохода') + (F.accrued > 0 ? splitBlock(kinds) : '<p class="small">Начислений за этот период нет.</p>') +
+      (months.length ? sec('По месяцам') + '<div class="g pad chart"><div class="readout">' + (rm ? '<b>' + MONF[+rm.slice(5, 7) - 1] + ' ' + rm.slice(0, 4) + '</b> · ' + rub(vals[sel]) : 'Нажмите на столбик') + '</div>' +
+        barChart(months.map(m => MONS[+m.slice(5, 7) - 1]), [{ cls: 'bin', values: vals }], sel, 'data-gbar') + '</div>' : '') +
+      sec('По проектам') + (prow.length ? hbars(prow) : '<p class="small">Нет начислений.</p>') +
+      '<p class="small">Доля попадает в тот год, когда деньги пришли на счёт ИП, как в таблице и в выписках. Разница между начисленным и выплаченным переходит на следующий год строкой «На начало года».</p></div>';
+  }
+};
+function previewBar() {
+  return S.role !== 'gost' ? '<button class="preview" data-exitpreview>' + chevL + 'Так видит Гостюхин · вернуться к общему виду</button>' : '';
+}
+
+/* ───────── подробные экраны ───────── */
+function owedItems() {
+  return (D.owed || []).filter(o => o.sum > 0.5).map(o => {
+    const w = String(o.what || ''), cut = w.search(/\s\(|:|\s—\s/);
+    return { t: (cut > 0 ? w.slice(0, cut) : w).trim(), n: (cut > 0 ? w.slice(cut).replace(/^[\s:(—]+/, '').replace(/\)\s*$/, '') : '').trim(), s: o.sum };
+  });
+}
+const SHEETS = {
+  bank() {
+    const c = D.cash, m = M.months[M.months.length - 1], ok = checksOk();
+    return backBtn + lt('В банках', 'по выпискам на ' + D.asOf) + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Всего</div><div class="num big">' + rub(c.total) + '</div></div>' +
+      '<div class="g list"><div class="row"><div class="t"><b>ТБанк</b><span>счёт …8996</span></div><div class="v">' + rub(c.tbank) + '</div></div>' +
+      '<div class="row"><div class="t"><b>Точка</b><span>счёт …3010</span></div><div class="v">' + rub(c.tochka) + '</div></div></div>' +
+      sec('Сверка') + '<div class="g list"><div class="row"><span class="ic ' + (ok ? 'good">✓' : 'bad">!') + '</span><div class="t"><b>' + (ok ? 'Сходится с таблицей' : 'Есть расхождения') + '</b><span>деньги в банках = долги всем + свободно</span></div></div></div>' +
+      sec(MONF[+m.slice(5, 7) - 1] + ', с начала месяца') + '<div class="g list"><div class="row"><div class="t"><b>Пришло</b></div><div class="v plus">' + plus(M.inc[m]) + '</div></div>' +
+      '<div class="row"><div class="t"><b>Ушло</b></div><div class="v">' + minus(M.out[m]) + '</div></div></div></div>';
+  },
+  free() {
+    const c = D.cash, obor = M.people.findIndex(p => p.name === 'Оборотка');
+    return backBtn + lt('Свободно', 'деньги, которые ни за кем не числятся') + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Свободно</div><div class="num big">' + rub(c.free) + '</div></div>' + sec('Как считается') + '<div class="g list">' +
+      '<button class="row" data-open="bank"><div class="t"><b>В банках</b></div><div class="v">' + rub(c.total) + '</div>' + chev + '</button>' +
+      '<button class="row" data-tab="people"><div class="t"><b>Минус долги всем</b><span>участникам, налоги, Гостюхину</span></div><div class="v">' + minus(c.debts_all) + '</div>' + chev + '</button>' +
+      '<div class="row"><div class="t"><b>Свободно</b></div><div class="v">' + rub(c.free) + '</div></div></div>' +
+      (obor >= 0 ? sec('Откуда') + '<div class="g list"><button class="row" data-open="person:' + obor + '"><div class="t"><b>Оборотка</b><span>остатки с цен концертов, банк, сервисы, возвраты</span></div><div class="v">' + rub(M.people[obor].debt) + '</div>' + chev + '</button></div>' : '') + '</div>';
+  },
+  owed() {
+    const items = owedItems(), t = sum(items, o => o.s);
+    return backBtn + lt('Нам должны', 'по листу «Сверка»') + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Всего</div><div class="num big">' + rub(t) + '</div></div>' +
+      (items.length ? '<div class="g list">' + items.map(o => '<div class="row wrap"><div class="t"><b>' + esc(o.t) + '</b>' + (o.n ? '<span>' + esc(o.n) + '</span>' : '') + '</div><div class="v">' + rub(o.s) + '</div></div>').join('') + '</div>' : '<p class="small">Долгов нет.</p>') +
+      '<p class="small">Сроков оплаты в таблице пока нет. Когда появятся ожидаемые платежи по договорам, здесь будет видно, кто просрочил.</p></div>';
+  },
+  op(i) {
+    const o = M.ops[+i]; if (!o) return backBtn;
+    const r = o.ref;
+    if (o.kind === 'out') {
+      return backBtn + lt(esc(o.title), dm(o.date) + ' ' + o.date.slice(0, 4)) + '<div class="stack">' +
+        '<div class="g pad"><div class="lbl">Оплата</div><div class="num big">' + minus(r.sum) + '</div><div class="mt8"><span class="chip info"><span class="dot" style="background:' + col(CAT2ENT[r.cat]) + '"></span>' + esc(r.cat || 'без категории') + '</span></div></div>' +
+        '<div class="g list"><div class="row wrap"><div class="t"><b>Назначение</b><span>' + esc(r.name) + '</span></div></div>' +
+        (r.note ? '<div class="row wrap"><div class="t"><b>Примечание</b><span>' + esc(r.note) + '</span></div></div>' : '') + '</div></div>';
+    }
+    const parts = [['Гостюхин', 'gost', r.gost], ['Брылин', 'bryl', r.bryl], ['Петрушенко', 'petr', r.petr], ['Админ', 'adm', r.adm], ['Менеджер', 'oth', r.mgr], ['НДС и УСН', 'tax', (r.nds || 0) + (r.usn || 0)], ['Доп. расходы', 'oth', r.extra], ['Оборотка', 'oth', r.obor]];
+    return backBtn + lt(esc(o.title), dm(o.date) + ' ' + o.date.slice(0, 4)) + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Приход</div><div class="num big plus">' + plus(r.sum) + '</div><div class="lbl mt4">' + esc(r.cp) + '</div></div>' +
+      '<div class="g list"><div class="row wrap"><div class="t"><b>Назначение</b><span>' + esc(r.name) + '</span></div></div>' +
+      '<div class="row"><div class="t"><b>Проект</b></div><div class="v"><small>' + esc(r.project || '—') + '</small></div></div></div>' +
+      sec('Как разнесён') + (splitBlock(parts, r.sum) || '<p class="small">Приход не разнесён.</p>') + '</div>';
+  },
+  cat(k) {
+    const cat = decodeURIComponent(k), m = M.months[S.month];
+    const rows = M.payments.filter(p => ym(p.date) === m && (p.cat || 'Без категории') === cat).reverse();
+    return backBtn + lt(esc(cat), MONF[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4)) + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">' + rows.length + ' оп.</div><div class="num big">' + minus(sum(rows, p => p.sum)) + '</div></div>' +
+      '<div class="g list">' + rows.map(p => { const i = M.ops.findIndex(o => o.ref === p); return opRow(M.ops[i], i); }).join('') + '</div></div>';
+  },
+  person(i) {
+    const p = M.people[+i]; if (!p) return backBtn;
+    const pays = M.payments.filter(x => p.cats.includes(x.cat)).reverse(), shown = S.showAll ? pays : pays.slice(0, 30);
+    const done = p.accrued ? Math.min(1, p.paid / p.accrued) : 0;
+    return backBtn + lt('<span class="dot" style="width:14px;height:14px;background:' + col(p.c) + '"></span>' + esc(p.name), p.sub) + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">' + (Math.abs(p.debt) < 1 ? 'Расчёты закрыты' : p.debt < 0 ? 'Переплата' : 'К выплате') + '</div><div class="num big">' + rub(Math.abs(p.debt)) + '</div>' +
+      '<div class="bar mt8"><i style="width:' + (done * 100).toFixed(1) + '%;background:' + col(p.c) + '"></i></div><div class="lbl mt8">выплачено ' + pct(done) + ' от начисленного</div></div>' +
+      '<div class="g list"><div class="row"><div class="t"><b>Начислено</b><span>с сентября 2024</span></div><div class="v">' + rub(p.accrued) + '</div></div>' +
+      '<div class="row"><div class="t"><b>Выплачено</b></div><div class="v">' + rub(p.paid) + '</div></div></div>' +
+      sec('Платежи · ' + pays.length) + (pays.length ? '<div class="g list">' + shown.map(x => { const k = M.ops.findIndex(o => o.ref === x); return opRow(M.ops[k], k, payPurpose(x)); }).join('') + '</div>' +
+        (pays.length > shown.length ? '<button class="more" data-more>Показать все ' + pays.length + '</button>' : '') : '<p class="small">Платежей нет.</p>') + '</div>';
+  },
+  concert(id) {
+    const gv = S.view === 'gost', src = gv ? G.conc.list : M.conc.list, c = src.find(x => x.id === id);
+    if (!c) return backBtn;
+    const [tl] = CTYPE(c.type);
+    const incs = gv ? G.accruals.filter(a => datesIn(a.name).includes(c.date)) : M.incomes.filter(i => datesIn(i.name).includes(c.date));
+    const got = sum(incs, i => i.sum);
+    const head = backBtn + lt(esc(c.city), dm(c.date) + ' ' + c.date.slice(0, 4) + ' · ' + tl) + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">' + (c.tour ? 'Цена по листу тура' : 'Цена концерта') + '</div><div class="num big">' + rub(c.price) + '</div><div class="lbl mt4">' + esc(c.cp) + '</div></div>';
+    const paid = sec('Пришло на счёт') + (incs.length
+      ? '<div class="g list">' + incs.map(i => '<div class="row"><div class="t"><b>' + esc(String(i.name).split(' — ')[0]) + '</b><span>' + esc(dm(i.date)) + ' · ' + esc(i.cp) + '</span></div><div class="v plus">' + plus(i.sum) + (gv ? '<small>вам ' + rub(i.gost) + '</small>' : '') + '</div></div>').join('') + '</div>' +
+        (c.price > 0 ? '<p class="small">Всего ' + rub(got) + ' из ' + rub(c.price) + '.</p>' : '')
+      : '<p class="small">' + (c.tour ? 'Туровые деньги приходят общими платежами, по датам их не видно.' : 'Приходов с датой этого концерта в реестре нет.') + '</p>');
+    if (gv) {
+      return head + sec('Ваша доля') + (c.split ? splitBlock([['Вам на руки', 'gost', c.gost], ['Налоги, команда, расходы', 'oth', Math.max(0, c.price - c.gost)]], c.price) : '<p class="small">Доля появится после оплаты.</p>') + paid + '</div>';
+    }
+    const parts = c.tour
+      ? [['Гостюхин', 'gost', c.gost], ['Брылин', 'bryl', c.bryl], ['Петрушенко', 'petr', c.petr], ['Админ', 'adm', c.adm], ['Налоги и прочее', 'tax', Math.max(0, c.price - c.gost - c.bryl - c.petr - c.adm)]]
+      : [['Гостюхин', 'gost', c.gost], ['Брылин', 'bryl', c.bryl], ['Петрушенко', 'petr', c.petr], ['Админ', 'adm', c.adm], ['Менеджер', 'oth', c.mgr], ['НДС и УСН', 'tax', c.nds + c.usn], ['Доп. расходы', 'oth', c.extra], ['Остаток в оборотку', 'oth', c.obor]];
+    return head + sec('Как делится цена') + (c.split ? splitBlock(parts, c.price) : '<p class="small">Доли ещё не разнесены.</p>') + paid + '</div>';
+  },
+  adv() {
+    const list = G.advances.slice().sort((a, b) => b.gost - a.gost);
+    return backBtn + lt('Аванс', 'деньги пришли, а концерт ещё впереди') + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Аванс за концерты впереди</div><div class="num big">' + rub(G.advSum) + '</div></div>' +
+      (list.length ? '<div class="g list">' + list.map(a => { const d = datesIn(a.name).filter(x => x > D.today)[0];
+        return '<div class="row">' + dateBadge(d) + '<div class="t"><b>' + esc(a.name.replace(/\s*—.*$/, '').replace(/\(.*?\)/, '').trim()) + '</b><span>' + esc(a.cp) + ' · пришло ' + esc(dm(a.date)) + '</span></div><div class="v">' + rub(a.gost) + '<small>из ' + rub(a.sum) + '</small></div></div>'; }).join('') + '</div>' : '<p class="small">Авансов нет.</p>') +
+      '<p class="small">После концерта сумма сама переходит в «отработано». Платежи ИП Баранов — возврат долга за тур осени 2025, они уже отработаны.</p></div>';
+  }
+};
+
+/* ───────── отрисовка и переходы ───────── */
+const views = $('views'), tabbar = $('tabbar'), sheet = $('sheet'), sheetViews = $('sheetViews');
+function renderTabs() {
+  tabbar.innerHTML = TABS[S.view].map(t => '<button class="tab" role="tab" aria-selected="' + (t[0] === S.tab) + '" data-tab="' + t[0] + '">' + icon(t[2]) + '<span>' + t[1] + '</span></button>').join('');
+}
+function renderView(animate) {
+  const keep = views.scrollTop;
+  views.innerHTML = SCREENS[S.tab]();
+  if (animate) { views.scrollTop = 0; views.classList.remove('in'); void views.offsetWidth; views.classList.add('in'); }
+  else views.scrollTop = keep;
+}
+function showTop(animate, keepScroll) {
+  if (!STACK.length) return;
+  const [k, arg] = STACK[STACK.length - 1], keep = sheetViews.scrollTop;
+  sheetViews.innerHTML = SHEETS[k] ? SHEETS[k](arg) : backBtn;
+  if (keepScroll) sheetViews.scrollTop = keep; else sheetViews.scrollTop = 0;
+  if (animate) { sheetViews.classList.remove('in'); void sheetViews.offsetWidth; sheetViews.classList.add('in'); }
+  sheet.style.transform = '';
+}
+function openSheet(k, arg) { S.showAll = false; STACK.push([k, arg]); showTop(STACK.length > 1, false); sheet.classList.add('open'); sheet.setAttribute('aria-hidden', 'false'); }
+function goBack() { S.showAll = false; STACK.pop(); if (STACK.length) showTop(true, false); else closeSheet(); }
+function closeSheet() { STACK.length = 0; sheet.style.transform = ''; sheet.classList.remove('open'); sheet.setAttribute('aria-hidden', 'true'); }
+function setTab(id) { closeSheet(); S.tab = id; S.gbar = null; S.showAll = false; renderTabs(); renderView(true); }
+function paint() { renderTabs(); renderView(false); if (STACK.length) showTop(false, true); }
+
+$('app').addEventListener('click', e => {
+  const el = e.target.closest('[data-tab],[data-open],[data-back],[data-seg],[data-month],[data-mbar],[data-year],[data-gyear],[data-gbar],[data-more],[data-refresh],[data-gostview],[data-exitpreview]');
+  if (!el) return;
+  const d = el.dataset;
+  if (d.tab !== undefined) { if (TABS[S.view].some(t => t[0] === d.tab)) setTab(d.tab); }
+  else if (d.open !== undefined) { const i = d.open.indexOf(':'); openSheet(i < 0 ? d.open : d.open.slice(0, i), i < 0 ? '' : d.open.slice(i + 1)); }
+  else if (d.back !== undefined) goBack();
+  else if (d.seg) { S.seg = d.seg; renderView(false); }
+  else if (d.month) { S.month = Math.max(0, Math.min(M.months.length - 1, S.month + Number(d.month))); renderView(false); }
+  else if (d.mbar) { S.month = Number(d.mbar); renderView(false); }
+  else if (d.year) { S.year = d.year; renderView(false); }
+  else if (d.gyear) { S.gyear = d.gyear; S.gbar = null; S.showAll = false; renderView(false); }
+  else if (d.gbar) { const i = Number(d.gbar); S.gbar = S.gbar === i ? null : i; renderView(false); }
+  else if (d.more !== undefined) { S.showAll = true; if (STACK.length) showTop(false, true); else renderView(false); }
+  else if (d.refresh !== undefined) refresh();
+  else if (d.gostview !== undefined) { S.view = 'gost'; setTab('me'); }
+  else if (d.exitpreview !== undefined) { S.view = 'full'; setTab('more'); }
+});
+/* свайп вправо — назад */
+let sx = null, sy = 0, dx = 0, horiz = false;
+sheet.addEventListener('touchstart', e => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; dx = 0; horiz = false; }, { passive: true });
+sheet.addEventListener('touchmove', e => {
+  if (sx === null) return; const t = e.touches[0]; dx = t.clientX - sx; const dy = t.clientY - sy;
+  if (!horiz && Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.3) horiz = true;
+  if (horiz && dx > 0) { sheet.style.transition = 'none'; sheet.style.transform = 'translateX(' + dx + 'px)'; }
+}, { passive: true });
+sheet.addEventListener('touchend', () => { sheet.style.transition = ''; if (horiz && dx > 90) goBack(); else sheet.style.transform = ''; sx = null; });
+
+/* ───────── данные ───────── */
+function pick(s) { s = (s || '').trim(); const m = /[?&#]k=([^&#\s]+)/.exec(s); if (m) return decodeURIComponent(m[1]); if (/^[A-Za-z0-9_\-]{8,}$/.test(s)) return s; return ''; }
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+function forget() { [LS_KEY, LS_DATA, LS_TS].forEach(lsDel); }
+function cached() { try { const t = lsGet(LS_DATA); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
+
+function viaFetch(url) {
+  return new Promise((resolve, reject) => {
+    if (!window.fetch) { reject(new Error('no fetch')); return; }
+    let done = false;
+    const t = setTimeout(() => { if (!done) { done = true; reject(new Error('долго не отвечает')); } }, TIMEOUT);
+    fetch(url, { method: 'GET', credentials: 'omit', cache: 'no-store' }).then(r => r.text())
+      .then(txt => { if (done) return; done = true; clearTimeout(t); resolve(txt); })
+      .catch(err => { if (done) return; done = true; clearTimeout(t); reject(err); });
+  });
+}
+function viaJsonp(url) {
+  return new Promise((resolve, reject) => {
+    const cb = 'kassa_cb_' + Date.now(), s = document.createElement('script'); let done = false;
+    const cleanup = () => { clearTimeout(t); try { delete window[cb]; } catch (e) { window[cb] = undefined; } if (s.parentNode) s.parentNode.removeChild(s); };
+    const t = setTimeout(() => { if (!done) { done = true; cleanup(); reject(new Error('долго не отвечает')); } }, TIMEOUT);
+    window[cb] = obj => { if (done) return; done = true; cleanup(); resolve(JSON.stringify(obj)); };
+    s.onerror = () => { if (done) return; done = true; cleanup(); reject(new Error('данные не загрузились')); };
+    s.src = url + '&callback=' + cb;
+    document.head.appendChild(s);
+  });
+}
+function load(key) {
+  const url = DATA_URL + '?k=' + encodeURIComponent(key);
+  return viaFetch(url).catch(() => viaJsonp(url)).then(txt => {
+    let d; try { d = JSON.parse(txt); } catch (e) { throw new Error('ответ не похож на данные'); }
+    if (d && d.error === '403') { const er = new Error('Ключ не подошёл. Откройте кассу по своей ссылке.'); er.denied = true; throw er; }
+    if (!d || !d.role || !d.incomes) throw new Error('в ответе нет цифр');
+    return d;
+  });
+}
+
+function boot(d) {
+  const first = !D;
+  D = d; S.role = d.role;
+  if (d.role === 'gost') { M = null; G = modelGost(d); }
+  else { M = modelFull(d); G = modelGost(slimForGost(d)); }
+  if (first) {
+    S.view = d.role === 'gost' ? 'gost' : 'full';
+    S.tab = TABS[S.view][0][0];
+    S.year = d.today.slice(0, 4); S.gyear = d.today.slice(0, 4);
+  }
+  if (S.view === 'full' && !M) S.view = 'gost';
+  if (M) S.month = (first || S.month == null || S.month >= M.months.length) ? M.months.length - 1 : S.month;
+  $('shell').hidden = true; $('app').hidden = false;
+  document.title = S.role === 'gost' ? 'Касса Гостюхина' : 'Касса ИП Гостюхин';
+  if (first) { renderTabs(); renderView(false); } else paint();
+}
+function shell(which, msg) {
+  $('app').hidden = true; $('shell').hidden = false;
+  ['s-load', 's-gate', 's-fail'].forEach(x => { $(x).hidden = x !== which; });
+  if (msg) $('failtext').textContent = msg;
+}
+let KEY = '';
+function refresh() {
+  if (!KEY || S.net === 'loading') return;
+  S.net = 'loading'; if (D) paint();
+  load(KEY).then(d => {
+    lsSet(LS_DATA, JSON.stringify(d)); lsSet(LS_TS, String(Date.now()));
+    S.net = 'ok'; boot(d);
+  }).catch(err => {
+    if (err && err.denied) { forget(); D = null; closeSheet(); shell('s-fail', err.message); return; }
+    if (D) { S.net = 'offline'; paint(); }
+    else shell('s-fail', 'Не получилось получить цифры: ' + (err && err.message ? err.message : err));
+  });
+}
+function gate() {
+  shell('s-gate');
+  $('ok').onclick = () => {
+    const v = pick($('key').value);
+    if (!v) { $('gateerr').hidden = false; $('key').focus(); return; }
+    $('gateerr').hidden = true; lsSet(LS_KEY, v); KEY = v; shell('s-load'); refresh();
+  };
+  $('key').addEventListener('keydown', e => { if (e.key === 'Enter') $('ok').click(); });
+}
+$('retry').onclick = () => { shell('s-load'); S.net = 'ok'; refresh(); };
+$('forget').onclick = () => { forget(); location.href = location.pathname; };
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && D && Date.now() - S.fetchedAt > 10 * 60 * 1000) { S.fetchedAt = Date.now(); refresh(); }
+});
+
+let TEST = null;
+try { TEST = JSON.parse($('testdata').textContent); } catch (e) { TEST = null; }
+if (TEST) {
+  boot(TEST);
+  const q = new URLSearchParams(location.search);
+  if (q.get('view') === 'gost') { S.view = 'gost'; setTab(q.get('tab') || 'me'); }
+  else if (q.get('tab')) setTab(q.get('tab'));
+  if (q.get('open')) { const o = q.get('open'), i = o.indexOf(':'); openSheet(i < 0 ? o : o.slice(0, i), i < 0 ? '' : o.slice(i + 1)); }
+} else {
+  if (USE_SW && 'serviceWorker' in navigator) window.addEventListener('load', () => { try { navigator.serviceWorker.register('sw.js'); } catch (e) {} });
+  KEY = pick(location.search) || pick(location.hash) || lsGet(LS_KEY) || '';
+  if (!KEY) gate();
+  else {
+    lsSet(LS_KEY, KEY);
+    const c = cached();
+    S.fetchedAt = Date.now();
+    if (c && c.role && c.incomes) { boot(c); refresh(); }
+    else { shell('s-load'); refresh(); }
+  }
+}
+})();
+</script>
+</body>
+</html>
