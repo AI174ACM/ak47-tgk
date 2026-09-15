@@ -1,6 +1,6 @@
 /* Служебный работник кассы. Страница берётся из сети, при отсутствии сети — из запаса.
-   Данные (script.google.com) и шрифты идут мимо: их кеширует сама страница в localStorage. */
-const CACHE = 'kassa-20260915-1949';
+   Данные (script.google.com) и шрифты идут мимо: цифры хранит сама страница в localStorage. */
+const CACHE = 'kassa-20260915-2322';
 const ASSETS = ['./', './index.html', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {
@@ -17,6 +17,7 @@ self.addEventListener('fetch', e => {
   let url;
   try { url = new URL(req.url); } catch (err) { return; }
   if (url.origin !== self.location.origin) return;
+  if (url.pathname.indexOf('/kassa/beta/') === 0) return;
   e.respondWith(
     fetch(req).then(r => {
       if (r && r.ok) { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {}); }
