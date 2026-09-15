@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260915-2225). -->
+<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260915-2306). -->
 <style>
 :root{
   color-scheme:dark;
@@ -82,6 +82,22 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .tile{appearance:none;display:block;width:100%;text-align:left;cursor:pointer;transition:transform .15s}
 .tile:active,button.row:active{transform:scale(.985)}
 .tile-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.car{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 4px;scroll-padding:0 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.car::-webkit-scrollbar{display:none}
+.car::after{content:"";flex:0 0 6px}
+.car-card{appearance:none;flex:0 0 86%;scroll-snap-align:start;min-height:158px;padding:17px 18px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;cursor:pointer;transition:transform .15s}
+.car-card:active{transform:scale(.985)}
+.car-card.blue{background:linear-gradient(160deg,rgba(63,134,221,.34),rgba(63,134,221,.05) 62%),var(--card)}
+.car-card.green{background:linear-gradient(160deg,rgba(23,166,115,.32),rgba(23,166,115,.05) 62%),var(--card)}
+.car-card.orange{background:linear-gradient(160deg,rgba(217,90,40,.32),rgba(217,90,40,.05) 62%),var(--card)}
+.car-card.grey{background:linear-gradient(160deg,rgba(124,136,147,.32),rgba(124,136,147,.05) 62%),var(--card)}
+.car-num{font-size:28px;line-height:1.1}
+.car-num.s{font-size:23px}
+.car-more{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+.dots{display:flex;gap:6px;justify-content:center;margin:8px 0 4px}
+.dots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.25);transition:width .2s,background .2s}
+.dots i.on{width:16px;background:var(--ink)}
+.okline{color:var(--good)}
 .sec{margin:16px 6px 0;font-size:13px;font-weight:600;color:var(--muted);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .sec button{appearance:none;border:0;background:none;color:var(--accent);font:500 13px 'Golos Text',sans-serif;cursor:pointer;padding:0}
 .lbl{font-size:13px;color:var(--muted)}
@@ -448,17 +464,19 @@ function opRow(o, i, title) {
 }
 const SCREENS = {
   home() {
-    const c = D.cash, owedT = sum(D.owed || [], o => o.sum), ok = checksOk(), next = M.conc.upcoming[0];
-    return lt('Касса', 'по выпискам на ' + D.asOf, true) + '<div class="stack">' +
-      '<button class="g pad tile" data-open="bank"><div class="tile-h"><span class="lbl">В банках</span>' + chev + '</div><div class="num big' + bigCls(rub(c.total)) + '">' + rub(c.total) + '</div>' +
-      '<div class="lbl mt4">ТБанк ' + rub(c.tbank) + ' · Точка ' + rub(c.tochka) + '</div></button>' +
-      '<div class="two"><button class="g pad tile" data-open="free"><div class="tile-h"><span class="lbl">Свободно</span>' + chev + '</div><div class="num mid">' + rub(c.free) + '</div></button>' +
-      '<button class="g pad tile" data-open="owed"><div class="tile-h"><span class="lbl">Нам должны</span>' + chev + '</div><div class="num mid">' + rub(owedT) + '</div></button></div>' +
-      '<button class="g row" data-tab="people"><div class="t"><b>Долги всем</b><span>участникам, налоги, Гостюхину</span></div><div class="v">' + rub(c.debts_all) + '</div>' + chev + '</button>' +
-      '<button class="g row" data-tab="more"><span class="ic ' + (ok ? 'good">✓' : 'bad">!') + '</span><div class="t"><b>' + (ok ? 'Касса сходится с банками' : 'Есть расхождения') + '</b><span>' +
-      (ok ? 'расхождение 0 ₽ · все платежи разнесены' : 'откройте проверки') + '</span></div>' + chev + '</button>' +
+    const c = D.cash, owedT = sum(D.owed || [], o => o.sum), ok = checksOk(), next = M.conc.upcoming[0], owedN = owedItems().length;
+    const card = (open, tone, label, value, note) => '<button class="g car-card ' + tone + '" data-open="' + open + '"><div class="tile-h"><span class="lbl">' + label + '</span><span class="car-more">подробнее' + chev + '</span></div>' +
+      '<div><div class="num car-num' + (value.length > 11 ? ' s' : '') + '">' + value + '</div><div class="lbl mt8">' + note + '</div></div></button>';
+    return '<div class="lt"><h1>Касса</h1><p><span>по выпискам на ' + esc(D.asOf) + '</span>' + (ok ? '<span class="okline">✓ сходится с банками</span>' : '') + netLine() + '</p></div>' +
+      '<div class="car" id="car" aria-label="Главные суммы, листаются влево и вправо">' +
+      card('bank', 'blue', 'На счетах', rub(c.total), 'ТБанк ' + compact(c.tbank) + ' · Точка ' + compact(c.tochka)) +
+      card('free', 'green', 'Свободные деньги', rub(c.free), 'ни за кем не числятся') +
+      card('owed', 'orange', 'К получению', rub(owedT), owedN ? 'нам должны: ' + owedN + ' ' + (owedN === 1 ? 'долг' : owedN < 5 ? 'долга' : 'долгов') : 'нам никто не должен') +
+      card('debts', 'grey', 'К выплате', rub(c.debts_all), 'участникам, Гостюхину, налоги') +
+      '</div><div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><div class="stack">' +
+      (ok ? '' : '<button class="g row" data-tab="more"><span class="ic bad">!</span><div class="t"><b>Касса не сходится</b><span>откройте проверки</span></div>' + chev + '</button>') +
       (next ? sec('Ближайший концерт', ['concerts', 'Все']) + '<div class="g list">' + concertRow(next) + '</div>' : '') +
-      sec('Последние операции', ['money', 'Деньги']) + '<div class="g list">' + M.ops.slice(0, 5).map((o, i) => opRow(o, i)).join('') + '</div></div>';
+      sec('Последние операции', ['money', 'Все']) + '<div class="g list">' + M.ops.slice(0, 3).map((o, i) => opRow(o, i)).join('') + '</div></div>';
   },
   money() {
     const mi = S.month, m = M.months[mi];
@@ -486,7 +504,7 @@ const SCREENS = {
   people() {
     const rows = M.people.filter(p => p.c !== 'oth' || p.name === 'Менеджер').slice().sort((a, b) => (Math.abs(b.debt) >= 1) - (Math.abs(a.debt) >= 1) || b.debt - a.debt);
     return lt('Люди', 'кому сколько к выплате') + '<div class="stack">' +
-      '<div class="g pad"><div class="lbl">Долги всем</div><div class="num big' + bigCls(rub(D.cash.debts_all)) + '">' + rub(D.cash.debts_all) + '</div><div class="lbl mt4">участникам, налоги, НДС и Гостюхину</div></div>' +
+      '<div class="g pad"><div class="lbl">К выплате</div><div class="num big' + bigCls(rub(D.cash.debts_all)) + '">' + rub(D.cash.debts_all) + '</div><div class="lbl mt4">участникам, налоги, НДС и Гостюхину</div></div>' +
       '<div class="g list">' + rows.map(p => { const i = M.people.indexOf(p);
         const v = Math.abs(p.debt) < 1 ? '<span class="chip good">✓ закрыто</span>' : p.debt < 0 ? '<div class="v">' + rub(-p.debt) + '<small>переплата</small></div>' : '<div class="v">' + rub(p.debt) + '<small>к выплате</small></div>';
         return '<button class="row" data-open="person:' + i + '"><span class="dot" style="background:' + col(p.c) + '"></span><div class="t"><b>' + esc(p.name) + '</b><span>' + esc(p.sub) + '</span></div>' + v + chev + '</button>'; }).join('') + '</div>' +
@@ -503,13 +521,14 @@ const SCREENS = {
     const obor = M.people.findIndex(p => p.name === 'Оборотка');
     const years = []; for (let k = 2024; k <= +M.curY; k++) years.push(String(k));
     return lt('Ещё') + '<div class="stack">' + sec('Проверки таблицы') + '<div class="g list">' +
-      ck(Math.abs(c.diff || 0) < 0.01, 'Деньги в банках = долги + оборотка', 'расхождение 0 ₽', 'расхождение ' + rub(c.diff)) +
+      ck(Math.abs(c.diff || 0) < 0.01, 'На счетах = к выплате + свободные деньги', 'расхождение 0 ₽', 'расхождение ' + rub(c.diff)) +
       ck(Math.abs(c.uncat || 0) < 0.01, 'Все платежи с категорией', 'без категории — 0', 'без категории ' + rub(c.uncat)) +
       ck(!c.control, 'Реестр, колонка «Контроль»', 'все строки ✓', c.control + ' строк без ✓') + '</div>' +
       sec('Кому пошли деньги') + yearChips('data-year', y, years) + (sum(parts, p => p[2]) > 0 ? splitBlock(parts) : '<p class="small">Приходов за этот период нет.</p>') +
       sec('Приходы по проектам') + (prow.length ? hbars(prow) : '<p class="small">Приходов за этот период нет.</p>') +
       sec('Прочее') + '<div class="g list">' +
-      (obor >= 0 ? '<button class="row" data-open="person:' + obor + '"><span class="dot" style="background:' + col('oth') + '"></span><div class="t"><b>Оборотка</b><span>банк, сервисы, возвраты, прочее</span></div><div class="v">' + rub(M.people[obor].debt) + '</div>' + chev + '</button>' : '') +
+      '<button class="row" data-open="free"><span class="dot" style="background:' + col('petr') + '"></span><div class="t"><b>Свободные деньги</b><span>из чего складываются</span></div><div class="v">' + rub(D.cash.free) + '</div>' + chev + '</button>' +
+      (obor >= 0 ? '' : '') +
       (S.role === 'admin' ? '<button class="row" data-gostview><span class="dot" style="background:' + col('gost') + '"></span><div class="t"><b>Экран Гостюхина</b><span>посмотреть, что видит он</span></div>' + chev + '</button>' : '') +
       '<button class="row" data-refresh><div class="t"><b>Обновить цифры</b><span>прочитаны ' + esc(D.generated || '') + '</span></div>' + (S.net === 'loading' ? '<span class="spin"></span>' : '') + '</button></div>' +
       '<p class="small">Данные: Google-таблица «ИП Гостюхин» — реестр приходов, журнал оплат, «Сверка», «Концерты 2026», лист тура осени 2026.</p></div>';
@@ -600,26 +619,62 @@ function owedItems() {
 const SHEETS = {
   bank() {
     const c = D.cash, m = M.months[M.months.length - 1], ok = checksOk();
-    return backBtn + lt('В банках', 'по выпискам на ' + D.asOf) + '<div class="stack">' +
+    return backBtn + lt('На счетах', 'по выпискам на ' + D.asOf) + '<div class="stack">' +
       '<div class="g pad"><div class="lbl">Всего</div><div class="num big">' + rub(c.total) + '</div></div>' +
       '<div class="g list"><div class="row"><div class="t"><b>ТБанк</b><span>счёт …8996</span></div><div class="v">' + rub(c.tbank) + '</div></div>' +
       '<div class="row"><div class="t"><b>Точка</b><span>счёт …3010</span></div><div class="v">' + rub(c.tochka) + '</div></div></div>' +
-      sec('Сверка') + '<div class="g list"><div class="row"><span class="ic ' + (ok ? 'good">✓' : 'bad">!') + '</span><div class="t"><b>' + (ok ? 'Сходится с таблицей' : 'Есть расхождения') + '</b><span>деньги в банках = долги всем + свободно</span></div></div></div>' +
+      sec('Сверка') + '<div class="g list"><div class="row"><span class="ic ' + (ok ? 'good">✓' : 'bad">!') + '</span><div class="t"><b>' + (ok ? 'Сходится с таблицей' : 'Есть расхождения') + '</b><span>на счетах = к выплате + свободные деньги</span></div></div></div>' +
       sec(MONF[+m.slice(5, 7) - 1] + ', с начала месяца') + '<div class="g list"><div class="row"><div class="t"><b>Пришло</b></div><div class="v plus">' + plus(M.inc[m]) + '</div></div>' +
       '<div class="row"><div class="t"><b>Ушло</b></div><div class="v">' + minus(M.out[m]) + '</div></div></div></div>';
   },
   free() {
-    const c = D.cash, obor = M.people.findIndex(p => p.name === 'Оборотка');
-    return backBtn + lt('Свободно', 'деньги, которые ни за кем не числятся') + '<div class="stack">' +
-      '<div class="g pad"><div class="lbl">Свободно</div><div class="num big">' + rub(c.free) + '</div></div>' + sec('Как считается') + '<div class="g list">' +
-      '<button class="row" data-open="bank"><div class="t"><b>В банках</b></div><div class="v">' + rub(c.total) + '</div>' + chev + '</button>' +
-      '<button class="row" data-tab="people"><div class="t"><b>Минус долги всем</b><span>участникам, налоги, Гостюхину</span></div><div class="v">' + minus(c.debts_all) + '</div>' + chev + '</button>' +
-      '<div class="row"><div class="t"><b>Свободно</b></div><div class="v">' + rub(c.free) + '</div></div></div>' +
-      (obor >= 0 ? sec('Откуда') + '<div class="g list"><button class="row" data-open="person:' + obor + '"><div class="t"><b>Оборотка</b><span>остатки с цен концертов, банк, сервисы, возвраты</span></div><div class="v">' + rub(M.people[obor].debt) + '</div>' + chev + '</button></div>' : '') + '</div>';
+    const c = D.cash;
+    const inObor = sum(M.incomes, i => i.obor || 0), nIn = M.incomes.filter(i => i.obor).length;
+    const OUTS = [['Банк и сервисы', 'Банк и сервисы', 'комиссии и обслуживание'], ['Прочее (с оборотки)', 'Прочие расходы', 'разовые расходы'], ['Возврат контрагенту', 'Возвраты заказчикам', 'вернули деньги']];
+    const outs = OUTS.map(([k, name, s]) => { const l = M.payments.filter(p => p.cat === k); return { k, name, s, v: sum(l, p => p.sum), n: l.length }; });
+    const calc = inObor - sum(outs, o => o.v), diff = calc - c.free;
+    return backBtn + lt('Свободные деньги', 'ни за кем не числятся') + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Сейчас</div><div class="num big">' + rub(c.free) + '</div></div>' +
+      sec('Из чего складываются') + '<div class="g list">' +
+      '<button class="row" data-open="freein"><span class="ic good">+</span><div class="t"><b>Остатки с приходов</b><span>' + nIn + ' приходов · надбавки и переплаты сверх цены</span></div><div class="v plus">' + plus(inObor) + '</div>' + chev + '</button>' +
+      outs.map(o => '<button class="row" data-open="catall:' + encodeURIComponent(o.k) + '"><span class="ic warn">−</span><div class="t"><b>' + esc(o.name) + '</b><span>' + o.n + ' оп. · ' + esc(o.s) + '</span></div><div class="v">' + minus(o.v) + '</div>' + chev + '</button>').join('') +
+      '<div class="row"><div class="t"><b>Итого</b></div><div class="v">' + rub(calc) + '</div></div></div>' +
+      (Math.abs(diff) >= 1 ? '<p class="small">Расчёт расходится со «Сверкой» на ' + rub(diff) + ' — нужно проверить таблицу.</p>' : '') +
+      sec('Проверка другим способом') + '<div class="g list">' +
+      '<button class="row" data-open="bank"><div class="t"><b>На счетах</b></div><div class="v">' + rub(c.total) + '</div>' + chev + '</button>' +
+      '<button class="row" data-open="debts"><div class="t"><b>Минус к выплате</b><span>участникам, Гостюхину, налоги</span></div><div class="v">' + minus(c.debts_all) + '</div>' + chev + '</button>' +
+      '<div class="row"><div class="t"><b>Свободные деньги</b></div><div class="v">' + rub(c.free) + '</div></div></div></div>';
+  },
+  freein() {
+    const rows = M.incomes.filter(i => i.obor).slice().reverse(), shown = S.showAll ? rows : rows.slice(0, 20);
+    const byP = {}; rows.forEach(i => { const k = i.project || 'Без проекта'; byP[k] = byP[k] || { v: 0, n: 0 }; byP[k].v += i.obor; byP[k].n++; });
+    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: 'petr' })).filter(r => r.v >= 1).sort((a, b) => b.v - a.v);
+    return backBtn + lt('Остатки с приходов', 'что осталось с цен после налогов и долей') + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Всего с сентября 2024</div><div class="num big">' + rub(sum(rows, i => i.obor)) + '</div></div>' +
+      sec('По проектам') + hbars(prow) + sec('Приходы · ' + rows.length) + '<div class="g list">' +
+      shown.map(i => { const k = M.ops.findIndex(o => o.ref === i);
+        return '<button class="row" data-open="op:' + k + '"><div class="t"><b>' + esc(String(i.name).split(' — ')[0]) + '</b><span>' + esc(dm(i.date) + ' ' + i.date.slice(0, 4)) + ' · из ' + rub(i.sum) + '</span></div><div class="v plus">' + (i.obor < 0 ? minus(-i.obor) : plus(i.obor)) + '</div>' + chev + '</button>'; }).join('') + '</div>' +
+      (rows.length > shown.length ? '<button class="more" data-more>Показать все ' + rows.length + '</button>' : '') + '</div>';
+  },
+  catall(k) {
+    const cat = decodeURIComponent(k), rows = M.payments.filter(p => p.cat === cat).reverse(), shown = S.showAll ? rows : rows.slice(0, 30);
+    return backBtn + lt(esc(cat), 'все операции с сентября 2024') + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">' + rows.length + ' оп.</div><div class="num big">' + minus(sum(rows, p => p.sum)) + '</div></div>' +
+      '<div class="g list">' + shown.map(p => { const i = M.ops.findIndex(o => o.ref === p); return opRow(M.ops[i], i, payPurpose(p)); }).join('') + '</div>' +
+      (rows.length > shown.length ? '<button class="more" data-more>Показать все ' + rows.length + '</button>' : '') + '</div>';
+  },
+  debts() {
+    const rows = M.people.filter(p => p.name !== 'Оборотка' && Math.abs(p.debt) >= 1).sort((a, b) => b.debt - a.debt);
+    return backBtn + lt('К выплате', 'деньги на счетах, которые нужно отдать') + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">Всего</div><div class="num big' + bigCls(rub(D.cash.debts_all)) + '">' + rub(D.cash.debts_all) + '</div></div>' +
+      '<div class="g list">' + rows.map(p => { const i = M.people.indexOf(p);
+        return '<button class="row" data-open="person:' + i + '"><span class="dot" style="background:' + col(p.c) + '"></span><div class="t"><b>' + esc(p.name) + '</b><span>' + esc(p.sub) + '</span></div>' +
+          (p.debt < 0 ? '<div class="v">' + minus(-p.debt) + '<small>переплата</small></div>' : '<div class="v">' + rub(p.debt) + '</div>') + chev + '</button>'; }).join('') + '</div>' +
+      '<p class="small">Переплата уменьшает общую сумму. Внутри каждой строки — сколько начислено, выплачено и все платежи.</p></div>';
   },
   owed() {
     const items = owedItems(), t = sum(items, o => o.s);
-    return backBtn + lt('Нам должны', 'по листу «Сверка»') + '<div class="stack">' +
+    return backBtn + lt('К получению', 'кто нам должен · по листу «Сверка»') + '<div class="stack">' +
       '<div class="g pad"><div class="lbl">Всего</div><div class="num big">' + rub(t) + '</div></div>' +
       (items.length ? '<div class="g list">' + items.map(o => '<div class="row wrap"><div class="t"><b>' + esc(o.t) + '</b>' + (o.n ? '<span>' + esc(o.n) + '</span>' : '') + '</div><div class="v">' + rub(o.s) + '</div></div>').join('') + '</div>' : '<p class="small">Долгов нет.</p>') +
       '<p class="small">Сроков оплаты в таблице пока нет. Когда появятся ожидаемые платежи по договорам, здесь будет видно, кто просрочил.</p></div>';
@@ -699,6 +754,17 @@ function renderView(animate) {
   views.innerHTML = SCREENS[S.tab]();
   if (animate) { views.scrollTop = 0; views.classList.remove('in'); void views.offsetWidth; views.classList.add('in'); }
   else views.scrollTop = keep;
+  bindCar();
+}
+/* карусель сумм на главной: точки показывают, какая карточка перед глазами; позиция сохраняется при обновлении цифр */
+function bindCar() {
+  const car = views.querySelector('#car'), dots = views.querySelectorAll('#dots i');
+  if (!car || !dots.length) return;
+  const step = () => (car.firstElementChild ? car.firstElementChild.offsetWidth + 10 : 1);
+  if (S.car) car.scrollLeft = S.car * step();
+  const upd = () => { const i = Math.max(0, Math.min(dots.length - 1, Math.round(car.scrollLeft / step()))); S.car = i; dots.forEach((d, k) => d.classList.toggle('on', k === i)); };
+  car.addEventListener('scroll', upd, { passive: true });
+  upd();
 }
 function showTop(animate, keepScroll) {
   if (!STACK.length) return;
