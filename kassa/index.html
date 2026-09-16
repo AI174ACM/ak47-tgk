@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-0953). -->
+<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1024). -->
 <style>
 :root{
   color-scheme:dark;
@@ -136,9 +136,21 @@ button.g.row{border:1px solid var(--line)}
 .chips::-webkit-scrollbar{display:none}
 .chips button{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 13.5px 'Golos Text',sans-serif;padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap}
 .chips button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:transparent}
-.yhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 6px -2px}
-.yhead .alltime{appearance:none;border:0;background:none;color:var(--accent);font:500 13px 'Golos Text',sans-serif;padding:2px 0;cursor:pointer}
-.yhead .alltime[aria-pressed="true"]{color:var(--ink);font-weight:600}
+.yseg{display:flex;flex-direction:column;gap:6px}
+.mini{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 4px;scroll-padding:0 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.mini::-webkit-scrollbar{display:none}
+.mini::after{content:"";flex:0 0 6px}
+.mini-card{appearance:none;flex:0 0 84%;max-width:84%;min-width:0;scroll-snap-align:start;padding:14px 15px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;transition:transform .15s;min-height:80px}
+.mini-card:active{transform:scale(.985)}
+.mini-card.blue{background:linear-gradient(145deg,rgba(63,134,221,.26),rgba(63,134,221,.04) 68%),var(--card)}
+.mini-card.green{background:linear-gradient(145deg,rgba(23,166,115,.24),rgba(23,166,115,.04) 68%),var(--card)}
+.mini-card.orange{background:linear-gradient(145deg,rgba(217,90,40,.24),rgba(217,90,40,.04) 68%),var(--card)}
+.mini-card.grey{background:linear-gradient(145deg,rgba(124,136,147,.26),rgba(124,136,147,.04) 68%),var(--card)}
+.mini-card .t{flex:1;min-width:0}
+.mini-card .t b{display:block;font-weight:500;font-size:14.5px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-card .t span{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.mini-card .v{font-variant-numeric:tabular-nums;font-weight:500;font-size:14.5px;white-space:nowrap;text-align:right}
+.mini-card .v small{display:block;font-size:11.5px;color:var(--muted);font-weight:400;margin-top:1px}
 .bar{height:8px;border-radius:4px;background:var(--seg);overflow:hidden;margin-top:7px}
 .bar i{display:block;height:100%;border-radius:4px;background:var(--in)}
 .split{display:flex;gap:2px;height:14px;margin:2px 0 4px}
@@ -403,8 +415,9 @@ function lt(title, sub, withNet) {
 const sec = (t, go) => '<div class="sec"><span>' + esc(t) + '</span>' + (go ? '<button data-tab="' + go[0] + '">' + esc(go[1]) + '</button>' : '') + '</div>';
 const backBtn = '<button class="back" data-back>' + chevL + 'Назад</button>';
 function dateBadge(s) { return '<div class="dateb"><b>' + (+s.slice(8, 10)) + '</b><span>' + MON[+s.slice(5, 7) - 1] + '</span></div>'; }
-function splitBlock(parts, total) {
+function splitBlock(parts, total, desc) {
   parts = parts.filter(p => p[2] > 0.5);
+  if (desc) parts = parts.slice().sort((a, b) => b[2] - a[2]);
   if (!parts.length) return '';
   const t = total || sum(parts, p => p[2]);
   return '<div class="g pad"><div class="split">' + parts.map(p => '<i style="flex:' + p[2] + ';background:' + col(p[1]) + '"></i>').join('') + '</div>' +
@@ -449,8 +462,27 @@ function carCard(attr, tone, label, value, note) {
 }
 /* годы в одну строку, «Всё время» отдельной кнопкой выше (решение Мельникова 16.09.2026) */
 function yearSeg(attr, cur, years) {
-  return '<div><div class="yhead"><span class="lbl">Год</span><button class="alltime" ' + attr + '="all" aria-pressed="' + (cur === 'all') + '">Всё время</button></div>' +
+  return '<div class="yseg"><div class="seg"><button ' + attr + '="all" aria-pressed="' + (cur === 'all') + '">Всё время</button></div>' +
     '<div class="seg">' + years.map(y => '<button ' + attr + '="' + y + '" aria-pressed="' + (y === cur) + '">' + y + '</button>').join('') + '</div></div>';
+}
+/* что ещё не выведено: выплаты закрывают начисления по порядку, здесь — непокрытый хвост (по убыванию даты) */
+function freeItems() {
+  const worked = G.accruals.filter(a => G.advances.indexOf(a) < 0).slice().sort(byDate);
+  const target = Math.max(0, sum(worked, a => a.gost) - sum(G.payouts, p => p.sum));
+  const out = []; let acc = 0;
+  for (let i = worked.length - 1; i >= 0 && acc < target - 0.5; i--) {
+    const a = worked[i]; if (!(a.gost > 0)) continue;
+    const take = Math.min(a.gost, target - acc);
+    out.push({ a: a, take: take, part: take < a.gost - 0.5 });
+    acc += take;
+  }
+  return out;
+}
+/* карточка мини-карусели на главной */
+function miniCard(tone, open, badge, title, sub, value, vcls) {
+  return '<' + (open ? 'button class="g mini-card ' + tone + '" data-open="' + open + '"' : 'div class="g mini-card ' + tone + '"') + '>' +
+    (badge ? dateBadge(badge) : '') + '<div class="t"><b>' + esc(title) + '</b><span>' + esc(sub) + '</span></div>' +
+    '<div class="v' + (vcls || '') + '">' + value + '</div>' + (open ? chev + '</button>' : '</div>');
 }
 const payTypes = list => Object.keys(PT).map(k => ({ name: PT[k][0], c: PT[k][1], v: sum(list.filter(p => p.type === k), p => p.sum) })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
 function payRow(p, withType) {
@@ -553,7 +585,7 @@ const SCREENS = {
   me() {
     const F = gostYear(G.curY), up = G.conc.upcoming.slice(0, 3), tot = G.total;
     const partE = Math.min(G.earned, Math.max(tot, 0)), partA = Math.min(G.advSum, Math.max(tot, 0));
-    const lastAcc = G.accruals.filter(a => a.gost > 0).slice(-3).reverse(), lastPay = G.payouts.slice(-3).reverse();
+    const lastAcc = G.accruals.filter(a => a.gost > 0).slice(-4).reverse(), lastPay = G.payouts.slice(-4).reverse();
     return previewBar() + lt('Моя касса', 'по выпискам на ' + D.asOf, true) +
       '<div class="car" id="car" aria-label="Мои суммы, листаются влево и вправо">' +
       carCard('data-open="gbal"', 'blue', 'Мой остаток', rub(tot), 'начислено, но ещё не выведено') +
@@ -562,10 +594,12 @@ const SCREENS = {
       carCard('data-open="gpaid"', 'grey', 'Выплачено в ' + G.curY, rub(F.paid), 'на карту и личные траты') +
       '</div><div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><div class="stack">' +
       (G.over > 0 ? '<p class="small">Авансов больше остатка на ' + rub(G.over) + ': часть денег за будущие концерты уже выведена.</p>' : '') +
-      (up.length ? sec('Ближайшие концерты', ['calendar', 'Календарь']) + '<div class="g list">' + up.map(c => concertRow(c, true)).join('') + '</div>' : '') +
-      (lastAcc.length ? sec('Последние начисления', ['share', 'Моя доля']) + '<div class="g list">' +
-        lastAcc.map(a => '<div class="row"><div class="t"><b>' + esc(opTitle(a.name)) + '</b><span>' + esc(dm(a.date)) + ' · ' + esc(a.project) + '</span></div><div class="v plus">' + plus(a.gost) + '</div></div>').join('') + '</div>' : '') +
-      (lastPay.length ? sec('Последние выплаты', ['payouts', 'Выплаты']) + '<div class="g list">' + lastPay.map(p => payRow(p, true)).join('') + '</div>' : '') + '</div>';
+      (up.length ? sec('Ближайшие концерты', ['calendar', 'Развернуть календарь']) + '<div class="mini">' +
+        up.map(c => miniCard('blue', 'concert:' + c.id, c.date, c.city, c.cp, c.split ? rub(c.gost) + '<small>вам</small>' : '<small>после оплаты</small>')).join('') + '</div>' : '') +
+      (lastAcc.length ? sec('Последние начисления', ['share', 'Вся моя доля']) + '<div class="mini">' +
+        lastAcc.map(a => miniCard('green', '', a.date, opTitle(a.name), a.project, plus(a.gost), ' plus')).join('') + '</div>' : '') +
+      (lastPay.length ? sec('Последние выплаты', ['payouts', 'Все выплаты']) + '<div class="mini">' +
+        lastPay.map(p => miniCard('orange', '', p.date, opTitle(p.name), PT[p.type][0], minus(p.sum))).join('') + '</div>' : '') + '</div>';
   },
   calendar() {
     const ev = {};
@@ -615,7 +649,7 @@ const SCREENS = {
       '<div class="g pad"><div class="lbl">Начислено ' + (y === 'all' ? 'за всё время' : 'за ' + y + ' год') + '</div><div class="num big' + bigCls(rub(F.accrued)) + '">' + rub(F.accrued) + '</div></div>' +
       (months.length ? sec('По месяцам') + '<div class="g pad chart"><div class="readout">' + (rm ? '<b>' + MONF[+rm.slice(5, 7) - 1] + ' ' + rm.slice(0, 4) + '</b> · ' + rub(vals[sel]) : 'Нажмите на столбик') + '</div>' +
         barChart(months.map(m => MONS[+m.slice(5, 7) - 1]), [{ cls: 'bin', values: vals }], sel, 'data-gbar') + '</div>' : '') +
-      sec('По типу дохода') + (F.accrued > 0 ? splitBlock(kinds) : '<p class="small">Начислений за этот период нет.</p>') +
+      sec('По типу дохода') + (F.accrued > 0 ? splitBlock(kinds, 0, true) : '<p class="small">Начислений за этот период нет.</p>') +
       sec('По проектам') + (prow.length ? hbars(prow) : '<p class="small">Нет начислений.</p>') +
       '<p class="small">Доля попадает в тот год, когда деньги пришли на счёт ИП, как в таблице и в выписках. Разница между начисленным и выплаченным переходит на следующий год строкой «На начало года».</p></div>';
   }
@@ -750,18 +784,18 @@ const SHEETS = {
     return head + sec('Как делится цена') + (c.split ? splitBlock(parts, c.price) : '<p class="small">Доли ещё не разнесены.</p>') + paid + '</div>';
   },
   gbal() {
-    const F = gostYear(G.curY), tot = G.total, n = G.advances.length;
+    const tot = G.total, n = G.advances.length;
     const partE = Math.min(G.earned, Math.max(tot, 0)), partA = Math.min(G.advSum, Math.max(tot, 0));
+    const items = freeItems();
+    const kinds = KIND.map(k => [k.label, k.c, sum(items.filter(x => kindOf(x.a.project) === k), x => x.take)]);
     return backBtn + lt('Мой остаток', 'по выпискам на ' + D.asOf) + '<div class="stack">' +
       '<div class="g pad"><div class="lbl">Начислено, но ещё не выведено</div><div class="num big' + bigCls(rub(tot)) + '">' + rub(tot) + '</div></div>' +
-      sec('Как считается') + '<div class="g list">' +
-      '<div class="row"><div class="t"><b>На начало ' + G.curY + ' года</b></div><div class="v">' + rub(F.open) + '</div></div>' +
-      '<button class="row" data-tab="share"><div class="t"><b>Плюс начислено в ' + G.curY + '</b><span>ваша доля из приходов</span></div><div class="v plus">' + plus(F.accrued) + '</div>' + chev + '</button>' +
-      '<button class="row" data-tab="payouts"><div class="t"><b>Минус выплачено в ' + G.curY + '</b><span>на карту и личные траты</span></div><div class="v">' + minus(F.paid) + '</div>' + chev + '</button>' +
-      '<div class="row"><div class="t"><b>Остаток</b></div><div class="v">' + rub(F.open + F.accrued - F.paid) + '</div></div></div>' +
-      sec('Из него') + splitBlock([['Можно выводить', 'gost', partE], ['Аванс за концерты впереди', 'adm', partA]], Math.max(partE + partA, 1)) +
-      (n ? '<div class="g list"><button class="row" data-open="adv"><div class="t"><b>Какие концерты в авансе</b><span>' + n + ' ' + (n === 1 ? 'приход' : n < 5 ? 'прихода' : 'приходов') + '</span></div>' + chev + '</button></div>' : '') +
-      '<p class="small">Аванс — оплата за концерт, который ещё не сыгран. Когда концерт проходит, эта сумма попадает в «можно выводить».</p></div>';
+      splitBlock([['Можно выводить', 'gost', partE], ['Аванс за концерты впереди', 'adm', partA]], Math.max(partE + partA, 1)) +
+      (items.length ? sec('За что эти ' + rub(partE)) + splitBlock(kinds, 0, true) : '') +
+      '<div class="g list">' +
+      (items.length ? '<button class="row" data-open="gfree"><div class="t"><b>По концертам и приходам</b><span>' + items.length + ' ' + (items.length === 1 ? 'приход' : items.length < 5 ? 'прихода' : 'приходов') + '</span></div>' + chev + '</button>' : '') +
+      (n ? '<button class="row" data-open="adv"><div class="t"><b>Какие концерты в авансе</b><span>' + n + ' ' + (n === 1 ? 'приход' : n < 5 ? 'прихода' : 'приходов') + '</span></div>' + chev + '</button>' : '') +
+      '</div></div>';
   },
   adv() {
     const list = G.advances.slice().sort((a, b) => b.gost - a.gost);
@@ -771,25 +805,18 @@ const SHEETS = {
         return '<div class="row">' + dateBadge(d) + '<div class="t"><b>' + esc(a.name.replace(/\s*—.*$/, '').replace(/\(.*?\)/, '').trim()) + '</b><span>' + esc(a.cp) + ' · пришло ' + esc(dm(a.date)) + '</span></div><div class="v">' + rub(a.gost) + '<small>из ' + rub(a.sum) + '</small></div></div>'; }).join('') + '</div>' : '<p class="small">Авансов нет.</p>') +
       '</div>';
   },
-  /* «Можно выводить»: за что сложилась сумма, без повтора экрана «Мой остаток» (решение Мельникова 16.09.2026) */
+  /* «Можно выводить»: конкретные концерты и приходы, которые ещё не выведены (решение Мельникова 16.09.2026) */
   gfree() {
     const tot = G.total, partE = Math.min(G.earned, Math.max(tot, 0));
-    const worked = G.accruals.filter(a => G.advances.indexOf(a) < 0);
-    const acc = sum(worked, a => a.gost), paid = sum(G.payouts, p => p.sum);
-    const kinds = KIND.map(k => [k.label, k.c, sum(worked.filter(a => kindOf(a.project) === k), a => a.gost)]);
-    const byP = {}; worked.forEach(a => { const k = kindOf(a.project).key === 'oth' ? 'Возвраты и прочее' : a.project; byP[k] = byP[k] || { v: 0, n: 0, c: kindOf(a.project).c }; byP[k].v += a.gost; byP[k].n++; });
-    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: o.c })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
-    const shown = S.showAll ? prow : prow.slice(0, 8);
+    const items = freeItems(), shown = S.showAll ? items : items.slice(0, 30);
     return backBtn + lt('Можно выводить', 'по выпискам на ' + D.asOf) + '<div class="stack">' +
       '<div class="g pad"><div class="lbl">Отработано и ещё не выведено</div><div class="num big' + bigCls(rub(partE)) + '">' + rub(partE) + '</div></div>' +
-      sec('Как получилось') + '<div class="g list">' +
-      '<div class="row"><div class="t"><b>Отработано за всё время</b><span>все начисления, кроме аванса</span></div><div class="v plus">' + plus(acc) + '</div></div>' +
-      '<div class="row"><div class="t"><b>Выплачено за всё время</b><span>на карту и личные траты</span></div><div class="v">' + minus(paid) + '</div></div>' +
-      '<div class="row"><div class="t"><b>Можно выводить</b></div><div class="v">' + rub(acc - paid) + '</div></div></div>' +
-      (G.over > 0 ? '<p class="small">Выплачено больше, чем отработано, на ' + rub(G.over) + ': часть аванса за будущие концерты уже выведена.</p>' : '') +
-      sec('За что начислено') + (acc > 0 ? splitBlock(kinds) : '<p class="small">Начислений нет.</p>') +
-      sec('По проектам · ' + prow.length) + (prow.length ? hbars(shown) +
-        (prow.length > shown.length ? '<button class="more" data-more>Показать все ' + prow.length + '</button>' : '') : '') + '</div>';
+      (items.length ? '<div class="g list">' + shown.map(x => {
+        const a = x.a;
+        return '<div class="row">' + dateBadge(a.date) + '<div class="t"><b>' + esc(opTitle(a.name)) + '</b><span>' + esc(a.project) + '</span></div>' +
+          '<div class="v">' + rub(x.take) + (x.part ? '<small>из ' + rub(a.gost) + '</small>' : '') + '</div></div>';
+      }).join('') + '</div>' + (items.length > shown.length ? '<button class="more" data-more>Показать все ' + items.length + '</button>' : '') : '<p class="small">Свободных денег нет.</p>') +
+      '<p class="small">Выплаты закрывают начисления по очереди, с самых ранних. Здесь то, что ещё не выведено.</p></div>';
   },
   /* «Выплачено в <год>»: только итоги, операции живут во вкладке «Выплаты» */
   gpaid() {
