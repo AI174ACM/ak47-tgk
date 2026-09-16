@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1024). -->
+<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1035). -->
 <style>
 :root{
   color-scheme:dark;
@@ -137,20 +137,11 @@ button.g.row{border:1px solid var(--line)}
 .chips button{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 13.5px 'Golos Text',sans-serif;padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap}
 .chips button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:transparent}
 .yseg{display:flex;flex-direction:column;gap:6px}
-.mini{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 4px;scroll-padding:0 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.mini::-webkit-scrollbar{display:none}
-.mini::after{content:"";flex:0 0 6px}
-.mini-card{appearance:none;flex:0 0 84%;max-width:84%;min-width:0;scroll-snap-align:start;padding:14px 15px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;transition:transform .15s;min-height:80px}
-.mini-card:active{transform:scale(.985)}
-.mini-card.blue{background:linear-gradient(145deg,rgba(63,134,221,.26),rgba(63,134,221,.04) 68%),var(--card)}
-.mini-card.green{background:linear-gradient(145deg,rgba(23,166,115,.24),rgba(23,166,115,.04) 68%),var(--card)}
-.mini-card.orange{background:linear-gradient(145deg,rgba(217,90,40,.24),rgba(217,90,40,.04) 68%),var(--card)}
-.mini-card.grey{background:linear-gradient(145deg,rgba(124,136,147,.26),rgba(124,136,147,.04) 68%),var(--card)}
-.mini-card .t{flex:1;min-width:0}
-.mini-card .t b{display:block;font-weight:500;font-size:14.5px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mini-card .t span{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.mini-card .v{font-variant-numeric:tabular-nums;font-weight:500;font-size:14.5px;white-space:nowrap;text-align:right}
-.mini-card .v small{display:block;font-size:11.5px;color:var(--muted);font-weight:400;margin-top:1px}
+.ht{display:block;width:100%}
+.ht.blue{background:linear-gradient(145deg,rgba(63,134,221,.26),rgba(63,134,221,.04) 68%),var(--card)}
+.ht.green{background:linear-gradient(145deg,rgba(23,166,115,.24),rgba(23,166,115,.04) 68%),var(--card)}
+.ht.orange{background:linear-gradient(145deg,rgba(217,90,40,.24),rgba(217,90,40,.04) 68%),var(--card)}
+.ht .ht-row{padding:11px 0 0}
 .bar{height:8px;border-radius:4px;background:var(--seg);overflow:hidden;margin-top:7px}
 .bar i{display:block;height:100%;border-radius:4px;background:var(--in)}
 .split{display:flex;gap:2px;height:14px;margin:2px 0 4px}
@@ -478,11 +469,12 @@ function freeItems() {
   }
   return out;
 }
-/* карточка мини-карусели на главной */
-function miniCard(tone, open, badge, title, sub, value, vcls) {
-  return '<' + (open ? 'button class="g mini-card ' + tone + '" data-open="' + open + '"' : 'div class="g mini-card ' + tone + '"') + '>' +
-    (badge ? dateBadge(badge) : '') + '<div class="t"><b>' + esc(title) + '</b><span>' + esc(sub) + '</span></div>' +
-    '<div class="v' + (vcls || '') + '">' + value + '</div>' + (open ? chev + '</button>' : '</div>');
+/* плитка на главной: подпись, одна запись, переход на свою страницу (решение Мельникова 16.09.2026) */
+function homeTile(tone, tab, label, date, title, sub, value, vcls) {
+  return '<button class="g pad tile ht ' + tone + '" data-tab="' + tab + '">' +
+    '<div class="tile-h"><span class="lbl">' + esc(label) + '</span><span class="car-more">развернуть' + chev + '</span></div>' +
+    '<div class="row ht-row">' + dateBadge(date) + '<div class="t"><b>' + esc(title) + '</b><span>' + esc(sub) + '</span></div>' +
+    '<div class="v' + (vcls || '') + '">' + value + '</div></div></button>';
 }
 const payTypes = list => Object.keys(PT).map(k => ({ name: PT[k][0], c: PT[k][1], v: sum(list.filter(p => p.type === k), p => p.sum) })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
 function payRow(p, withType) {
@@ -594,12 +586,10 @@ const SCREENS = {
       carCard('data-open="gpaid"', 'grey', 'Выплачено в ' + G.curY, rub(F.paid), 'на карту и личные траты') +
       '</div><div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><div class="stack">' +
       (G.over > 0 ? '<p class="small">Авансов больше остатка на ' + rub(G.over) + ': часть денег за будущие концерты уже выведена.</p>' : '') +
-      (up.length ? sec('Ближайшие концерты', ['calendar', 'Развернуть календарь']) + '<div class="mini">' +
-        up.map(c => miniCard('blue', 'concert:' + c.id, c.date, c.city, c.cp, c.split ? rub(c.gost) + '<small>вам</small>' : '<small>после оплаты</small>')).join('') + '</div>' : '') +
-      (lastAcc.length ? sec('Последние начисления', ['share', 'Вся моя доля']) + '<div class="mini">' +
-        lastAcc.map(a => miniCard('green', '', a.date, opTitle(a.name), a.project, plus(a.gost), ' plus')).join('') + '</div>' : '') +
-      (lastPay.length ? sec('Последние выплаты', ['payouts', 'Все выплаты']) + '<div class="mini">' +
-        lastPay.map(p => miniCard('orange', '', p.date, opTitle(p.name), PT[p.type][0], minus(p.sum))).join('') + '</div>' : '') + '</div>';
+      (up.length ? homeTile('blue', 'calendar', 'Ближайший концерт', up[0].date, up[0].city, up[0].cp,
+        up[0].split ? rub(up[0].gost) + '<small>вам</small>' : '<small>после оплаты</small>', '') : '') +
+      (lastAcc.length ? homeTile('green', 'share', 'Последнее начисление', lastAcc[0].date, opTitle(lastAcc[0].name), lastAcc[0].project, plus(lastAcc[0].gost), ' plus') : '') +
+      (lastPay.length ? homeTile('orange', 'payouts', 'Последняя выплата', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + '</div>';
   },
   calendar() {
     const ev = {};
