@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1056). -->
+<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1103). -->
 <style>
 :root{
   color-scheme:dark;
@@ -593,8 +593,8 @@ const SCREENS = {
       '<div class="tiles">' +
       (up.length ? homeTile('t1', 'calendar', 'Ближайший концерт', up[0].date, up[0].city, up[0].cp,
         up[0].split ? rub(up[0].gost) + '<small>вам</small>' : '<small>после оплаты</small>', '') : '') +
-      (lastAcc.length ? homeTile('t2', 'open:gacc', 'Начисление', lastAcc[0].date, opTitle(lastAcc[0].name), lastAcc[0].project, plus(lastAcc[0].gost), ' plus') : '') +
-      (lastPay.length ? homeTile('t3', 'open:gplist:pers', 'Оплата', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + '</div></div>';
+      (lastAcc.length ? homeTile('t2', 'open:gacc', 'Начисления', lastAcc[0].date, opTitle(lastAcc[0].name), lastAcc[0].project, plus(lastAcc[0].gost), ' plus') : '') +
+      (lastPay.length ? homeTile('t3', 'open:gplist:pers', 'Оплаты', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + '</div></div>';
   },
   calendar() {
     const ev = {};
