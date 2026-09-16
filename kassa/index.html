@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1035). -->
+<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1042). -->
 <style>
 :root{
   color-scheme:dark;
@@ -137,11 +137,14 @@ button.g.row{border:1px solid var(--line)}
 .chips button{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 13.5px 'Golos Text',sans-serif;padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap}
 .chips button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:transparent}
 .yseg{display:flex;flex-direction:column;gap:6px}
-.ht{display:block;width:100%}
-.ht.blue{background:linear-gradient(145deg,rgba(63,134,221,.26),rgba(63,134,221,.04) 68%),var(--card)}
-.ht.green{background:linear-gradient(145deg,rgba(23,166,115,.24),rgba(23,166,115,.04) 68%),var(--card)}
-.ht.orange{background:linear-gradient(145deg,rgba(217,90,40,.24),rgba(217,90,40,.04) 68%),var(--card)}
-.ht .ht-row{padding:11px 0 0}
+.tiles{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.ht{display:block;width:100%;padding:15px 16px 16px;box-shadow:inset 3px 0 0 var(--tone),inset 0 1px 0 rgba(255,255,255,.07)}
+.ht.t1{--tone:#7A6BE8;background:linear-gradient(145deg,rgba(122,107,232,.20),rgba(122,107,232,.03) 70%),var(--card)}
+.ht.t2{--tone:#19A3B8;background:linear-gradient(145deg,rgba(25,163,184,.20),rgba(25,163,184,.03) 70%),var(--card)}
+.ht.t3{--tone:#C2589B;background:linear-gradient(145deg,rgba(194,88,155,.20),rgba(194,88,155,.03) 70%),var(--card)}
+.ht .lbl{color:var(--tone);font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+.ht .car-more{font-size:12px;opacity:.75}
+.ht .ht-row{padding:12px 0 0}
 .bar{height:8px;border-radius:4px;background:var(--seg);overflow:hidden;margin-top:7px}
 .bar i{display:block;height:100%;border-radius:4px;background:var(--in)}
 .split{display:flex;gap:2px;height:14px;margin:2px 0 4px}
@@ -471,7 +474,7 @@ function freeItems() {
 }
 /* плитка на главной: подпись, одна запись, переход на свою страницу (решение Мельникова 16.09.2026) */
 function homeTile(tone, tab, label, date, title, sub, value, vcls) {
-  return '<button class="g pad tile ht ' + tone + '" data-tab="' + tab + '">' +
+  return '<button class="g tile ht ' + tone + '" data-tab="' + tab + '">' +
     '<div class="tile-h"><span class="lbl">' + esc(label) + '</span><span class="car-more">развернуть' + chev + '</span></div>' +
     '<div class="row ht-row">' + dateBadge(date) + '<div class="t"><b>' + esc(title) + '</b><span>' + esc(sub) + '</span></div>' +
     '<div class="v' + (vcls || '') + '">' + value + '</div></div></button>';
@@ -586,10 +589,11 @@ const SCREENS = {
       carCard('data-open="gpaid"', 'grey', 'Выплачено в ' + G.curY, rub(F.paid), 'на карту и личные траты') +
       '</div><div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><div class="stack">' +
       (G.over > 0 ? '<p class="small">Авансов больше остатка на ' + rub(G.over) + ': часть денег за будущие концерты уже выведена.</p>' : '') +
-      (up.length ? homeTile('blue', 'calendar', 'Ближайший концерт', up[0].date, up[0].city, up[0].cp,
+      '<div class="tiles">' +
+      (up.length ? homeTile('t1', 'calendar', 'Ближайший концерт', up[0].date, up[0].city, up[0].cp,
         up[0].split ? rub(up[0].gost) + '<small>вам</small>' : '<small>после оплаты</small>', '') : '') +
-      (lastAcc.length ? homeTile('green', 'share', 'Последнее начисление', lastAcc[0].date, opTitle(lastAcc[0].name), lastAcc[0].project, plus(lastAcc[0].gost), ' plus') : '') +
-      (lastPay.length ? homeTile('orange', 'payouts', 'Последняя выплата', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + '</div>';
+      (lastAcc.length ? homeTile('t2', 'share', 'Последнее начисление', lastAcc[0].date, opTitle(lastAcc[0].name), lastAcc[0].project, plus(lastAcc[0].gost), ' plus') : '') +
+      (lastPay.length ? homeTile('t3', 'payouts', 'Последняя выплата', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + '</div></div>';
   },
   calendar() {
     const ev = {};
