@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1103). -->
+<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1819). -->
 <style>
 :root{
   color-scheme:dark;
@@ -198,6 +198,31 @@ button.g.row{border:1px solid var(--line)}
 .loadrow{display:flex;align-items:center;gap:12px;color:var(--muted)}
 .loadrow .spin{width:22px;height:22px;border-width:3px;flex:none}
 
+/* касса Петрушенко: зелёный акцент, кнопки действий, встроенный калькулятор, заявка */
+#app.petr{--accent:#7EDDB4}
+#app.petr .bin{fill:#17A673}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.act{appearance:none;display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:15px 16px;text-align:left;cursor:pointer;transition:transform .15s}
+.act:active{transform:scale(.985)}
+.act .aic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center}
+.act .aic svg{width:21px;height:21px}
+.act b{font-weight:600;font-size:15px;line-height:1.2}
+.act span{font-size:12.5px;color:var(--muted);margin-top:-6px}
+.btns{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.btns .btn{gap:8px}
+.btns .btn svg{width:19px;height:19px}
+.btn.green{background:#17A673}
+.btns .two .btn.ghost{margin-top:0}
+.linkbox{display:flex;align-items:center;gap:10px;padding:14px;border-radius:14px;background:rgba(0,0,0,.28);border:1px solid var(--line);margin-top:10px}
+.linkbox b{flex:1;font-family:var(--num);font-weight:500;font-size:15px;letter-spacing:-.02em;word-break:break-all}
+.msg{white-space:pre-wrap;font-size:14px;line-height:1.45;color:var(--muted);margin:8px 0 0;padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.22);border:1px solid var(--sep)}
+.calcwrap{position:absolute;top:calc(var(--top) + 6px);left:0;right:0;bottom:calc(var(--bottom) + 84px);z-index:2}
+.calcwrap iframe{width:100%;height:100%;border:0;display:block;background:transparent}
+.calcwrap .loadrow{position:absolute;top:40%;left:0;right:0;justify-content:center;z-index:-1}
+.toast{position:fixed;left:50%;bottom:calc(var(--bottom) + 96px);transform:translate(-50%,20px);opacity:0;z-index:30;max-width:calc(100% - 40px);
+  padding:11px 16px;border-radius:14px;background:rgba(30,36,48,.94);border:1px solid var(--line);font-size:14px;text-align:center;transition:opacity .2s,transform .2s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
 @media (prefers-reduced-motion:reduce){.bg{animation:none}.views.in{animation:none}.sheet,.sheet.open{transition:none}}
 </style>
 </head>
@@ -207,6 +232,7 @@ button.g.row{border:1px solid var(--line)}
 <div id="app" hidden>
   <div class="topfade"></div>
   <main id="views" class="views"></main>
+  <div id="calcwrap" class="calcwrap" hidden><div class="loadrow"><div class="spin"></div><div>Открываю калькулятор…</div></div></div>
   <nav id="tabbar" class="tabbar" role="tablist" aria-label="Разделы"></nav>
   <section id="sheet" class="sheet" aria-hidden="true"><div class="bg"></div><div id="sheetViews" class="views"></div></section>
 </div>
@@ -229,6 +255,8 @@ button.g.row{border:1px solid var(--line)}
     </div>
   </div>
 </div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script id="testdata" type="application/json">null</script>
 <script>
@@ -280,7 +308,13 @@ const I = {
   more: '<circle cx="5.5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="18.5" cy="12" r="1.5" fill="currentColor"/>',
   cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="3.2"/><path d="M3.5 10h17M8.2 3v4M15.8 3v4"/>',
   list: '<path d="M9 6.5h11.5M9 12h11.5M9 17.5h11.5"/><circle cx="4.6" cy="6.5" r=".9" fill="currentColor"/><circle cx="4.6" cy="12" r=".9" fill="currentColor"/><circle cx="4.6" cy="17.5" r=".9" fill="currentColor"/>',
-  pie: '<path d="M11 4.1a8.4 8.4 0 1 0 8.9 8.9H11z"/><path d="M14 3.2a7.6 7.6 0 0 1 6.8 6.8H14z"/>'
+  pie: '<path d="M11 4.1a8.4 8.4 0 1 0 8.9 8.9H11z"/><path d="M14 3.2a7.6 7.6 0 0 1 6.8 6.8H14z"/>',
+  calc: '<rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h.01M15.5 18h.01"/>',
+  form: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  share: '<path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>',
+  copy: '<rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 8.5V5.5a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/>',
+  eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+  send: '<path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/>'
 };
 const icon = k => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + I[k] + '</svg>';
 const chev = '<svg class="chev" viewBox="0 0 7 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l5 5-5 5"/></svg>';
@@ -315,15 +349,21 @@ const KIND = [
   { key: 'oth', label: 'Возвраты и прочее', c: 'oth', test: () => true }
 ];
 const kindOf = p => KIND.find(k => k.test(p || ''));
+/* выплаты Петрушенко: вид и подпись считает «Касса — данные» (petrPay), здесь то же для просмотра админом */
+const PPT = { bank: ['На счёт ИП', 'petr'], cash: ['Наличными', 'adm'], offset: ['Зачёт', 'gost'] };
+const CALC_URL = 'https://kalkulator.ak47-tgk.ru/';
+const FORM_URL = 'https://zayavka.ak47-tgk.ru';
+const FORM_MSG = 'Здравствуйте! Это Антон Петрушенко. Для договора заполните, пожалуйста, заявку: ' + FORM_URL + '\nПонадобятся реквизиты юрлица или ИП, площадка и дата концерта.';
 const CTYPE = t => /Тур/.test(t) ? ['тур', 'gost'] : /Корпоратив|Фест|Реклама/.test(t) ? [String(t).toLowerCase(), 'bryl'] : ['концерт', 'petr'];
 
 /* ───────── состояние ───────── */
 const S = { role: null, view: null, tab: null, seg: 'ahead', month: null, year: null, gyear: null, gbar: null, showAll: false, net: 'ok', fetchedAt: 0 };
-let D = null, M = null, G = null;
+let D = null, M = null, G = null, P = null;
 const STACK = [];
 const TABS = {
   full: [['home', 'Главная', 'home'], ['money', 'Деньги', 'wallet'], ['concerts', 'Концерты', 'ticket'], ['people', 'Люди', 'people'], ['more', 'Ещё', 'more']],
-  gost: [['me', 'Главная', 'home'], ['calendar', 'Календарь', 'cal'], ['payouts', 'Выплаты', 'list'], ['share', 'Доля', 'pie']]
+  gost: [['me', 'Главная', 'home'], ['calendar', 'Календарь', 'cal'], ['payouts', 'Выплаты', 'list'], ['share', 'Доля', 'pie']],
+  petr: [['phome', 'Главная', 'home'], ['pcalc', 'Считать', 'calc'], ['pform', 'Заявка', 'form'], ['pcal', 'Календарь', 'cal'], ['pmoney', 'Деньги', 'wallet']]
 };
 
 /* ───────── модели ───────── */
@@ -387,6 +427,74 @@ function modelGost(d) {
   const advSum = sum(advances, a => a.gost);
   const years = []; for (let y = 2024; y <= +d.today.slice(0, 4); y++) years.push(String(y));
   return { accruals, payouts, total, advances, advSum, earned: Math.max(0, total - advSum), over: Math.max(0, advSum - total), conc: allConcerts(d), years, curY: d.today.slice(0, 4) };
+}
+function petrPay(p) {
+  const n = p.name || '', note = p.note || '';
+  const type = /ЗАЧ[ЁЕ]Т/i.test(n) ? 'offset' : /налич/i.test(note) ? 'cash' : 'bank';
+  const m = n.match(/дог\.?\s*№?\s*(\d{2}-\d{4})/i);
+  const label = type === 'offset' ? 'Зачёт без движения по счёту' : type === 'cash' ? 'Наличными' : (m ? 'Оплата по договору № ' + m[1] : 'Перевод на счёт ИП');
+  return { date: p.date, sum: p.sum, type: type, label: label };
+}
+/* то же, что отдаёт «Касса — данные» по ключу petr (slimPetr) — для кнопки «Экран Петрушенко» у админа */
+function slimForPetr(d) {
+  const b = (d.balances || []).filter(x => /^Петрушенко/.test(x.who))[0] || { accrued: 0, paid: 0, debt: 0 };
+  return {
+    incomes: d.incomes.filter(i => i.petr !== 0).map(i => ({ name: i.name, cp: i.cp, date: i.date, sum: i.sum, petr: i.petr, project: i.project })),
+    payments: d.payments.filter(p => p.cat === 'Петрушенко').map(petrPay),
+    balance: { accrued: b.accrued, paid: b.paid, debt: b.debt },
+    concerts2026: (d.concerts2026 || []).map(c => ({ date: c.date, city: c.city, cp: c.cp, sum: c.sum, petr: c.petr, type: c.type, split: c.split })),
+    tour2026: (d.tour2026 || []).map(t => ({ date: t.date, city: t.city, price: t.price, petr: t.petr })),
+    today: d.today, asOf: d.asOf, generated: d.generated, calcKey: d.calcKey || ''
+  };
+}
+function modelPetr(d) {
+  const accruals = d.incomes.filter(i => i.petr !== 0).map(i => ({ date: i.date, name: i.name, cp: i.cp, sum: i.sum || 0, share: i.petr, project: i.project || 'Без проекта' })).sort(byDate);
+  const payouts = (d.payments || []).map(p => ({ date: p.date, sum: p.sum, type: PPT[p.type] ? p.type : 'bank', label: p.label || '' })).sort(byDate);
+  const total = sum(accruals, a => a.share) - sum(payouts, p => p.sum);
+  const bal = d.balance || { accrued: 0, paid: 0, debt: total };
+  /* к выплате: выплаты закрывают начисления по очереди с самых ранних, непокрытый хвост — то, что ещё должны (как у Гостюхина, регламент 08) */
+  const due = []; let acc = 0;
+  for (let i = accruals.length - 1; i >= 0 && acc < total - 0.5; i--) {
+    const a = accruals[i]; if (!(a.share > 0)) continue;
+    const take = Math.min(a.share, total - acc);
+    due.push({ a: a, take: take, part: take < a.share - 0.5, ahead: datesIn(a.name).some(x => x > d.today) });
+    acc += take;
+  }
+  const years = []; for (let y = 2024; y <= +d.today.slice(0, 4); y++) years.push(String(y));
+  return { accruals, payouts, total, bal, due, conc: allConcerts(d), years, curY: d.today.slice(0, 4), calcKey: d.calcKey || '' };
+}
+function petrYear(y) {
+  const inY = s => y === 'all' || s.slice(0, 4) === y;
+  const accY = P.accruals.filter(a => inY(a.date)), payY = P.payouts.filter(p => inY(p.date));
+  return { accY, payY, accrued: sum(accY, a => a.share), paid: sum(payY, p => p.sum) };
+}
+const pTypes = list => Object.keys(PPT).map(k => ({ name: PPT[k][0], c: PPT[k][1], v: sum(list.filter(p => p.type === k), p => p.sum) })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+function pPayRow(p) {
+  return '<div class="row"><span class="dot" style="background:' + col(PPT[p.type][1]) + '"></span><div class="t"><b>' + esc(p.label || PPT[p.type][0]) + '</b><span>' + esc(dm(p.date) + ' ' + p.date.slice(0, 4)) + ' · ' + esc(PPT[p.type][0]) + '</span></div><div class="v">' + rub(p.sum) + '</div></div>';
+}
+function pAccRow(a, v, small) {
+  return '<div class="row">' + dateBadge(a.date) + '<div class="t"><b>' + esc(opTitle(a.name)) + '</b><span>' + esc(a.cp) + ' · ' + esc(a.project) + '</span></div><div class="v plus">' + plus(v) + (small ? '<small>' + small + '</small>' : '') + '</div></div>';
+}
+const nWord = (n, a, b, c) => n + ' ' + (n % 10 === 1 && n % 100 !== 11 ? a : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? b : c);
+function toast(t) { const el = $('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2600); }
+function copyText(text, done) {
+  const fallback = () => { try { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); toast(ok ? done : 'Не получилось скопировать: выделите текст вручную'); } catch (e) { toast('Не получилось скопировать: выделите текст вручную'); } };
+  try { navigator.clipboard.writeText(text).then(() => toast(done), fallback); } catch (e) { fallback(); }
+}
+function shareForm() {
+  if (navigator.share) navigator.share({ text: FORM_MSG }).catch(err => { if (err && err.name !== 'AbortError') copyText(FORM_MSG, 'Текст со ссылкой скопирован — вставьте в чат заказчику'); });
+  else copyText(FORM_MSG, 'Текст со ссылкой скопирован — вставьте в чат заказчику');
+}
+/* встроенный калькулятор: один раз создаётся и живёт, пока открыта касса, чтобы обновление цифр не стирало введённое */
+function syncCalc() {
+  const w = $('calcwrap'), on = S.view === 'petr' && S.tab === 'pcalc';
+  w.hidden = !on;
+  if (!on || w.querySelector('iframe') || !P) return;
+  if (!P.calcKey) { w.innerHTML = '<p class="small" style="margin:40px 22px">Калькулятор не подключён к этому ключу. Напишите Антону Мельникову.</p>'; return; }
+  const f = document.createElement('iframe');
+  f.title = 'Калькулятор концерта';
+  f.src = CALC_URL + '?k=' + encodeURIComponent(P.calcKey);
+  w.appendChild(f);
 }
 function gostYear(y) {
   const inY = s => y === 'all' || s.slice(0, 4) === y;
@@ -506,6 +614,30 @@ function payPurpose(p) {
 function opRow(o, i, title) {
   return '<button class="row" data-open="op:' + i + '"><div class="t"><b>' + esc(title || o.title) + '</b><span>' + esc(dm(o.date)) + ' · ' + esc(o.sub) + '</span></div><div class="v' + (o.kind === 'in' ? ' plus' : '') + '">' + (o.kind === 'in' ? plus(o.sum) : minus(o.sum)) + '</div>' + chev + '</button>';
 }
+/* календарь на четыре месяца: общий для экранов Гостюхина и Петрушенко */
+function calMonths(conc) {
+  const ev = {};
+  conc.list.filter(c => !/11-2026/.test(c.cp || '')).forEach(c => { (ev[c.date] = ev[c.date] || []).push(c); });
+  const today = D.today, y0 = +today.slice(0, 4), m0 = +today.slice(5, 7);
+  let cal = '';
+  for (let k = 0; k < 4; k++) {
+    const y = y0 + Math.floor((m0 - 1 + k) / 12), m = ((m0 - 1 + k) % 12) + 1, mm = y + '-' + String(m).padStart(2, '0');
+    const lead = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7, days = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    const cnt = Object.keys(ev).filter(d => d.startsWith(mm)).length;
+    let cells = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(w => '<div class="h">' + w + '</div>').join('');
+    for (let i = 0; i < lead; i++) cells += '<div></div>';
+    for (let d = 1; d <= days; d++) {
+      const iso = mm + '-' + String(d).padStart(2, '0'), e = ev[iso];
+      const cls = (iso < today ? ' past' : '') + (iso === today ? ' today' : '');
+      cells += e ? '<button class="d busy' + cls + '" style="background:' + col(CTYPE(e[0].type)[1]) + '" data-open="concert:' + e[0].id + '" aria-label="' + esc(dm(iso) + ', ' + e[0].city) + '">' + d + '</button>'
+        : '<div class="d' + cls + '">' + d + '</div>';
+    }
+    cal += '<div class="g pad"><div class="mswitch"><b>' + MONF[m - 1] + (y !== y0 ? ' ' + y : '') + '</b><span class="lbl">' + (cnt ? cnt + ' ' + (cnt === 1 ? 'дата' : cnt < 5 ? 'даты' : 'дат') : 'свободно') + '</span></div><div class="cal">' + cells + '</div></div>';
+  }
+  return '<div class="stack">' +
+    '<div class="legend" style="margin:0 6px"><span><i style="background:var(--c-gost)"></i>тур</span><span><i style="background:var(--c-petr)"></i>концерт</span><span><i style="background:var(--c-bryl)"></i>корпоратив, фест</span></div>' +
+    cal + '<p class="small">Нажмите на дату, чтобы открыть концерт.</p></div>';
+}
 const SCREENS = {
   home() {
     const c = D.cash, owedT = sum(D.owed || [], o => o.sum), ok = checksOk(), next = M.conc.upcoming[0], owedN = owedItems().length;
@@ -573,6 +705,7 @@ const SCREENS = {
       '<button class="row" data-open="free"><span class="dot" style="background:' + col('petr') + '"></span><div class="t"><b>Свободные деньги</b><span>из чего складываются</span></div><div class="v">' + rub(D.cash.free) + '</div>' + chev + '</button>' +
       (obor >= 0 ? '' : '') +
       (S.role === 'admin' ? '<button class="row" data-gostview><span class="dot" style="background:' + col('gost') + '"></span><div class="t"><b>Экран Гостюхина</b><span>посмотреть, что видит он</span></div>' + chev + '</button>' : '') +
+      (S.role === 'admin' && P ? '<button class="row" data-petrview><span class="dot" style="background:' + col('petr') + '"></span><div class="t"><b>Экран Петрушенко</b><span>посмотреть, что видит он</span></div>' + chev + '</button>' : '') +
       '<button class="row" data-refresh><div class="t"><b>Обновить цифры</b><span>прочитаны ' + esc(D.generated || '') + '</span></div>' + (S.net === 'loading' ? '<span class="spin"></span>' : '') + '</button></div>' +
       '<p class="small">Данные: Google-таблица «ИП Гостюхин» — реестр приходов, журнал оплат, «Сверка», «Концерты 2026», лист тура осени 2026.</p></div>';
   },
@@ -597,27 +730,59 @@ const SCREENS = {
       (lastPay.length ? homeTile('t3', 'open:gplist:pers', 'Оплаты', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + '</div></div>';
   },
   calendar() {
-    const ev = {};
-    G.conc.list.filter(c => !/11-2026/.test(c.cp || '')).forEach(c => { (ev[c.date] = ev[c.date] || []).push(c); });
-    const today = D.today, y0 = +today.slice(0, 4), m0 = +today.slice(5, 7);
-    let cal = '';
-    for (let k = 0; k < 4; k++) {
-      const y = y0 + Math.floor((m0 - 1 + k) / 12), m = ((m0 - 1 + k) % 12) + 1, mm = y + '-' + String(m).padStart(2, '0');
-      const lead = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7, days = new Date(Date.UTC(y, m, 0)).getUTCDate();
-      const cnt = Object.keys(ev).filter(d => d.startsWith(mm)).length;
-      let cells = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(w => '<div class="h">' + w + '</div>').join('');
-      for (let i = 0; i < lead; i++) cells += '<div></div>';
-      for (let d = 1; d <= days; d++) {
-        const iso = mm + '-' + String(d).padStart(2, '0'), e = ev[iso];
-        const cls = (iso < today ? ' past' : '') + (iso === today ? ' today' : '');
-        cells += e ? '<button class="d busy' + cls + '" style="background:' + col(CTYPE(e[0].type)[1]) + '" data-open="concert:' + e[0].id + '" aria-label="' + esc(dm(iso) + ', ' + e[0].city) + '">' + d + '</button>'
-          : '<div class="d' + cls + '">' + d + '</div>';
-      }
-      cal += '<div class="g pad"><div class="mswitch"><b>' + MONF[m - 1] + (y !== y0 ? ' ' + y : '') + '</b><span class="lbl">' + (cnt ? cnt + ' ' + (cnt === 1 ? 'дата' : cnt < 5 ? 'даты' : 'дат') : 'свободно') + '</span></div><div class="cal">' + cells + '</div></div>';
-    }
-    return previewBar() + lt('Календарь', G.conc.upcoming.length + ' концертов впереди') + '<div class="stack">' +
-      '<div class="legend" style="margin:0 6px"><span><i style="background:var(--c-gost)"></i>тур</span><span><i style="background:var(--c-petr)"></i>концерт</span><span><i style="background:var(--c-bryl)"></i>корпоратив, фест</span></div>' +
-      cal + '<p class="small">Нажмите на дату, чтобы открыть концерт.</p></div>';
+    return previewBar() + lt('Календарь', G.conc.upcoming.length + ' концертов впереди') + calMonths(G.conc);
+  },
+  /* ───────── экраны: касса Петрушенко (решение Мельникова 16.09.2026) ───────── */
+  phome() {
+    const F = petrYear(P.curY), up = P.conc.upcoming, tot = P.total, n = P.due.length;
+    const lastAcc = P.accruals.filter(a => a.share > 0).slice(-1)[0], lastPay = P.payouts.slice(-1)[0];
+    const next = up[0];
+    return previewBar() + lt('Моя касса', 'Антон Петрушенко · по выпискам на ' + D.asOf, true) +
+      '<div class="car" id="car" aria-label="Мои суммы, листаются влево и вправо">' +
+      carCard('data-open="pdue"', 'green', tot < -0.5 ? 'Переплата' : 'Мне к выплате', rub(Math.abs(tot)), tot > 0.5 ? 'за ' + nWord(n, 'приход', 'прихода', 'приходов') + ', выплата после прихода денег' : tot < -0.5 ? 'выплачено больше начисленного' : 'всё выплачено') +
+      carCard('data-open="ppaid"', 'blue', 'Получено в ' + P.curY, rub(F.paid), F.payY.length ? nWord(F.payY.length, 'выплата', 'выплаты', 'выплат') + ' за год' : 'выплат в этом году не было') +
+      carCard('data-tab="pmoney"', 'grey', 'Моя доля в ' + P.curY, rub(F.accrued), 'начислено с приходов за год') +
+      '</div><div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>' +
+      '<div class="acts">' +
+      '<button class="g act" data-tab="pcalc"><span class="aic" style="background:rgba(23,166,115,.22);color:var(--good)">' + icon('calc') + '</span><b>Посчитать концерт</b><span>цена для договора</span></button>' +
+      '<button class="g act" data-shareform><span class="aic" style="background:rgba(63,134,221,.22);color:#8AB8F5">' + icon('send') + '</span><b>Отправить заявку</b><span>ссылка заказчику</span></button>' +
+      '</div><div class="stack"><div class="tiles">' +
+      (next ? homeTile('t1', 'pcal', 'Ближайший концерт', next.date, next.city, next.cp, next.split && next.petr ? rub(next.petr) + '<small>ваша доля</small>' : '<small>после оплаты</small>', '') : '') +
+      (lastAcc ? homeTile('t2', 'open:pacc', 'Начисления', lastAcc.date, opTitle(lastAcc.name), lastAcc.project, plus(lastAcc.share), ' plus') : '') +
+      (lastPay ? homeTile('t3', 'open:ppaid', 'Последняя выплата', lastPay.date, lastPay.label, PPT[lastPay.type][0], rub(lastPay.sum), '') : '') + '</div></div>';
+  },
+  pcalc() { return ''; },
+  pform() {
+    return previewBar() + lt('Заявка', 'ссылка на форму для заказчика') + '<div class="stack">' +
+      '<div class="g pad"><span class="lbl">Форма заявки</span><div class="linkbox"><b>zayavka.ak47-tgk.ru</b></div>' +
+      '<div class="btns"><button class="btn green" data-shareform>' + icon('share') + 'Отправить заказчику</button>' +
+      '<div class="two"><button class="btn ghost" data-copyform>' + icon('copy') + 'Скопировать</button><button class="btn ghost" data-openform>' + icon('eye') + 'Открыть</button></div></div></div>' +
+      sec('Что уйдёт заказчику') + '<div class="msg">' + esc(FORM_MSG) + '</div>' +
+      '<p class="small">Отправлять лично заказчику, не в общие чаты. Цены в форме нет — её называете вы по калькулятору. Когда заказчик заполнит форму, заявка придёт в группу «Концерты/документы».</p></div>';
+  },
+  pcal() {
+    return previewBar() + lt('Календарь', P.conc.upcoming.length + ' концертов впереди') + calMonths(P.conc);
+  },
+  pmoney() {
+    const y = S.gyear, F = petrYear(y), months = y === 'all' ? monthsUpTo(D.today) : monthsUpTo(D.today).filter(m => m.slice(0, 4) === y);
+    const vals = months.map(m => sum(F.accY.filter(a => ym(a.date) === m), a => a.share));
+    const sel = S.gbar != null && S.gbar < months.length ? S.gbar : null, rm = sel != null ? months[sel] : null;
+    const byT = pTypes(F.payY), tot = P.total;
+    const byP = {}; F.accY.forEach(a => { const k = kindOf(a.project).key === 'oth' ? 'Возвраты и прочее' : a.project; byP[k] = byP[k] || { v: 0, n: 0, c: kindOf(a.project).c }; byP[k].v += a.share; byP[k].n++; });
+    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: o.c })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    const lastPays = F.payY.slice(-5).reverse(), lastAcc = F.accY.filter(a => a.share !== 0).slice(-5).reverse();
+    return previewBar() + lt('Мои деньги', 'доля с приходов и выплаты') + '<div class="stack">' + yearSeg('data-gyear', y, P.years) +
+      '<div class="g pad"><div class="lbl">Моя доля ' + (y === 'all' ? 'за всё время' : 'за ' + y + ' год') + '</div><div class="num big' + bigCls(rub(F.accrued)) + '">' + rub(F.accrued) + '</div>' +
+      '<div class="lbl mt4">' + nWord(F.accY.length, 'приход', 'прихода', 'приходов') + ' на счёт ИП</div></div>' +
+      '<div class="two"><button class="g pad tile" data-open="ppaid"><div class="lbl">Выплачено</div><div class="num mid">' + rub(F.paid) + '</div></button>' +
+      '<button class="g pad tile" data-open="pdue"><div class="lbl">' + (tot < -0.5 ? 'Переплата' : 'К выплате') + '</div><div class="num mid" style="color:var(--warn)">' + rub(Math.abs(tot)) + '</div></button></div>' +
+      (months.length ? sec('По месяцам') + '<div class="g pad chart"><div class="readout">' + (rm ? '<b>' + MONF[+rm.slice(5, 7) - 1] + ' ' + rm.slice(0, 4) + '</b> · ' + rub(vals[sel]) : 'Нажмите на столбик') + '</div>' +
+        barChart(months.map(m => MONS[+m.slice(5, 7) - 1]), [{ cls: 'bin', values: vals }], sel, 'data-gbar') + '</div>' : '') +
+      sec('Выплаты') + (byT.length ? hbars(byT) : '<p class="small">Выплат за этот период нет.</p>') +
+      (lastPays.length ? '<div class="g list">' + lastPays.map(pPayRow).join('') + '</div><button class="more" data-open="ppaid">Все выплаты</button>' : '') +
+      sec('Доля по проектам') + (prow.length ? hbars(prow) : '<p class="small">Начислений за этот период нет.</p>') +
+      (lastAcc.length ? sec('Последние начисления') + '<div class="g list">' + lastAcc.map(a => pAccRow(a, a.share)).join('') + '</div><button class="more" data-open="pacc">Все начисления</button>' : '') +
+      '<p class="small">Доля попадает в тот год, когда деньги пришли на счёт ИП, как в таблице и в выписках.</p></div>';
   },
   payouts() {
     const y = S.gyear, F = gostYear(y);
@@ -650,7 +815,7 @@ const SCREENS = {
   }
 };
 function previewBar() {
-  return S.role !== 'gost' ? '<button class="preview" data-exitpreview>' + chevL + 'Так видит Гостюхин · вернуться к общему виду</button>' : '';
+  return S.role === 'admin' ? '<button class="preview" data-exitpreview>' + chevL + 'Так видит ' + (S.view === 'petr' ? 'Петрушенко' : 'Гостюхин') + ' · вернуться к общему виду</button>' : '';
 }
 
 /* ───────── подробные экраны ───────── */
@@ -759,8 +924,18 @@ const SHEETS = {
         (pays.length > shown.length ? '<button class="more" data-more>Показать все ' + pays.length + '</button>' : '') : '<p class="small">Платежей нет.</p>') + '</div>';
   },
   concert(id) {
-    const gv = S.view === 'gost', src = gv ? G.conc.list : M.conc.list, c = src.find(x => x.id === id);
+    const gv = S.view === 'gost', pv = S.view === 'petr', src = gv ? G.conc.list : pv ? P.conc.list : M.conc.list, c = src.find(x => x.id === id);
     if (!c) return backBtn;
+    if (pv) {
+      const pincs = P.accruals.filter(a => datesIn(a.name).includes(c.date)), pgot = sum(pincs, i => i.sum);
+      return backBtn + lt(esc(c.city), dm(c.date) + ' ' + c.date.slice(0, 4) + ' · ' + CTYPE(c.type)[0]) + '<div class="stack">' +
+        '<div class="g pad"><div class="lbl">Ваша доля</div><div class="num big">' + (c.split || c.tour ? rub(c.petr) : '—') + '</div><div class="lbl mt4">' + (c.split || c.tour ? (c.tour ? 'по листу тура' : 'по строке «Концертов 2026»') : 'появится после оплаты') + '</div></div>' +
+        '<div class="g list"><div class="row"><div class="t"><b>' + (c.tour ? 'Цена по листу тура' : 'Цена концерта') + '</b><span>' + esc(c.cp) + '</span></div><div class="v">' + rub(c.price) + '</div></div></div>' +
+        sec('Пришло на счёт') + (pincs.length
+          ? '<div class="g list">' + pincs.map(i => '<div class="row"><div class="t"><b>' + esc(String(i.name).split(' — ')[0]) + '</b><span>' + esc(dm(i.date)) + ' · ' + esc(i.cp) + '</span></div><div class="v plus">' + plus(i.sum) + '<small>вам ' + rub(i.share) + '</small></div></div>').join('') + '</div>' +
+            (c.price > 0 ? '<p class="small">Всего ' + rub(pgot) + ' из ' + rub(c.price) + '.</p>' : '')
+          : '<p class="small">' + (c.tour ? 'Туровые деньги приходят общими платежами, по датам их не видно.' : 'Приходов с датой этого концерта пока нет.') + '</p>') + '</div>';
+    }
     const [tl] = CTYPE(c.type);
     const incs = gv ? G.accruals.filter(a => datesIn(a.name).includes(c.date)) : M.incomes.filter(i => datesIn(i.name).includes(c.date));
     const got = sum(incs, i => i.sum);
@@ -836,6 +1011,32 @@ const SHEETS = {
         '<div class="t"><b>' + esc(opTitle(a.name)) + '</b><span>' + esc(a.project) + '</span></div><div class="v plus">' + plus(a.gost) + '</div></div>').join('') + '</div>' +
         (rows.length > shown.length ? '<button class="more" data-more>Показать все ' + rows.length + '</button>' : '') : '<p class="small">Начислений за этот период нет.</p>') + '</div>';
   },
+  /* касса Петрушенко: к выплате — из каких приходов */
+  pdue() {
+    const tot = P.total, b = P.bal;
+    return backBtn + lt(tot < -0.5 ? 'Переплата' : 'Мне к выплате', 'по выпискам на ' + D.asOf) + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">' + (tot < -0.5 ? 'Выплачено больше начисленного' : 'Начислено, но ещё не выплачено') + '</div><div class="num big' + bigCls(rub(Math.abs(tot))) + '">' + rub(Math.abs(tot)) + '</div></div>' +
+      '<div class="g list"><div class="row"><div class="t"><b>Начислено</b><span>с сентября 2024</span></div><div class="v">' + rub(b.accrued) + '</div></div>' +
+      '<div class="row"><div class="t"><b>Выплачено</b></div><div class="v">' + rub(b.paid) + '</div></div></div>' +
+      (P.due.length ? sec('За какие приходы') + '<div class="g list">' + P.due.map(x => pAccRow(x.a, x.take, (x.part ? 'из ' + rub(x.a.share) : '') + (x.ahead ? (x.part ? ' · ' : '') + 'концерт впереди' : ''))).join('') + '</div>' : '') +
+      '<p class="small">Выплата — после прихода денег от заказчика, по договору (регламент 05). Выплаты закрывают начисления по очереди, с самых ранних; здесь то, что ещё не выплачено.</p></div>';
+  },
+  ppaid() {
+    const y = S.gyear, F = petrYear(y);
+    const rows = F.payY.slice().reverse(), shown = S.showAll ? rows : rows.slice(0, 50);
+    return backBtn + lt('Выплаты', 'что перечислено и выдано') + '<div class="stack">' + yearSeg('data-gyear', y, P.years) +
+      '<div class="g pad"><div class="lbl">Выплачено ' + (y === 'all' ? 'за всё время' : 'за ' + y + ' год') + '</div><div class="num big' + bigCls(rub(F.paid)) + '">' + rub(F.paid) + '</div></div>' +
+      (pTypes(F.payY).length ? hbars(pTypes(F.payY)) : '') +
+      (rows.length ? '<div class="g list">' + shown.map(pPayRow).join('') + '</div>' + (rows.length > shown.length ? '<button class="more" data-more>Показать все ' + rows.length + '</button>' : '') : '<p class="small">Выплат за этот период нет.</p>') + '</div>';
+  },
+  pacc() {
+    const y = S.gyear, F = petrYear(y);
+    const rows = F.accY.filter(a => a.share !== 0).slice().reverse(), shown = S.showAll ? rows : rows.slice(0, 50);
+    return backBtn + lt('Начисления', 'моя доля с каждого прихода') + '<div class="stack">' + yearSeg('data-gyear', y, P.years) +
+      '<div class="g pad"><div class="lbl">Начислено ' + (y === 'all' ? 'за всё время' : 'за ' + y + ' год') + '</div><div class="num big' + bigCls(rub(F.accrued)) + '">' + rub(F.accrued) + '</div></div>' +
+      (rows.length ? '<div class="g list">' + shown.map(a => pAccRow(a, a.share, 'из ' + rub(a.sum))).join('') + '</div>' +
+        (rows.length > shown.length ? '<button class="more" data-more>Показать все ' + rows.length + '</button>' : '') : '<p class="small">Начислений за этот период нет.</p>') + '</div>';
+  },
   /* полный список выплат одного вида */
   gplist(k) {
     const t = PT[k]; if (!t) return backBtn;
@@ -856,6 +1057,8 @@ function renderTabs() {
 function renderView(animate) {
   const keep = views.scrollTop;
   views.innerHTML = SCREENS[S.tab]();
+  $('app').classList.toggle('petr', S.view === 'petr');
+  syncCalc();
   if (animate) { views.scrollTop = 0; views.classList.remove('in'); void views.offsetWidth; views.classList.add('in'); }
   else views.scrollTop = keep;
   bindCar();
@@ -885,7 +1088,7 @@ function setTab(id) { closeSheet(); S.tab = id; S.gbar = null; S.showAll = false
 function paint() { renderTabs(); renderView(false); if (STACK.length) showTop(false, true); }
 
 $('app').addEventListener('click', e => {
-  const el = e.target.closest('[data-tab],[data-open],[data-back],[data-seg],[data-month],[data-mbar],[data-year],[data-gyear],[data-gbar],[data-more],[data-refresh],[data-gostview],[data-exitpreview]');
+  const el = e.target.closest('[data-tab],[data-open],[data-back],[data-seg],[data-month],[data-mbar],[data-year],[data-gyear],[data-gbar],[data-more],[data-refresh],[data-gostview],[data-petrview],[data-exitpreview],[data-shareform],[data-copyform],[data-openform]');
   if (!el) return;
   const d = el.dataset;
   if (d.tab !== undefined) { if (TABS[S.view].some(t => t[0] === d.tab)) setTab(d.tab); }
@@ -900,6 +1103,10 @@ $('app').addEventListener('click', e => {
   else if (d.more !== undefined) { S.showAll = true; if (STACK.length) showTop(false, true); else renderView(false); }
   else if (d.refresh !== undefined) refresh();
   else if (d.gostview !== undefined) { S.view = 'gost'; setTab('me'); }
+  else if (d.petrview !== undefined) { S.view = 'petr'; setTab('phome'); }
+  else if (d.shareform !== undefined) shareForm();
+  else if (d.copyform !== undefined) copyText(FORM_URL, 'Ссылка скопирована');
+  else if (d.openform !== undefined) { try { window.open(FORM_URL, '_blank', 'noopener'); } catch (err) {} }
   else if (d.exitpreview !== undefined) { S.view = 'full'; setTab('more'); }
 });
 /* свайп вправо — назад */
@@ -954,21 +1161,22 @@ function load(key) {
 function boot(d) {
   const first = !D;
   D = d; S.role = d.role;
-  if (d.role === 'gost') { M = null; G = modelGost(d); }
-  else { M = modelFull(d); G = modelGost(slimForGost(d)); }
+  if (d.role === 'gost') { M = null; P = null; G = modelGost(d); }
+  else if (d.role === 'petr') { M = null; G = null; P = modelPetr(d); }
+  else { M = modelFull(d); G = modelGost(slimForGost(d)); P = modelPetr(slimForPetr(d)); }
   if (first) {
-    S.view = d.role === 'gost' ? 'gost' : 'full';
+    S.view = d.role === 'gost' ? 'gost' : d.role === 'petr' ? 'petr' : 'full';
     S.tab = TABS[S.view][0][0];
     S.year = d.today.slice(0, 4); S.gyear = d.today.slice(0, 4);
   }
-  if (S.view === 'full' && !M) S.view = 'gost';
+  if (!(S.view === 'full' && M || S.view === 'gost' && G || S.view === 'petr' && P)) { S.view = M ? 'full' : G ? 'gost' : 'petr'; S.tab = TABS[S.view][0][0]; }
   if (M) S.month = (first || S.month == null || S.month >= M.months.length) ? M.months.length - 1 : S.month;
   $('shell').hidden = true; $('app').hidden = false;
-  document.title = S.role === 'gost' ? 'Касса Гостюхина' : 'Касса ИП Гостюхин';
+  document.title = S.role === 'gost' ? 'Касса Гостюхина' : S.role === 'petr' ? 'Касса Петрушенко' : 'Касса ИП Гостюхин';
   if (first) { renderTabs(); renderView(false); } else paint();
 }
 function shell(which, msg) {
-  $('app').hidden = true; $('shell').hidden = false;
+  $('app').hidden = true; $('calcwrap').hidden = true; $('shell').hidden = false;
   ['s-load', 's-gate', 's-fail'].forEach(x => { $(x).hidden = x !== which; });
   if (msg) $('failtext').textContent = msg;
 }
@@ -1006,6 +1214,7 @@ if (TEST) {
   boot(TEST);
   const q = new URLSearchParams(location.search);
   if (q.get('view') === 'gost') { S.view = 'gost'; setTab(q.get('tab') || 'me'); }
+  else if (q.get('view') === 'petr' && P) { S.view = 'petr'; setTab(q.get('tab') || 'phome'); }
   else if (q.get('tab')) setTab(q.get('tab'));
   if (q.get('open')) { const o = q.get('open'), i = o.indexOf(':'); openSheet(i < 0 ? o : o.slice(0, i), i < 0 ? '' : o.slice(i + 1)); }
 } else {
