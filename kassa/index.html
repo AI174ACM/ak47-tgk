@@ -9,15 +9,16 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Касса">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" id="sbstyle">
+<script>try{var c=JSON.parse(localStorage.getItem('kassa_app_data')||'null');if(c&&c.role==='admin'){document.documentElement.className='pm';document.getElementById('sbstyle').content='default';document.querySelector('meta[name=theme-color]').content='#EEEDEA';}}catch(e){}</script>
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <link rel="icon" href="data:image/png;base64,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">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260916-1819). -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
+<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-0831). -->
 <style>
 :root{
   color-scheme:dark;
@@ -223,7 +224,157 @@ button.g.row{border:1px solid var(--line)}
   padding:11px 16px;border-radius:14px;background:rgba(30,36,48,.94);border:1px solid var(--line);font-size:14px;text-align:center;transition:opacity .2s,transform .2s;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
-@media (prefers-reduced-motion:reduce){.bg{animation:none}.views.in{animation:none}.sheet,.sheet.open{transition:none}}
+
+/* ───────── общий вид (admin): стиль «Предметы» (решение Мельникова 17.09.2026, регламент 08). Всё ниже действует только при html.pm ───────── */
+html.pm{
+  color-scheme:light;
+  --ground:#EEEDEA;--ink:#111111;--muted:#6C6B67;--faint:#A6A5A0;
+  --card:#FFFFFF;--card-solid:#FFFFFF;--line:transparent;--sep:#EFEEEA;
+  --accent:#FF5A1F;--in:#1E9E63;--out:#D6D4CE;--grid:#ECEBE7;
+  --tab:rgba(255,255,255,.58);--tab-on:rgba(255,255,255,.92);--seg:#E4E3DF;
+  --good-bg:#E1F4EA;--good:#157A4C;--warn-bg:#FFEBD9;--warn:#A64A12;--bad-bg:#FDE2DE;--bad:#B3301D;
+  --c-tax:#8A8F98;--c-oth:#B4B2AC;
+  --num:Manrope,system-ui,sans-serif;--head:Manrope,system-ui,sans-serif;--mono:'Martian Mono',ui-monospace,monospace;
+  --spring:cubic-bezier(.3,1.35,.5,1);
+  --r:26px;
+}
+html.pm body{font-family:Manrope,-apple-system,system-ui,sans-serif;font-weight:500;font-variant-numeric:lining-nums}
+html.pm .bg{display:none}
+html.pm .topfade{background:rgba(238,237,234,.7)}
+html.pm .views.in{animation:none}
+html.pm .views.in>*{animation:pmrise .5s var(--spring) both}
+html.pm .views.in>*:nth-child(2){animation-delay:.03s}html.pm .views.in>*:nth-child(3){animation-delay:.06s}
+html.pm .views.in>*:nth-child(4){animation-delay:.09s}html.pm .views.in>*:nth-child(n+5){animation-delay:.12s}
+@keyframes pmrise{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+html.pm .g{border:0;box-shadow:0 1px 0 rgba(0,0,0,.02);-webkit-backdrop-filter:none;backdrop-filter:none}
+html.pm button.g.row{border:0}
+html.pm button.g,html.pm button.row,html.pm .qa button,html.pm .bx{transition:transform .35s var(--spring)}
+html.pm button.g:active,html.pm button.row:active,html.pm .qa button:active,html.pm .bx:active{transform:scale(.965);transition-duration:.12s}
+html.pm .lt h1{font-weight:800;font-size:34px;letter-spacing:-.045em}
+html.pm .lt p{font-size:14.5px}
+html.pm .num{font-weight:800;letter-spacing:-.045em;font-variant-numeric:tabular-nums lining-nums}
+html.pm .big{font-size:32px}
+html.pm .sec{margin:24px 6px 2px;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.03em;color:var(--ink)}
+html.pm .sec button{font:700 13.5px Manrope,sans-serif;letter-spacing:0}
+html.pm .lbl{font-weight:600}
+html.pm .row{padding:12px 16px;min-height:56px}
+html.pm .row .t b{font-weight:700;font-size:15.5px;letter-spacing:-.01em}
+html.pm .row .t span{margin-top:2px}
+html.pm .row .v{font-weight:800;font-size:15.5px;letter-spacing:-.03em}
+html.pm .row .v small{font-weight:600;letter-spacing:0}
+html.pm .plus{color:var(--in)}
+html.pm .chev{color:var(--faint);opacity:1}
+html.pm .dot{width:11px;height:11px}
+html.pm .chip{font-weight:700;padding:4px 10px}
+html.pm .dateb{width:46px;height:48px;border-radius:14px;background:#F2F1EE}
+html.pm .dateb b{font:500 16px/1 var(--mono);letter-spacing:-.06em}
+html.pm .dateb span{font-weight:700}
+html.pm .seg{padding:4px;border-radius:16px}
+html.pm .seg button{font:700 13.5px Manrope,sans-serif;padding:9px 6px;border-radius:12px}
+html.pm .seg button[aria-pressed="true"]{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+html.pm .chips button{border:0;background:#fff;font:700 13.5px Manrope,sans-serif}
+html.pm .chips button[aria-pressed="true"]{background:var(--ink);color:#fff}
+html.pm .mswitch b{font-weight:800;letter-spacing:-.03em;font-size:18px}
+html.pm .mswitch button{background:#F2F1EE}
+html.pm .bar{height:8px;background:#F2F1EE}
+html.pm .ax{font-family:Manrope,sans-serif;font-weight:700}
+html.pm .legend{font-weight:600}
+html.pm .more{color:var(--accent);font:700 14px Manrope,sans-serif}
+html.pm .spin{border-color:rgba(0,0,0,.12);border-top-color:var(--accent)}
+html.pm .small{font-weight:500}
+html.pm .toast{background:rgba(17,17,17,.92);border:0;color:#fff;border-radius:18px;font:600 14px Manrope,sans-serif}
+html.pm .shell .card{background:#fff}
+html.pm .logo{background:linear-gradient(135deg,#FF8A4C,#FF5A1F);box-shadow:0 8px 24px rgba(255,90,31,.35);font-family:Manrope,sans-serif;font-weight:800}
+html.pm .btn{background:var(--accent)}
+html.pm .field{background:#F2F1EE;color:var(--ink)}
+
+/* плавающее стеклянное меню, сжимается при прокрутке */
+html.pm .tabbar{left:14px;right:14px;bottom:max(14px,calc(var(--bottom) - 4px));padding:6px;border-radius:36px;
+  background:rgba(255,255,255,.58);border:1px solid rgba(255,255,255,.85);-webkit-backdrop-filter:blur(20px) saturate(1.9);backdrop-filter:blur(20px) saturate(1.9);
+  box-shadow:0 12px 34px rgba(0,0,0,.13),inset 0 1px 0 #fff;transition:left .45s var(--spring),right .45s var(--spring),padding .45s var(--spring)}
+html.pm .tab{color:#5E5D59;font:600 10.5px/1.1 Manrope,sans-serif;padding:8px 2px 7px;border-radius:30px;transition:background .25s,color .25s,padding .45s var(--spring)}
+html.pm .tab svg{width:24px;height:24px}
+html.pm .tab span{max-height:14px;overflow:hidden;transition:max-height .35s var(--spring),opacity .2s}
+html.pm .tab[aria-selected="true"]{color:var(--accent);background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+html.pm #app.compact .tabbar{left:48px;right:48px;padding:4px}
+html.pm #app.compact .tab{padding:7px 2px}
+html.pm #app.compact .tab span{max-height:0;opacity:0}
+
+/* подробные экраны выезжают на пружине, «Назад» — стеклянная кнопка */
+html.pm .sheet{transition:transform .5s var(--spring),visibility 0s linear .5s;box-shadow:-18px 0 40px rgba(0,0,0,.14)}
+html.pm .sheet.open{transition:transform .5s var(--spring),visibility 0s}
+html.pm .back{position:sticky;top:0;z-index:3;background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.9);box-shadow:0 6px 18px rgba(0,0,0,.08);
+  -webkit-backdrop-filter:blur(18px) saturate(1.8);backdrop-filter:blur(18px) saturate(1.8);color:var(--ink);font:700 15px Manrope,sans-serif;padding:8px 16px 8px 11px;margin:0 0 10px}
+
+/* главная */
+.hd{display:flex;justify-content:space-between;align-items:center;margin:2px 2px 16px}
+.hd .hi{font-size:14px;color:var(--muted);font-weight:600}
+.hd .hi b{display:block;color:var(--ink);font-size:17px;font-weight:800;letter-spacing:-.02em}
+.hd .me{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#FF8A4C,#FF5A1F);color:#fff;display:grid;place-items:center;font:800 14px Manrope,sans-serif;border:0;cursor:pointer;box-shadow:0 4px 12px rgba(255,90,31,.35)}
+.total-k{font-size:14px;color:var(--muted);font-weight:700;margin:0 4px}
+.total-v{font:800 44px/1.02 Manrope,sans-serif;letter-spacing:-.055em;margin:4px 4px 0;font-variant-numeric:tabular-nums lining-nums;white-space:nowrap}
+.total-v.s{font-size:38px}
+.total-s{margin:6px 4px 0;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;color:var(--in)}
+.total-s i{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 0 4px rgba(30,158,99,.15)}
+.total-s.bad{color:var(--bad)}
+.total-s span{color:var(--muted);font-weight:600}
+.wallet{position:relative;display:block;width:100%;height:196px;margin:18px 0 4px;padding:0;border:0;background:none;cursor:pointer;text-align:left;transition:height .6s var(--spring)}
+.cd{position:absolute;top:0;left:0;right:0;height:172px;border-radius:24px;padding:18px 20px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;
+  transition:transform .6s var(--spring);box-shadow:0 18px 34px -14px rgba(0,0,0,.42);overflow:hidden}
+.cd::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 2px,transparent 2px 7px);pointer-events:none}
+.cd::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.16) 45%,transparent 60%);transform:translateX(-120%);animation:pmshine 6s 1.2s ease-in-out infinite;pointer-events:none}
+@keyframes pmshine{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.cd .top{display:flex;justify-content:space-between;align-items:flex-start;position:relative}
+.cd .nm{font-weight:800;font-size:17px;letter-spacing:-.02em}
+.cd .nm small{display:block;font-size:12px;opacity:.65;font-weight:600;letter-spacing:0;margin-top:2px}
+.cd .chipc{width:38px;height:28px;border-radius:7px;background:linear-gradient(135deg,#F1E3B6,#B99A53);box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.cd .bt{position:relative;display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.cd .bal{font:500 27px/1 var(--mono);letter-spacing:-.07em;white-space:nowrap}
+.cd .bal small{font-size:14px;opacity:.6}
+.cd .bt span{font-size:12px;opacity:.7;font-weight:600;text-align:right}
+.cd.c1{background:linear-gradient(140deg,#3A3A40,#1B1B1F 70%);transform:translateY(24px);z-index:2}
+.cd.c2{background:linear-gradient(140deg,#8763FF,#4B2BD3 75%);transform:scale(.93);z-index:1}
+.wallet.open{height:344px}
+.wallet.open .cd.c2{transform:none}
+.wallet.open .cd.c1{transform:translateY(172px)}
+.wallet-h{display:flex;justify-content:space-between;align-items:center;margin:6px 6px 0;font-size:12.5px;color:var(--muted);font-weight:600}
+.wallet-h button{appearance:none;border:0;background:none;color:var(--accent);font:700 12.5px Manrope,sans-serif;cursor:pointer;padding:4px 0}
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}
+.qa button{appearance:none;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;font:700 11.5px/1.15 Manrope,sans-serif;color:var(--ink);text-align:center;padding:0}
+.qa i{width:58px;height:58px;border-radius:20px;background:#fff;display:grid;place-items:center;color:var(--ink)}
+.qa svg{width:25px;height:25px}
+.brief{margin-top:18px;padding:16px 17px;border-radius:var(--r);background:linear-gradient(150deg,#FFF3EC,#FFFFFF 60%)}
+.brief .h{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--accent)}
+.brief .h svg{width:17px;height:17px}
+.brief .h small{margin-left:auto;color:var(--faint);font-weight:600;font-size:11.5px}
+.brief p{margin:8px 0 0;font-size:16px;line-height:1.42;font-weight:600;letter-spacing:-.01em}
+.bento{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.bx{appearance:none;border:0;background:#fff;border-radius:var(--r);padding:15px 16px;text-align:left;cursor:pointer;display:flex;flex-direction:column;min-height:136px;min-width:0;color:var(--ink);font:inherit}
+.bx.w{grid-column:span 2;min-height:0}
+.bx h5{margin:0;font-size:12.5px;color:var(--muted);font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px;width:100%}
+.bx .bv{font:800 23px/1.1 Manrope,sans-serif;letter-spacing:-.05em;margin-top:6px;font-variant-numeric:tabular-nums lining-nums;white-space:nowrap}
+.bx .bv.l{font-size:32px}
+.bx .bs{font-size:12px;color:var(--muted);font-weight:600;margin-top:auto;padding-top:8px;line-height:1.3}
+.bx.hot{background:linear-gradient(150deg,#FF7A3D,#FF5A1F);color:#fff}
+.bx.hot h5,.bx.hot .bs{color:rgba(255,255,255,.85)}
+.bx.dark{background:linear-gradient(150deg,#2D2D33,#161619);color:#fff}
+.bx.dark h5,.bx.dark .bs{color:rgba(255,255,255,.62)}
+.bx ul{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:700;line-height:1.25}
+.bx li{display:flex;gap:7px;align-items:baseline}
+.bx li i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none;transform:translateY(-2px)}
+.bx .ring{width:70px;height:70px;margin-top:8px}
+.eq{display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px;margin-top:12px}
+.eq i{display:block;height:100%;border-radius:3px}
+.eqk{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font-size:12px;color:var(--muted);font-weight:600}
+.eqk span{display:inline-flex;align-items:center;gap:5px}
+.eqk b{width:8px;height:8px;border-radius:2px;display:inline-block}
+.wk{display:flex;align-items:flex-end;gap:7px;height:60px;margin-top:10px}
+.wk i{flex:1;display:flex;align-items:flex-end;gap:2px;height:100%;transform-origin:bottom;animation:pmgrow .7s var(--spring) both}
+.wk i:nth-child(2){animation-delay:.05s}.wk i:nth-child(3){animation-delay:.1s}.wk i:nth-child(4){animation-delay:.15s}.wk i:nth-child(5){animation-delay:.2s}
+.wk u{flex:1;border-radius:4px;min-height:3px}
+@keyframes pmgrow{from{transform:scaleY(.1)}to{transform:none}}
+
+@media (prefers-reduced-motion:reduce){.bg{animation:none}.views.in{animation:none}.sheet,.sheet.open{transition:none}html.pm .views.in>*,html.pm .wk i,html.pm .cd::after{animation:none!important}html.pm .cd,html.pm .tabbar{transition:none}}
 </style>
 </head>
 <body>
@@ -353,6 +504,7 @@ const kindOf = p => KIND.find(k => k.test(p || ''));
 const PPT = { bank: ['На счёт ИП', 'petr'], cash: ['Наличными', 'adm'], offset: ['Зачёт', 'gost'] };
 const CALC_URL = 'https://kalkulator.ak47-tgk.ru/';
 const FORM_URL = 'https://zayavka.ak47-tgk.ru';
+const FORM_MSG_ADMIN = 'Здравствуйте! Для договора заполните, пожалуйста, заявку: ' + FORM_URL + '\nПонадобятся реквизиты юрлица или ИП, площадка и дата концерта.';
 const FORM_MSG = 'Здравствуйте! Это Антон Петрушенко. Для договора заполните, пожалуйста, заявку: ' + FORM_URL + '\nПонадобятся реквизиты юрлица или ИП, площадка и дата концерта.';
 const CTYPE = t => /Тур/.test(t) ? ['тур', 'gost'] : /Корпоратив|Фест|Реклама/.test(t) ? [String(t).toLowerCase(), 'bryl'] : ['концерт', 'petr'];
 
@@ -482,8 +634,9 @@ function copyText(text, done) {
   try { navigator.clipboard.writeText(text).then(() => toast(done), fallback); } catch (e) { fallback(); }
 }
 function shareForm() {
-  if (navigator.share) navigator.share({ text: FORM_MSG }).catch(err => { if (err && err.name !== 'AbortError') copyText(FORM_MSG, 'Текст со ссылкой скопирован — вставьте в чат заказчику'); });
-  else copyText(FORM_MSG, 'Текст со ссылкой скопирован — вставьте в чат заказчику');
+  const msg = S.view === 'full' ? FORM_MSG_ADMIN : FORM_MSG;
+  if (navigator.share) navigator.share({ text: msg }).catch(err => { if (err && err.name !== 'AbortError') copyText(msg, 'Текст со ссылкой скопирован — вставьте в чат заказчику'); });
+  else copyText(msg, 'Текст со ссылкой скопирован — вставьте в чат заказчику');
 }
 /* встроенный калькулятор: один раз создаётся и живёт, пока открыта касса, чтобы обновление цифр не стирало введённое */
 function syncCalc() {
@@ -638,20 +791,121 @@ function calMonths(conc) {
     '<div class="legend" style="margin:0 6px"><span><i style="background:var(--c-gost)"></i>тур</span><span><i style="background:var(--c-petr)"></i>концерт</span><span><i style="background:var(--c-bryl)"></i>корпоратив, фест</span></div>' +
     cal + '<p class="small">Нажмите на дату, чтобы открыть концерт.</p></div>';
 }
+/* ───────── общий вид «Предметы»: помощники главной (регламент 08) ───────── */
+I.refresh = '<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4.5V11h-6.5"/>';
+const SPARK = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.9 5.6 5.6 1.9-5.6 1.9L12 17l-1.9-5.6-5.6-1.9 5.6-1.9zM19 14l.9 2.6 2.6.9-2.6.9L19 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg>';
+let pmCounted = false;
+function setPm(on) {
+  document.documentElement.classList.toggle('pm', on);
+  const tc = document.querySelector('meta[name=theme-color]');
+  if (tc) tc.content = on ? '#EEEDEA' : '#07090F';
+}
+const daysTo = iso => Math.round((Date.parse(iso) - Date.parse(D.today)) / 864e5);
+const daysWord = n => n === 0 ? 'сегодня' : n === 1 ? 'завтра' : 'через ' + n + ' ' + (n % 10 === 1 && n % 100 !== 11 ? 'день' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'дня' : 'дней');
+/* что пришло на счёт по концерту: приходы, в названии которых есть дата концерта (как на экране концерта) */
+const gotFor = c => sum(M.incomes.filter(i => datesIn(i.name).indexOf(c.date) >= 0), i => i.sum);
+/* ближайший налоговый срок по общему правилу регламента 06: НДС до 25-го месяца после квартала, авансы УСН до 28 апреля, июля, октября */
+function nextTax() {
+  const y = +D.today.slice(0, 4), out = [];
+  [y, y + 1].forEach(yy => {
+    [1, 4, 7, 10].forEach(m => out.push({ d: yy + '-' + String(m).padStart(2, '0') + '-25', t: 'НДС за квартал' }));
+    [4, 7, 10].forEach(m => out.push({ d: yy + '-' + String(m).padStart(2, '0') + '-28', t: m === 4 ? 'УСН за год' : 'аванс УСН' }));
+  });
+  return out.filter(x => x.d >= D.today).sort(byDate0)[0];
+}
+const byDate0 = (a, b) => a.d < b.d ? -1 : a.d > b.d ? 1 : 0;
+function checkList() {
+  const c = D.checks || {};
+  return [Math.abs(c.diff || 0) < 0.01, Math.abs(c.uncat || 0) < 0.01, !c.control];
+}
+/* «Требует внимания»: только то, что видно из данных */
+function attention() {
+  const out = [];
+  if (!checksOk()) out.push({ t: 'Касса не сходится с банками', go: 'data-tab="more"' });
+  const uns = M.conc.past.filter(c => !c.split && c.price > 0);
+  if (uns.length) out.push({ t: 'Не разнесены: ' + uns.map(c => c.city).slice(0, 2).join(', ') + (uns.length > 2 ? ' и ещё ' + (uns.length - 2) : ''), go: 'data-tab="concerts"' });
+  M.conc.upcoming.filter(c => c.price > 0 && daysTo(c.date) <= 14 && gotFor(c) < 1).forEach(c => out.push({ t: c.city + ': денег нет, концерт ' + daysWord(daysTo(c.date)), go: 'data-open="concert:' + c.id + '"' }));
+  return out;
+}
+function brief() {
+  const c = D.cash, next = M.conc.upcoming[0], owedT = sum(D.owed || [], o => o.sum), tax = nextTax();
+  const parts = [checksOk() ? 'Касса сходится с банками.' : 'Касса не сходится с банками — загляните в проверки.'];
+  parts.push('Свободно ' + compact(c.free) + ' ₽.');
+  if (next) {
+    const got = gotFor(next), n = daysTo(next.date);
+    let t = 'Ближайший концерт — ' + next.city + ' ' + dm(next.date) + ' (' + daysWord(n) + ')';
+    if (next.price > 0) t += got >= next.price - 1 ? ', оплачен полностью.' : got > 0 ? ', пришло ' + compact(got) + ' ₽ из ' + compact(next.price) + ' ₽.' : ', денег по нему пока нет.';
+    else t += '.';
+    parts.push(t);
+  }
+  if (owedT > 0.5) parts.push('Нам должны ' + compact(owedT) + ' ₽.');
+  if (tax) parts.push('Ближайший налог — ' + tax.t + ' до ' + dm(tax.d) + '.');
+  return parts.join(' ');
+}
+/* текущий месяц по неделям: пришло и ушло */
+function weeksOf(m) {
+  const w = [0, 1, 2, 3, 4].map(() => ({ i: 0, o: 0 }));
+  const k = d => Math.min(4, Math.floor((+d.slice(8, 10) - 1) / 7));
+  M.incomes.filter(x => ym(x.date) === m).forEach(x => { w[k(x.date)].i += x.sum; });
+  M.payments.filter(x => ym(x.date) === m).forEach(x => { w[k(x.date)].o += x.sum; });
+  return w.filter((x, i) => i < 4 || x.i || x.o);
+}
+function ring(ok, n) {
+  const C = 2 * Math.PI * 27, part = n ? ok / n : 1;
+  return '<svg class="ring" viewBox="0 0 70 70" aria-label="' + ok + ' из ' + n + '"><circle cx="35" cy="35" r="27" fill="none" stroke="#ECEBE7" stroke-width="8"/>' +
+    '<circle cx="35" cy="35" r="27" fill="none" stroke="' + (ok === n ? '#1E9E63' : '#FF5A1F') + '" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + (C * (1 - part)).toFixed(1) + '" transform="rotate(-90 35 35)"/>' +
+    '<text x="35" y="40" text-anchor="middle" font-family="Manrope" font-weight="800" font-size="16" fill="#111">' + ok + '/' + n + '</text></svg>';
+}
+/* сумма «На счетах» набегает при первом открытии */
+function pmAfter() {
+  const tv = views.querySelector('.total-v');
+  if (!tv || pmCounted) return;
+  pmCounted = true;
+  let calm = false; try { calm = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  if (calm) return;
+  const to = +tv.dataset.n, t0 = performance.now();
+  const st = t => { const k = Math.min(1, (t - t0) / 1300), e = 1 - Math.pow(1 - k, 4); tv.textContent = rub(to * e); if (k < 1) requestAnimationFrame(st); };
+  requestAnimationFrame(st);
+}
+const netText = () => S.net === 'loading' ? 'обновляю цифры' : S.net === 'offline' ? 'нет связи, цифры на ' + D.asOf : 'выписки на ' + D.asOf;
 const SCREENS = {
   home() {
-    const c = D.cash, owedT = sum(D.owed || [], o => o.sum), ok = checksOk(), next = M.conc.upcoming[0], owedN = owedItems().length;
-    const card = (open, ...rest) => carCard('data-open="' + open + '"', ...rest);
-    return '<div class="lt"><h1>Касса</h1><p><span>по выпискам на ' + esc(D.asOf) + '</span>' + (ok ? '<span class="okline">✓ сходится с банками</span>' : '') + netLine() + '</p></div>' +
-      '<div class="car" id="car" aria-label="Главные суммы, листаются влево и вправо">' +
-      card('bank', 'blue', 'На счетах', rub(c.total), 'ТБанк ' + compact(c.tbank) + ' · Точка ' + compact(c.tochka)) +
-      card('free', 'green', 'Свободные деньги', rub(c.free), 'ни за кем не числятся') +
-      card('owed', 'orange', 'К получению', rub(owedT), owedN ? 'нам должны: ' + owedN + ' ' + (owedN === 1 ? 'долг' : owedN < 5 ? 'долга' : 'долгов') : 'нам никто не должен') +
-      card('debts', 'grey', 'К выплате', rub(c.debts_all), 'участникам, Гостюхину, налоги') +
-      '</div><div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><div class="stack">' +
-      (ok ? '' : '<button class="g row" data-tab="more"><span class="ic bad">!</span><div class="t"><b>Касса не сходится</b><span>откройте проверки</span></div>' + chev + '</button>') +
-      (next ? sec('Ближайший концерт', ['concerts', 'Все']) + '<div class="g list">' + concertRow(next) + '</div>' : '') +
-      sec('Последние операции', ['money', 'Все']) + '<div class="g list">' + M.ops.slice(0, 3).map((o, i) => opRow(o, i)).join('') + '</div></div>';
+    const c = D.cash, ok = checksOk(), next = M.conc.upcoming[0], owed = owedItems(), owedT = sum(owed, o => o.s);
+    const hr = new Date().getHours(), greet = hr < 5 ? 'Доброй ночи' : hr < 12 ? 'Доброе утро' : hr < 18 ? 'Добрый день' : 'Добрый вечер';
+    const card = (cls, name, bal) => '<div class="cd ' + cls + '"><div class="top"><div class="nm">' + name + '<small>расчётный счёт ИП</small></div><div class="chipc"></div></div>' +
+      '<div class="bt"><div class="bal">' + fmt(bal) + ' <small>₽</small></div><span>по выписке<br>на ' + esc(D.asOf) + '</span></div></div>';
+    const q = (ic, t, attr) => '<button ' + attr + '><i>' + icon(ic) + '</i>' + t + '</button>';
+    const att = attention(), cl = checkList(), okN = cl.filter(Boolean).length;
+    const m = M.months[M.months.length - 1], wk = weeksOf(m), wmax = Math.max(1, ...wk.map(x => Math.max(x.i, x.o)));
+    const debtN = M.people.filter(p => p.name !== 'Оборотка' && p.debt >= 1).length;
+    const eq = [['К выплате', 'var(--c-tax)', c.debts_all], ['Свободно', 'var(--accent)', c.free]].filter(x => x[2] > 0);
+    const eqT = sum(eq, x => x[2]) || 1;
+    return '<div class="hd"><div class="hi">' + greet + '<b>Антон</b></div><button class="me" data-tab="more" aria-label="Проверки и прочее">АМ</button></div>' +
+      '<div class="total-k">На счетах</div><div class="total-v' + (rub(c.total).length > 13 ? ' s' : '') + '" data-n="' + c.total + '">' + rub(c.total) + '</div>' +
+      '<div class="total-s' + (ok ? '' : ' bad') + '"><i></i>' + (ok ? 'Сходится с таблицей' : 'Не сходится с таблицей') + '<span>· ' + netText() + '</span></div>' +
+      '<button class="wallet" data-wallet aria-label="Раскрыть счета">' + card('c2', 'Точка', c.tochka) + card('c1', 'ТБанк', c.tbank) + '</button>' +
+      '<div class="wallet-h"><span>Нажмите на карты — раскроются</span><button data-open="bank">Оба счёта</button></div>' +
+      '<div class="qa">' + q('calc', 'Посчитать<br>концерт', 'data-calc') + q('send', 'Отправить<br>заявку', 'data-shareform') +
+        q('cal', 'Календарь', 'data-open="calendar"') + q('refresh', S.net === 'loading' ? 'Обновляю…' : 'Обновить<br>цифры', 'data-refresh') + '</div>' +
+      '<div class="brief"><div class="h">' + SPARK + 'Коротко<small>по таблице и выпискам</small></div><p>' + esc(brief()) + '</p></div>' +
+      '<div class="bento">' +
+        '<button class="bx w" data-open="free"><h5>Свободные деньги<span>из чего ›</span></h5><div class="bv l">' + rub(c.free) + '</div>' +
+          '<div class="eq">' + eq.map(x => '<i style="flex:' + x[2] + ';background:' + x[1] + '"></i>').join('') + '</div>' +
+          '<div class="eqk"><span><b style="background:var(--c-tax)"></b>к выплате ' + compact(c.debts_all) + '</span><span><b style="background:var(--accent)"></b>свободно ' + Math.round(c.free / eqT * 100) + ' % денег на счетах</span></div></button>' +
+        (att.length
+          ? '<button class="bx hot" ' + att[0].go + '><h5>Требует внимания<span>' + att.length + '</span></h5><ul>' + att.slice(0, 3).map(a => '<li><i></i>' + esc(a.t) + '</li>').join('') + '</ul></button>'
+          : '<button class="bx" data-tab="concerts"><h5>Требует внимания</h5><div class="bv" style="color:var(--in)">Всё спокойно</div><div class="bs">касса сходится, концерты разнесены</div></button>') +
+        '<button class="bx" data-tab="more"><h5>Проверки</h5>' + ring(okN, cl.length) + '<div class="bs">' + (okN === cl.length ? 'таблица в порядке' : 'есть расхождения') + '</div></button>' +
+        '<button class="bx" data-open="owed"><h5>К получению</h5><div class="bv">' + compact(owedT) + '</div><div class="bs">' + (owed.length ? owed.length + ' ' + (owed.length === 1 ? 'долг' : owed.length < 5 ? 'долга' : 'долгов') + ' перед нами' : 'нам никто не должен') + '</div></button>' +
+        '<button class="bx" data-open="debts"><h5>К выплате</h5><div class="bv">' + compact(c.debts_all) + '</div><div class="bs">' + debtN + ' получателей</div></button>' +
+        (next ? '<button class="bx dark" data-open="concert:' + next.id + '"><h5>Ближайший концерт</h5><div class="bv" style="font-size:24px;white-space:normal">' + esc(next.city) + '</div>' +
+          '<div class="bs">' + dm(next.date) + ' · ' + daysWord(daysTo(next.date)) + (next.price > 0 ? '<br>' + compact(next.price) + ' ₽ по договору' : '') + '</div></button>'
+          : '<button class="bx dark" data-tab="concerts"><h5>Ближайший концерт</h5><div class="bv">—</div><div class="bs">дат впереди нет</div></button>') +
+        '<button class="bx" data-tab="money"><h5>' + MONF[+m.slice(5, 7) - 1] + '</h5><div class="bv" style="font-size:19px;color:var(--in)">+' + compact(M.inc[m]) + '</div>' +
+          '<div class="wk">' + wk.map(x => '<i><u style="height:' + (x.i / wmax * 100).toFixed(0) + '%;background:var(--in)"></u><u style="height:' + (x.o / wmax * 100).toFixed(0) + '%;background:#D6D4CE"></u></i>').join('') + '</div>' +
+          '<div class="bs">ушло ' + compact(M.out[m]) + ' ₽ · по неделям</div></button>' +
+      '</div>' +
+      sec('Последние операции', ['money', 'Все']) + '<div class="g list">' + M.ops.slice(0, 4).map((o, i) => opRow(o, i)).join('') + '</div>';
   },
   money() {
     const mi = S.month, m = M.months[mi];
@@ -826,6 +1080,9 @@ function owedItems() {
   });
 }
 const SHEETS = {
+  calendar() {
+    return backBtn + lt('Календарь', 'занятые даты на четыре месяца') + calMonths(M.conc);
+  },
   bank() {
     const c = D.cash, m = M.months[M.months.length - 1], ok = checksOk();
     return backBtn + lt('На счетах', 'по выпискам на ' + D.asOf) + '<div class="stack">' +
@@ -1058,11 +1315,15 @@ function renderView(animate) {
   const keep = views.scrollTop;
   views.innerHTML = SCREENS[S.tab]();
   $('app').classList.toggle('petr', S.view === 'petr');
+  setPm(S.view === 'full');
+  $('app').classList.remove('compact');
+  pmAfter();
   syncCalc();
   if (animate) { views.scrollTop = 0; views.classList.remove('in'); void views.offsetWidth; views.classList.add('in'); }
   else views.scrollTop = keep;
   bindCar();
 }
+views.addEventListener('scroll', () => { if (S.view === 'full') $('app').classList.toggle('compact', views.scrollTop > 60); }, { passive: true });
 /* карусель сумм на главной: точки показывают, какая карточка перед глазами; позиция сохраняется при обновлении цифр */
 function bindCar() {
   const car = views.querySelector('#car'), dots = views.querySelectorAll('#dots i');
@@ -1088,9 +1349,12 @@ function setTab(id) { closeSheet(); S.tab = id; S.gbar = null; S.showAll = false
 function paint() { renderTabs(); renderView(false); if (STACK.length) showTop(false, true); }
 
 $('app').addEventListener('click', e => {
-  const el = e.target.closest('[data-tab],[data-open],[data-back],[data-seg],[data-month],[data-mbar],[data-year],[data-gyear],[data-gbar],[data-more],[data-refresh],[data-gostview],[data-petrview],[data-exitpreview],[data-shareform],[data-copyform],[data-openform]');
+  const el = e.target.closest('[data-wallet],[data-calc],[data-ask],[data-tab],[data-open],[data-back],[data-seg],[data-month],[data-mbar],[data-year],[data-gyear],[data-gbar],[data-more],[data-refresh],[data-gostview],[data-petrview],[data-exitpreview],[data-shareform],[data-copyform],[data-openform]');
   if (!el) return;
   const d = el.dataset;
+  if (d.wallet !== undefined) { el.classList.toggle('open'); return; }
+  if (d.calc !== undefined) { if (D.calcKey) { try { window.open(CALC_URL + '?k=' + encodeURIComponent(D.calcKey), '_blank', 'noopener'); } catch (err) {} } else toast('Калькулятор не подключён к этому ключу'); return; }
+  if (d.ask !== undefined) { toast(d.ask); return; }
   if (d.tab !== undefined) { if (TABS[S.view].some(t => t[0] === d.tab)) setTab(d.tab); }
   else if (d.open !== undefined) { const i = d.open.indexOf(':'); openSheet(i < 0 ? d.open : d.open.slice(0, i), i < 0 ? '' : d.open.slice(i + 1)); }
   else if (d.back !== undefined) goBack();
