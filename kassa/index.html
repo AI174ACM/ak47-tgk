@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-2255). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-2324). -->
 <style>
 :root{
   color-scheme:dark;
@@ -142,6 +142,8 @@ button.g.row{border:1px solid var(--line)}
 .ht{display:block;width:100%;min-height:120px;padding:17px 16px 19px;box-shadow:inset 3px 0 0 var(--tone),inset 0 1px 0 rgba(255,255,255,.07)}
 .ht.t1{--tone:#7A6BE8;background:linear-gradient(145deg,rgba(122,107,232,.20),rgba(122,107,232,.03) 70%),var(--card)}
 .ht.t2{--tone:#19A3B8;background:linear-gradient(145deg,rgba(25,163,184,.20),rgba(25,163,184,.03) 70%),var(--card)}
+.ht.t4{--tone:#B7791F;background:linear-gradient(145deg,rgba(183,121,31,.20),rgba(183,121,31,.03) 70%),var(--card)}
+.cal button.off{color:var(--muted);font-weight:600;cursor:pointer}
 .ht.t3{--tone:#C2589B;background:linear-gradient(145deg,rgba(194,88,155,.20),rgba(194,88,155,.03) 70%),var(--card)}
 .ht .lbl{color:var(--tone);font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
 .ht .car-more{font-size:12px;opacity:.75}
@@ -411,6 +413,8 @@ html.pm .dots i.on{width:18px;background:var(--ink)}
 html.pm .ht{background:#fff;padding:18px 18px 20px;box-shadow:inset 4px 0 0 var(--tone)}
 html.pm .ht.t1{--tone:#6A5AE0;background:linear-gradient(150deg,rgba(106,90,224,.10),#fff 55%)}
 html.pm .ht.t2{--tone:#0F93A8;background:linear-gradient(150deg,rgba(15,147,168,.10),#fff 55%)}
+html.pm .ht.t4{--tone:#A66A12;background:linear-gradient(150deg,rgba(183,121,31,.12),#fff 55%)}
+html.pm .bx.cashbx{background:linear-gradient(150deg,rgba(183,121,31,.10),#fff 60%)}
 html.pm .ht.t3{--tone:#B8468C;background:linear-gradient(150deg,rgba(184,70,140,.10),#fff 55%)}
 html.pm .ht .lbl{font:800 11.5px Manrope,sans-serif;letter-spacing:.07em}
 html.pm .ht .car-more{color:var(--faint);font-weight:700;opacity:1}
@@ -770,20 +774,19 @@ function calWallets(list) {
   for (let k = 0; k < 4; k++) {
     const y = y0 + Math.floor((m0 - 1 + k) / 12), m = ((m0 - 1 + k) % 12) + 1, mm = y + '-' + String(m).padStart(2, '0');
     const lead = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7, days = new Date(Date.UTC(y, m, 0)).getUTCDate();
-    const cnt = Object.keys(ev).filter(d => d.startsWith(mm)).length;
+    const cnt = new Set(Object.keys(ev).concat(cashDates()).filter(d => d.startsWith(mm))).size;
     let cells = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(w => '<div class="h">' + w + '</div>').join('');
     for (let i = 0; i < lead; i++) cells += '<div></div>';
     for (let d = 1; d <= days; d++) {
       const iso = mm + '-' + String(d).padStart(2, '0'), e = ev[iso];
       const cls = (iso < today ? ' past' : '') + (iso === today ? ' today' : '');
-      cells += e ? '<button class="d busy' + cls + '" style="background:' + bg(e) + '" data-open="' + (e.length > 1 ? 'day:' + iso : (e[0].w === 'ip' ? 'ipc:' : 'concert:') + e[0].id) + '" aria-label="' + esc(dm(iso) + ', ' + e.map(c => c.city).join(', ')) + '">' + d + '</button>'
-        : '<div class="d' + cls + '">' + d + '</div>';
+      cells += calCell(iso, d, cls, e, e ? bg(e) : '', e ? (e.length > 1 ? 'day:' + iso : (e[0].w === 'ip' ? 'ipc:' : 'concert:') + e[0].id) : '', e ? dm(iso) + ', ' + e.map(c => c.city).join(', ') : '');
     }
     cal += '<div class="g pad"><div class="mswitch"><b>' + MONF[m - 1] + (y !== y0 ? ' ' + y : '') + '</b><span class="lbl">' + (cnt ? cnt + ' ' + (cnt === 1 ? 'дата' : cnt < 5 ? 'даты' : 'дат') : 'свободно') + '</span></div><div class="cal">' + cells + '</div></div>';
   }
   const ahead = list.filter(c => c.date >= today);
   return '<div class="stack"><div class="legend" style="margin:0 6px"><span><i style="background:var(--ak)"></i>АК-47 (через Гостюхина)</span><span><i style="background:var(--ip)"></i>ТГК и тур (моё ИП)</span>' +
-    '<span><i style="background:linear-gradient(135deg,var(--ak) 50%,var(--ip) 50%)"></i>обе группы</span></div>' + cal +
+    '<span><i style="background:linear-gradient(135deg,var(--ak) 50%,var(--ip) 50%)"></i>обе группы</span>' + cashLegend() + '</div>' + cal + cashAhead() +
     sec('Впереди') + (ahead.length ? '<div class="g list">' + ahead.map(wRow).join('') + '</div>' : '<p class="small">Дат впереди нет.</p>') +
     '<p class="small">АК-47 — таблица «ИП Гостюхин»; ТГК и тур — таблица «ИП Петрушенко (Тбанк)». Совместный концерт — одна дата, две строки: заказчик платит каждому ИП отдельно.</p></div>';
 }
@@ -939,6 +942,41 @@ function payPurpose(p) {
 function opRow(o, i, title) {
   return '<button class="row" data-open="op:' + i + '"><div class="t"><b>' + esc(title || o.title) + '</b><span>' + esc(dm(o.date)) + ' · ' + esc(o.sub) + '</span></div><div class="v' + (o.kind === 'in' ? ' plus' : '') + '">' + (o.kind === 'in' ? plus(o.sum) : minus(o.sum)) + '</div>' + chev + '</button>';
 }
+/* ───────── наличные концерты и занятые даты (лист «Наличные 2026», решение Мельникова 17.09.2026) ─────────
+   Строго отдельно от денег ИП: в суммы «На счетах», «К выплате», долги и проверки не входят. Участвуют Гостюхин и Петрушенко (10 %). */
+const CASH_COL = '#B7791F', BUSY_BG = 'repeating-linear-gradient(135deg,#CFCDC6 0 4px,#ECEBE7 4px 8px)';
+const cashList = () => ((D && D.cash2026) || []).map((c, i) => Object.assign({ i: i }, c)).filter(c => /^\d{4}-\d{2}-\d{2}$/.test(c.date));
+const isBusyRow = c => /Занят/i.test(c.type || '');
+const cashEvents = () => cashList().filter(c => !isBusyRow(c));
+const cashOn = iso => cashEvents().filter(c => c.date === iso);
+const busyOn = iso => cashList().filter(c => isBusyRow(c) && c.date <= iso && iso <= (c.dateTo || c.date));
+const cashDates = () => cashEvents().map(c => c.date);
+const cashMine = c => S.view === 'gost' ? [c.gost, 'вам'] : S.view === 'petr' ? [c.petr, 'мне, 10 %'] : [c.sum, 'сумма'];
+const cashDueLbl = () => S.view === 'petr' ? 'Получить от Вити сейчас' : 'Отдать Петрушенко сейчас';
+function calCell(iso, d, cls, e, bg, open, label) {
+  const cs = cashOn(iso), bs = busyOn(iso);
+  if (e && !cs.length) return '<button class="d busy' + cls + '" style="background:' + bg + '" data-open="' + open + '" aria-label="' + esc(label) + '">' + d + '</button>';
+  if (e) return '<button class="d busy' + cls + '" style="background:linear-gradient(135deg,#2B2B2B 50%,' + CASH_COL + ' 50%)" data-open="cday:' + iso + '" aria-label="' + esc(label + ', наличные: ' + cs.map(c => c.city).join(', ')) + '">' + d + '</button>';
+  if (cs.length) return '<button class="d busy' + cls + '" style="background:' + CASH_COL + '" data-open="' + (cs.length === 1 ? 'cashd:' + cs[0].i : 'cday:' + iso) + '" aria-label="' + esc(dm(iso) + ', наличные: ' + cs.map(c => c.city).join(', ')) + '">' + d + '</button>';
+  if (bs.length) return '<button class="d off' + cls + '" style="background:' + BUSY_BG + '" data-open="cashd:' + bs[0].i + '" aria-label="' + esc(dm(iso) + ', ' + (bs[0].who || 'занято')) + '">' + d + '</button>';
+  return '<div class="d' + cls + '">' + d + '</div>';
+}
+const cashLegend = () => cashList().length ? '<span><i style="background:' + CASH_COL + '"></i>наличные</span><span><i style="background:' + BUSY_BG + '"></i>Витя занят</span>' : '';
+function cashRow(c) {
+  const busy = isBusyRow(c), m = cashMine(c);
+  const v = busy ? '<div class="v"><small>занято</small></div>' : '<div class="v">' + rub(m[0]) + '<small>' + m[1] + '</small></div>';
+  return '<button class="row" data-open="cashd:' + c.i + '"><span class="wm" style="background:' + (busy ? '#B4B2AC' : CASH_COL) + '"></span>' + dateBadge(c.date) +
+    '<div class="t"><b>' + esc(busy ? (c.who || c.city) : c.city) + '</b><span>' + esc(busy ? 'по ' + dm(c.dateTo || c.date) + (c.city ? ' · ' + c.city : '') : String(c.type || 'концерт').toLowerCase() + ' · наличные' + (c.time ? ' · ' + c.time : '')) + '</span></div>' + v + chev + '</button>';
+}
+function cashAhead() {
+  const a = cashList().filter(c => (c.dateTo || c.date) >= D.today).sort(byDate);
+  return a.length ? sec('Наличные и занятость') + '<div class="g list">' + a.map(cashRow).join('') + '</div><p class="small">Наличные идут отдельно от денег ИП: в остатки на счетах, долги и налоги не входят.</p>' : '';
+}
+function cashTotals() {
+  const e = cashEvents();
+  return { n: e.length, sum: sum(e, c => c.sum), got: sum(e, c => c.got), petr: sum(e, c => c.petr), paid: sum(e, c => c.petrPaid), due: sum(e, c => c.petrDue), gost: sum(e, c => c.gost),
+    next: e.filter(c => c.date >= D.today).sort(byDate)[0] };
+}
 /* календарь на четыре месяца: общий для экранов Гостюхина и Петрушенко */
 function calMonths(conc) {
   const ev = {};
@@ -948,20 +986,19 @@ function calMonths(conc) {
   for (let k = 0; k < 4; k++) {
     const y = y0 + Math.floor((m0 - 1 + k) / 12), m = ((m0 - 1 + k) % 12) + 1, mm = y + '-' + String(m).padStart(2, '0');
     const lead = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7, days = new Date(Date.UTC(y, m, 0)).getUTCDate();
-    const cnt = Object.keys(ev).filter(d => d.startsWith(mm)).length;
+    const cnt = new Set(Object.keys(ev).concat(cashDates()).filter(d => d.startsWith(mm))).size;
     let cells = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(w => '<div class="h">' + w + '</div>').join('');
     for (let i = 0; i < lead; i++) cells += '<div></div>';
     for (let d = 1; d <= days; d++) {
       const iso = mm + '-' + String(d).padStart(2, '0'), e = ev[iso];
       const cls = (iso < today ? ' past' : '') + (iso === today ? ' today' : '');
-      cells += e ? '<button class="d busy' + cls + '" style="background:' + col(CTYPE(e[0].type)[1]) + '" data-open="concert:' + e[0].id + '" aria-label="' + esc(dm(iso) + ', ' + e[0].city) + '">' + d + '</button>'
-        : '<div class="d' + cls + '">' + d + '</div>';
+      cells += calCell(iso, d, cls, e, e ? col(CTYPE(e[0].type)[1]) : '', e ? 'concert:' + e[0].id : '', e ? dm(iso) + ', ' + e[0].city : '');
     }
     cal += '<div class="g pad"><div class="mswitch"><b>' + MONF[m - 1] + (y !== y0 ? ' ' + y : '') + '</b><span class="lbl">' + (cnt ? cnt + ' ' + (cnt === 1 ? 'дата' : cnt < 5 ? 'даты' : 'дат') : 'свободно') + '</span></div><div class="cal">' + cells + '</div></div>';
   }
   return '<div class="stack">' +
-    '<div class="legend" style="margin:0 6px"><span><i style="background:var(--c-gost)"></i>тур</span><span><i style="background:var(--c-petr)"></i>концерт</span><span><i style="background:var(--c-bryl)"></i>корпоратив, фест</span></div>' +
-    cal + '<p class="small">Нажмите на дату, чтобы открыть концерт.</p></div>';
+    '<div class="legend" style="margin:0 6px"><span><i style="background:var(--c-gost)"></i>тур</span><span><i style="background:var(--c-petr)"></i>концерт</span><span><i style="background:var(--c-bryl)"></i>корпоратив, фест</span>' + cashLegend() + '</div>' +
+    cal + '<p class="small">Нажмите на дату, чтобы открыть концерт.</p>' + cashAhead() + '</div>';
 }
 /* ───────── общий вид «Предметы»: помощники главной (регламент 08) ───────── */
 I.refresh = '<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4.5V11h-6.5"/>';
@@ -1040,6 +1077,19 @@ function pmAfter() {
   const st = t => { const k = Math.min(1, (t - t0) / 1300), e = 1 - Math.pow(1 - k, 4); tv.textContent = rub(to * e); if (k < 1) requestAnimationFrame(st); };
   requestAnimationFrame(st);
 }
+/* плитка «Наличные» на главных: отдельно от денег ИП */
+function cashTileBx() {
+  const t = cashTotals(); if (!t.n) return '';
+  return '<button class="bx w cashbx" data-open="cashall"><h5><span><i style="background:' + CASH_COL + '"></i>Наличные · вне денег ИП</span><span>подробнее ›</span></h5>' +
+    '<div class="kv three"><div><span class="lbl">' + (S.view === 'petr' ? 'От Вити сейчас' : 'Петрушенко сейчас') + '</span><b>' + fmt(t.due) + '</b></div><div><span class="lbl">Получено</span><b>' + fmt(t.got) + '</b></div>' +
+    '<div><span class="lbl">Всего</span><b>' + fmt(t.sum) + '</b></div></div>' +
+    (t.next ? '<div class="bs">ближайший — ' + esc(t.next.city) + ', ' + dm(t.next.date) + (t.next.time ? ' в ' + esc(t.next.time) : '') + '</div>' : '') + '</button>';
+}
+function cashTileHt() {
+  const t = cashTotals(), c = t.next; if (!t.n || !c) return '';
+  const m = cashMine(c);
+  return homeTile('t4', 'open:cashall', 'Наличные · вне денег ИП', c.date, c.city, (S.view === 'petr' ? 'всего получить от Вити сейчас: ' : 'всего отдать Петрушенко сейчас: ') + fmt(t.due), rub(m[0]) + '<small>' + m[1] + '</small>', '');
+}
 const netText = () => S.net === 'loading' ? 'обновляю цифры' : S.net === 'offline' ? 'нет связи, цифры на ' + D.asOf : 'выписки на ' + D.asOf;
 const SCREENS = {
   home() {
@@ -1077,6 +1127,7 @@ const SCREENS = {
         '<button class="bx" data-tab="money"><h5>' + MONF[+m.slice(5, 7) - 1] + '</h5><div class="bv" style="font-size:19px;color:var(--in)">+' + compact(M.inc[m]) + '</div>' +
           '<div class="wk">' + wk.map(x => '<i><u style="height:' + (x.i / wmax * 100).toFixed(0) + '%;background:var(--in)"></u><u style="height:' + (x.o / wmax * 100).toFixed(0) + '%;background:#D6D4CE"></u></i>').join('') + '</div>' +
           '<div class="bs">ушло ' + compact(M.out[m]) + ' ₽ · по неделям</div></button>' +
+        cashTileBx() +
       '</div>' +
       sec('Последние операции', ['money', 'Все']) + '<div class="g list">' + M.ops.slice(0, 4).map((o, i) => opRow(o, i)).join('') + '</div>';
   },
@@ -1154,7 +1205,7 @@ const SCREENS = {
       (up.length ? homeTile('t1', 'calendar', 'Ближайший концерт', up[0].date, up[0].city, up[0].cp,
         up[0].split ? rub(up[0].gost) + '<small>вам</small>' : '<small>после оплаты</small>', '') : '') +
       (lastAcc.length ? homeTile('t2', 'open:gacc', 'Начисления', lastAcc[0].date, opTitle(lastAcc[0].name), lastAcc[0].project, plus(lastAcc[0].gost), ' plus') : '') +
-      (lastPay.length ? homeTile('t3', 'open:gplist:pers', 'Оплаты', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + '</div></div>';
+      (lastPay.length ? homeTile('t3', 'open:gplist:pers', 'Оплаты', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + cashTileHt() + '</div></div>';
   },
   calendar() {
     return previewBar() + lt('Календарь', G.conc.upcoming.length + ' концертов впереди') + calMonths(G.conc);
@@ -1190,6 +1241,7 @@ const SCREENS = {
           '<div class="bs">' + dm(next.date) + ' · ' + daysWord(daysTo(next.date)) + '<br>' + WAL[next.w === 'ip' ? 'ip' : 'ak'].name + (next.mine ? ' · мне ' + fmt(next.mine) : '') + '</div></button>' : '') +
         (W.tour.length ? '<button class="bx" data-open="iptour"><h5><span><i style="background:var(--ip)"></i>Тур осень ' + W.tour[0].date.slice(0, 4) + '</span></h5><div class="bv">' + compact(W.tourSum) + '</div>' +
           '<div class="bs">' + nWord(W.tour.length, 'концерт', 'концерта', 'концертов') + ' · мне ' + fmt(W.tourPetr) + '</div></button>' : '') +
+        cashTileBx() +
       '</div>' +
       '<div class="sec"><span>Последние операции моего ИП</span></div><div class="g list">' + W.last.map(ipOpRow).join('') + '</div>' +
       '<p class="small">Журнал Оплат: ' + fmt(W.opsCount) + ' операций, реестр: ' + fmt(W.incomesCount) + ' приходов. Касса-факт по выпискам на ' + esc(W.asOf) + '.</p>';
@@ -1210,7 +1262,7 @@ const SCREENS = {
       '</div><div class="stack"><div class="tiles">' +
       (next ? homeTile('t1', 'pcal', 'Ближайший концерт', next.date, next.city, next.cp, next.split && next.petr ? rub(next.petr) + '<small>ваша доля</small>' : '<small>после оплаты</small>', '') : '') +
       (lastAcc ? homeTile('t2', 'open:pacc', 'Начисления', lastAcc.date, opTitle(lastAcc.name), lastAcc.project, plus(lastAcc.share), ' plus') : '') +
-      (lastPay ? homeTile('t3', 'open:ppaid', 'Последняя выплата', lastPay.date, lastPay.label, PPT[lastPay.type][0], rub(lastPay.sum), '') : '') + '</div></div>';
+      (lastPay ? homeTile('t3', 'open:ppaid', 'Последняя выплата', lastPay.date, lastPay.label, PPT[lastPay.type][0], rub(lastPay.sum), '') : '') + cashTileHt() + '</div></div>';
   },
   pcalc() { return ''; },
   pform() {
@@ -1364,6 +1416,40 @@ const SHEETS = {
     return backBtn + lt(dm(iso) + ' ' + iso.slice(0, 4), cs.length > 1 ? 'обе группы в один день — две строки в двух таблицах' : '') + '<div class="stack">' +
       '<div class="g list">' + cs.map(wRow).join('') + '</div>' +
       '<p class="small">Заказчик платит каждому ИП отдельно: за АК-47 — Гостюхину, за ТГК — мне.</p></div>';
+  },
+  /* наличные: карточка даты, день с несколькими событиями, общий экран */
+  cashd(i) {
+    const c = cashList().filter(x => x.i === +i)[0];
+    if (!c) return backBtn;
+    if (isBusyRow(c)) return backBtn + lt(esc(c.who || 'Занято'), dm(c.date) + ' – ' + dm(c.dateTo || c.date) + ' ' + (c.dateTo || c.date).slice(0, 4)) + '<div class="stack">' +
+      '<div class="g pad"><span class="lbl">Даты заняты</span><div class="num mid">' + esc(c.city || '—') + '</div><div class="lbl mt4">концерты на эти дни не ставим</div></div></div>';
+    const m = cashMine(c), left = Math.max(0, c.sum - c.got);
+    const row = (t, s, v, strong) => '<div class="row' + (strong ? ' total' : '') + '"><div class="t"><b>' + t + '</b>' + (s ? '<span>' + esc(s) + '</span>' : '') + '</div><div class="v">' + v + '</div></div>';
+    return backBtn + lt(esc(c.city), dm(c.date) + ' ' + c.date.slice(0, 4) + (c.time ? ' · ' + esc(c.time) : '') + ' · ' + esc(String(c.type || '').toLowerCase())) + '<div class="stack">' +
+      '<div class="g pad"><div class="tile-hh"><span class="lbl">' + (S.view === 'full' ? 'Сумма' : S.view === 'gost' ? 'Вам' : 'Мне, 10 %') + '</span><span class="chip" style="background:' + CASH_COL + ';color:#fff">наличные</span></div>' +
+        '<div class="num big' + bigCls(rub(m[0])) + '">' + rub(m[0]) + '</div><div class="lbl mt4">' + esc(c.who || '') + '</div></div>' +
+      '<div class="g list">' + row('Вся сумма', 'по договорённости', rub(c.sum)) + row('Получено', c.holder ? 'деньги у: ' + c.holder : '', rub(c.got)) + row('Осталось получить', '', left > 0.5 ? rub(left) : '—') + '</div>' +
+      sec('Как делится') + '<div class="g list">' + row('Гостюхин', 'всё, кроме доли Петрушенко', rub(c.gost)) + row('Петрушенко', '10 % от всей суммы', rub(c.petr)) +
+        row('Петрушенко уже отдано', c.petrPaidWhen || '', c.petrPaid > 0.5 ? rub(c.petrPaid) : '—') + row(cashDueLbl(), '10 % от полученного минус отданное', c.petrDue > 0.5 ? rub(c.petrDue) : '—', true) + '</div>' +
+      '<p class="small">Наличные. В деньги ИП, налоги и долги ИП не входят. Лист «Наличные 2026».' + (c.note ? ' ' + esc(c.note) : '') + '</p></div>';
+  },
+  cday(iso) {
+    const src = S.view === 'gost' ? G : S.view === 'petr' ? P : M;
+    const conc = S.view === 'petr' && W ? pAll().filter(c => c.date === iso).map(wRow) : src.conc.list.filter(c => c.date === iso && !/11-2026/.test(c.cp || '')).map(c => concertRow(c, S.view === 'gost'));
+    return backBtn + lt(dm(iso) + ' ' + iso.slice(0, 4), 'несколько событий в один день') + '<div class="stack"><div class="g list">' + conc.join('') + cashOn(iso).map(cashRow).join('') + busyOn(iso).map(cashRow).join('') + '</div></div>';
+  },
+  cashall() {
+    const t = cashTotals(), all = cashList().slice().sort(byDate);
+    const ahead = all.filter(c => (c.dateTo || c.date) >= D.today), past = all.filter(c => (c.dateTo || c.date) < D.today).reverse();
+    return backBtn + lt('Наличные', 'концерты и корпоративы за наличные · вне денег ИП') + '<div class="stack">' +
+      '<div class="g pad"><div class="tile-hh"><span class="lbl">' + cashDueLbl() + '</span><span class="chip" style="background:' + CASH_COL + ';color:#fff">наличные</span></div>' +
+        '<div class="num big' + bigCls(rub(t.due)) + '">' + rub(t.due) + '</div><div class="lbl mt4">10 % от уже полученных денег минус то, что отдано</div>' +
+        '<div class="kv three"><div><span class="lbl">Всего</span><b>' + fmt(t.sum) + '</b></div><div><span class="lbl">Получено</span><b>' + fmt(t.got) + '</b></div><div><span class="lbl">Осталось</span><b>' + fmt(Math.max(0, t.sum - t.got)) + '</b></div></div></div>' +
+      '<div class="g list"><div class="row"><span class="dot" style="background:var(--c-gost)"></span><div class="t"><b>Гостюхин</b><span>всё, кроме доли Петрушенко</span></div><div class="v">' + rub(t.gost) + '</div></div>' +
+        '<div class="row"><span class="dot" style="background:var(--c-petr)"></span><div class="t"><b>Петрушенко</b><span>10 % от всей суммы · отдано ' + fmt(t.paid) + '</span></div><div class="v">' + rub(t.petr) + '</div></div></div>' +
+      (ahead.length ? sec('Впереди') + '<div class="g list">' + ahead.map(cashRow).join('') + '</div>' : '') +
+      (past.length ? sec('Прошли') + '<div class="g list">' + past.map(cashRow).join('') + '</div>' : '') +
+      '<p class="small">Деньги получает Гостюхин и сам отдаёт Петрушенко 10 % от каждой полученной суммы. В остатки на счетах, долги ИП и налоги наличные не входят. Лист «Наличные 2026».</p></div>';
   },
   calendar() {
     return backBtn + lt('Календарь', 'занятые даты на четыре месяца') + calMonths(M.conc);
