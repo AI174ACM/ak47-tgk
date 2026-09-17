@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-2132). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-2255). -->
 <style>
 :root{
   color-scheme:dark;
@@ -344,6 +344,12 @@ html.pm .back{position:sticky;top:0;z-index:3;background:rgba(255,255,255,.62);b
 .qa button{appearance:none;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;font:700 11.5px/1.15 Manrope,sans-serif;color:var(--ink);text-align:center;padding:0}
 .qa i{width:58px;height:58px;border-radius:20px;background:#fff;display:grid;place-items:center;color:var(--ink)}
 .qa svg{width:25px;height:25px}
+/* яркие кнопки на главной Петрушенко (решение Мельникова 17.09.2026: белые плитки сливались с фоном) */
+.qa.hot i{color:#fff;box-shadow:0 10px 18px -9px var(--c)}
+.qa.hot button:nth-child(1) i{--c:#12915F;background:linear-gradient(140deg,#2FC08A,#12915F)}
+.qa.hot button:nth-child(2) i{--c:#2A6FD6;background:linear-gradient(140deg,#5B97EE,#2A6FD6)}
+.qa.hot button:nth-child(3) i{--c:#6A5AE0;background:linear-gradient(140deg,#8E80F0,#6A5AE0)}
+.qa.hot button:nth-child(4) i{--c:#FF5A1F;background:linear-gradient(140deg,#FF8A5C,#FF5A1F)}
 .brief{margin-top:18px;padding:16px 17px;border-radius:var(--r);background:linear-gradient(150deg,#FFF3EC,#FFFFFF 60%)}
 .brief .h{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--accent)}
 .brief .h svg{width:17px;height:17px}
@@ -1169,7 +1175,7 @@ const SCREENS = {
       '<button class="wallet" data-wallet aria-label="Раскрыть кошельки">' + card('c2', 'ak', Math.abs(tot), (tot < -0.5 ? 'переплата' : 'ещё должны мне') + '<br>' + dueNote) +
         card('c1', 'ip', W.bank, 'в банках<br>долги всем ' + fmt(W.debts)) + '</button>' +
       '<div class="wallet-h"><span>Нажмите на карты — раскроются</span><button data-open="wallets">Как делятся</button></div>' +
-      '<div class="qa">' + q('calc', 'Посчитать<br>концерт', 'data-tab="pcalc"') + q('send', 'Отправить<br>заявку', 'data-shareform') +
+      '<div class="qa hot">' + q('calc', 'Посчитать<br>концерт', 'data-tab="pcalc"') + q('send', 'Отправить<br>заявку', 'data-shareform') +
         q('cal', 'Занятые<br>даты', 'data-tab="pcal"') + q('refresh', S.net === 'loading' ? 'Обновляю…' : 'Обновить<br>цифры', 'data-refresh') + '</div>' +
       '<div class="brief"><div class="h">' + SPARK + 'Коротко<small>по двум таблицам</small></div><p>' + esc(pBrief()) + '</p></div>' +
       '<div class="bento">' +
