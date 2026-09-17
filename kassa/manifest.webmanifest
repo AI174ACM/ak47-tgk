@@ -1,10 +1,8 @@
-{
+{"scope": "./",
  "name": "Касса ИП Гостюхин",
  "short_name": "Касса",
  "lang": "ru",
  "dir": "ltr",
- "scope": "./",
- "start_url": "./",
  "display": "standalone",
  "background_color": "#07090F",
  "theme_color": "#07090F",
