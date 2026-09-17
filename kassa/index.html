@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-0938). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-2132). -->
 <style>
 :root{
   color-scheme:dark;
@@ -437,6 +437,35 @@ html.pm .preview{border:0;border-radius:16px;font:700 13.5px Manrope,sans-serif}
 html.pm .calcwrap .loadrow{font-weight:600}
 
 @media (prefers-reduced-motion:reduce){.bg{animation:none}.views.in{animation:none}.sheet,.sheet.open{transition:none}html.pm .views.in>*,html.pm .wk i,html.pm .cd::after,html.pm .car-card::after{animation:none!important}html.pm .cd,html.pm .tabbar{transition:none}}
+
+/* ───────── два кошелька Петрушенко (17.09.2026): АК-47 синий — доля из таблицы «ИП Гостюхин», ИП Петрушенко зелёный — всё из его таблицы ───────── */
+html.pm{--ak:#3F86DD;--ak-bg:#E6F0FC;--ip:#1E9E63;--ip-bg:#E1F4EA}
+#app.petr .cd.c1{background:linear-gradient(140deg,#23A56B,#0E5A38 75%)}
+#app.petr .cd.c2{background:linear-gradient(140deg,#5B9BEA,#2A5FC4 75%)}
+.bx h5 i{width:8px;height:8px;border-radius:50%;flex:none;margin-right:6px;display:inline-block}
+.bx h5>span:first-child{display:flex;align-items:center}
+.bx.blue{background:linear-gradient(150deg,#5B9BEA,#2A5FC4);color:#fff}
+.bx.blue h5,.bx.blue .bs{color:rgba(255,255,255,.82)}
+.bx.warnbx{background:var(--warn-bg)}.bx.warnbx h5,.bx.warnbx .bs{color:var(--warn)}.bx.warnbx .bv{color:var(--bad)}
+.bar2{display:flex;height:12px;border-radius:6px;overflow:hidden;margin-top:12px;gap:2px;width:100%}
+.bar2 i{display:block;height:100%;border-radius:3px}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;width:100%}
+.kv.three{grid-template-columns:1fr 1fr 1fr;gap:8px}
+.kv div{padding:12px 13px;border-radius:18px;background:#F6F5F2;min-width:0}
+.kv .lbl{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
+.kv b{display:block;font:800 17px Manrope,sans-serif;letter-spacing:-.04em;margin-top:3px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.kv.three b{font-size:15px}
+.wm{width:5px;align-self:stretch;border-radius:3px;flex:none}
+.row.total{background:#F6F5F2}
+.chip.ak{background:var(--ak-bg);color:#245FB0}.chip.ip{background:var(--ip-bg);color:var(--good)}
+.seg .dot{width:9px;height:9px;display:inline-block;margin-right:6px;vertical-align:1px}
+.rule{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rule div{padding:14px 15px;border-radius:20px}
+.rule .ak{background:var(--ak-bg)}.rule .ip{background:var(--ip-bg)}
+.rule b{display:block;font-size:15px;font-weight:800;letter-spacing:-.02em}
+.rule span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.35;font-weight:600}
+.tile-hh{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.row .t.wrap b,.row .t.wrap span{white-space:normal}
 </style>
 </head>
 <body>
@@ -571,7 +600,7 @@ const FORM_MSG = 'Здравствуйте! Это Антон Петрушенк
 const CTYPE = t => /Тур/.test(t) ? ['тур', 'gost'] : /Корпоратив|Фест|Реклама/.test(t) ? [String(t).toLowerCase(), 'bryl'] : ['концерт', 'petr'];
 
 /* ───────── состояние ───────── */
-const S = { role: null, view: null, tab: null, seg: 'ahead', month: null, year: null, gyear: null, gbar: null, showAll: false, net: 'ok', fetchedAt: 0 };
+const S = { role: null, view: null, tab: null, wal: 'ip', seg: 'ahead', month: null, year: null, gyear: null, gbar: null, showAll: false, net: 'ok', fetchedAt: 0 };
 let D = null, M = null, G = null, P = null;
 const STACK = [];
 const TABS = {
@@ -676,6 +705,81 @@ function modelPetr(d) {
   }
   const years = []; for (let y = 2024; y <= +d.today.slice(0, 4); y++) years.push(String(y));
   return { accruals, payouts, total, bal, due, conc: allConcerts(d), years, curY: d.today.slice(0, 4), calcKey: d.calcKey || '' };
+}
+/* ───────── два кошелька Петрушенко (прототип «Касса Петрушенко», решение Мельникова 17.09.2026) ─────────
+   АК-47: заказчик платит ИП Гостюхин — видна только доля (модель P, таблица «ИП Гостюхин»).
+   ИП Петрушенко: заказчик платит его ИП — видно всё (модель W: блок ip из «Касса — данные», лист «Касса_данные» его таблицы). */
+const WCOL = { tax: '#8A8F98', nds: '#D39A10', aver: '#9AA3AC', vibe: '#3FBF7F', petr: '#E86C9E', mik: '#E3B341', adm: '#6A55E8', obor: '#B4B2AC' };
+const WAL = {
+  ak: { name: 'АК-47', sub: 'через ИП Гостюхин · моя доля', col: 'var(--ak)', table: 'ИП Гостюхин' },
+  ip: { name: 'ИП Петрушенко', sub: 'моё ИП · ТГК, тур, реклама', col: 'var(--ip)', table: 'ИП Петрушенко (Тбанк)' }
+};
+const IP_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1vFG-eDb5dm0X4ZFHlQowiKic1FQN1n4Z825jesXV3ek/edit';
+let W = null;
+const rub2 = n => ((n || 0) < -0.004 ? '−' : '') + Math.abs(n || 0).toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + NB + '₽';
+function modelIp(ip) {
+  if (!ip || ip.bank == null) return null;
+  const parts = (c, tourRow) => [['НДС 5 %', c.nds, WCOL.nds], [tourRow ? 'Налоги, УСН' : 'УСН', c.usn, WCOL.tax], ['ИП Аверин', c.aver, WCOL.aver], ['ИП Вибе', c.vibe, WCOL.vibe],
+    ['ИП Микрюков', c.mik, WCOL.mik], ['Петрушенко', c.petr, WCOL.petr], ['Админ', c.adm, WCOL.adm], ['Остаток', c.tail, WCOL.obor]];
+  const conc = (ip.tgk || []).map((c, i) => ({ id: 'k' + i, w: 'ip', date: c.date, city: c.city, cp: c.cp, type: 'Концерт ТГК', price: c.price, mine: c.petr, parts: parts(c, false), tour: false }))
+    .concat((ip.tour || []).map((c, i) => ({ id: 'r' + i, w: 'ip', date: c.date, city: c.city, cp: 'Тур ТГК осень ' + c.date.slice(0, 4), type: 'Тур ТГК', price: c.price, mine: c.petr, parts: parts(c, true), tour: true })))
+    .filter(c => /^\d{4}-\d{2}-\d{2}$/.test(c.date)).sort(byDate);
+  const rest = (ip.rest || []).map(r => ({ key: r.key, name: r.name, sum: r.sum, col: WCOL[r.key] || WCOL.obor }));
+  const mine = (rest.filter(r => r.key === 'petr')[0] || { sum: 0 }).sum;
+  return Object.assign({}, ip, { rest: rest, mine: mine, conc: conc, ok: Math.abs(ip.diff || 0) < 0.005 });
+}
+/* общий список дат для календаря и главной: АК-47 из таблицы Гостюхина + ТГК и тур из таблицы Петрушенко */
+function pAll() {
+  const ak = P.conc.list.filter(c => !/11-2026/.test(c.cp || '')).map(c => Object.assign({ w: 'ak', mine: c.split || c.tour ? c.petr : 0 }, c));
+  return ak.concat(W ? W.conc : []).sort((a, b) => byDate(a, b) || (a.w < b.w ? -1 : 1));
+}
+function wRow(c) {
+  const k = c.w === 'ip' ? 'ip' : 'ak';
+  return '<button class="row" data-open="' + (k === 'ip' ? 'ipc:' : 'concert:') + c.id + '"><span class="wm" style="background:' + WAL[k].col + '"></span>' + dateBadge(c.date) +
+    '<div class="t"><b>' + esc(c.city) + '</b><span>' + esc(k === 'ip' ? c.type : CTYPE(c.type)[0]) + ' · ' + WAL[k].name + '</span></div>' +
+    '<div class="v">' + (c.mine ? rub(c.mine) : '—') + '<small>мне</small></div>' + chev + '</button>';
+}
+const wchip = k => '<span class="chip ' + k + '">' + WAL[k].name + '</span>';
+const ipOpRow = o => '<div class="row">' + dateBadge(o.date) + '<div class="t"><b>' + esc(o.name) + '</b><span>' + (o.kind === 'in' ? 'приход' : 'оплата') + (o.cat ? ' · ' + esc(o.cat) : '') + '</span></div>' +
+  '<div class="v' + (o.kind === 'in' ? ' plus' : '') + '">' + (o.kind === 'in' ? plus(o.sum) : minus(o.sum)) + '</div></div>';
+const restBar = () => '<div class="bar2">' + W.rest.filter(r => r.sum > 1).map(r => '<i style="width:' + (r.sum / W.bank * 100).toFixed(2) + '%;background:' + r.col + '"></i>').join('') + '</div>';
+const restList = () => W.rest.map(r => '<div class="row"><span class="dot" style="background:' + r.col + '"></span><div class="t"><b>' + esc(r.name) + '</b></div><div class="v">' + (Math.abs(r.sum) > 0.004 ? rub2(r.sum) : '—') + '</div></div>').join('') +
+  '<div class="row total"><div class="t"><b>Итого = деньги в банках</b><span>расхождение ' + rub2(W.diff) + '</span></div><div class="v">' + rub2(W.bank) + '</div></div>';
+const wseg = () => '<div class="seg" role="group" aria-label="Кошелёк"><button data-wal="ip" aria-pressed="' + (S.wal === 'ip') + '"><span class="dot" style="background:var(--ip)"></span>ИП Петрушенко</button>' +
+  '<button data-wal="ak" aria-pressed="' + (S.wal === 'ak') + '"><span class="dot" style="background:var(--ak)"></span>АК-47 · доля</button></div>';
+function pBrief() {
+  const p = [], tot = P.total, next = pAll().filter(c => c.date >= D.today)[0];
+  p.push('В вашем ИП свободно ' + rub(W.free) + (W.ok ? ', касса сходится с таблицей.' : ', касса не сходится: расхождение ' + rub2(W.diff) + '.'));
+  if (W.taxGap > 0.5) p.push('На налоги и НДС в копилках не хватает ' + rub(W.taxGap) + '.');
+  p.push(tot > 0.5 ? 'По АК-47 вам ещё должны ' + rub(tot) + '.' : 'По АК-47 долга перед вами нет.');
+  if (next) p.push('Ближайший концерт — ' + String(next.city).split(',')[0] + ', ' + dm(next.date) + ' (' + WAL[next.w === 'ip' ? 'ip' : 'ak'].name + ').');
+  return p.join(' ');
+}
+/* календарь на четыре месяца по двум кошелькам: день с обеими группами — двуцветный и открывает обе строки */
+function calWallets(list) {
+  const ev = {}; list.forEach(c => { (ev[c.date] = ev[c.date] || []).push(c); });
+  const bg = e => { const ks = e.map(c => c.w === 'ip' ? 'ip' : 'ak'); return ks.indexOf('ak') >= 0 && ks.indexOf('ip') >= 0 ? 'linear-gradient(135deg,var(--ak) 50%,var(--ip) 50%)' : WAL[ks[0]].col; };
+  const today = D.today, y0 = +today.slice(0, 4), m0 = +today.slice(5, 7);
+  let cal = '';
+  for (let k = 0; k < 4; k++) {
+    const y = y0 + Math.floor((m0 - 1 + k) / 12), m = ((m0 - 1 + k) % 12) + 1, mm = y + '-' + String(m).padStart(2, '0');
+    const lead = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7, days = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    const cnt = Object.keys(ev).filter(d => d.startsWith(mm)).length;
+    let cells = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(w => '<div class="h">' + w + '</div>').join('');
+    for (let i = 0; i < lead; i++) cells += '<div></div>';
+    for (let d = 1; d <= days; d++) {
+      const iso = mm + '-' + String(d).padStart(2, '0'), e = ev[iso];
+      const cls = (iso < today ? ' past' : '') + (iso === today ? ' today' : '');
+      cells += e ? '<button class="d busy' + cls + '" style="background:' + bg(e) + '" data-open="' + (e.length > 1 ? 'day:' + iso : (e[0].w === 'ip' ? 'ipc:' : 'concert:') + e[0].id) + '" aria-label="' + esc(dm(iso) + ', ' + e.map(c => c.city).join(', ')) + '">' + d + '</button>'
+        : '<div class="d' + cls + '">' + d + '</div>';
+    }
+    cal += '<div class="g pad"><div class="mswitch"><b>' + MONF[m - 1] + (y !== y0 ? ' ' + y : '') + '</b><span class="lbl">' + (cnt ? cnt + ' ' + (cnt === 1 ? 'дата' : cnt < 5 ? 'даты' : 'дат') : 'свободно') + '</span></div><div class="cal">' + cells + '</div></div>';
+  }
+  const ahead = list.filter(c => c.date >= today);
+  return '<div class="stack"><div class="legend" style="margin:0 6px"><span><i style="background:var(--ak)"></i>АК-47 (через Гостюхина)</span><span><i style="background:var(--ip)"></i>ТГК и тур (моё ИП)</span>' +
+    '<span><i style="background:linear-gradient(135deg,var(--ak) 50%,var(--ip) 50%)"></i>обе группы</span></div>' + cal +
+    sec('Впереди') + (ahead.length ? '<div class="g list">' + ahead.map(wRow).join('') + '</div>' : '<p class="small">Дат впереди нет.</p>') +
+    '<p class="small">АК-47 — таблица «ИП Гостюхин»; ТГК и тур — таблица «ИП Петрушенко (Тбанк)». Совместный концерт — одна дата, две строки: заказчик платит каждому ИП отдельно.</p></div>';
 }
 function petrYear(y) {
   const inY = s => y === 'all' || s.slice(0, 4) === y;
@@ -1051,6 +1155,40 @@ const SCREENS = {
   },
   /* ───────── экраны: касса Петрушенко (решение Мельникова 16.09.2026) ───────── */
   phome() {
+    if (!W) return SCREENS.phomeAk();
+    const tot = P.total, n = P.due.length, next = pAll().filter(c => c.date >= D.today)[0];
+    const hr = new Date().getHours(), greet = hr < 5 ? 'Доброй ночи' : hr < 12 ? 'Доброе утро' : hr < 18 ? 'Добрый день' : 'Добрый вечер';
+    const card = (cls, k, bal, foot) => '<div class="cd ' + cls + '"><div class="top"><div class="nm">' + WAL[k].name + '<small>' + WAL[k].sub + '</small></div><div class="chipc"></div></div>' +
+      '<div class="bt"><div class="bal">' + fmt(bal) + ' <small>₽</small></div><span>' + foot + '</span></div></div>';
+    const q = (ic, t, attr) => '<button ' + attr + '><i>' + icon(ic) + '</i>' + t + '</button>';
+    const net = S.net === 'loading' ? 'обновляю цифры' : S.net === 'offline' ? 'нет связи, цифры на ' + W.asOf : 'выписки на ' + W.asOf;
+    const dueNote = tot > 0.5 ? 'за ' + nWord(n, 'приход', 'прихода', 'приходов') : tot < -0.5 ? 'переплата' : 'долга нет';
+    return previewBar() + '<div class="hd"><div class="hi">' + greet + '<b>Антон</b></div><button class="me" data-open="wallets" aria-label="Как делятся кошельки">АП</button></div>' +
+      '<div class="total-k">Свободно в моём ИП</div><div class="total-v' + (rub(W.free).length > 13 ? ' s' : '') + '" data-n="' + W.free + '">' + rub(W.free) + '</div>' +
+      '<div class="total-s' + (W.ok ? '' : ' bad') + '"><i></i>' + (W.ok ? 'Сходится с таблицей' : 'Расхождение ' + rub2(W.diff)) + '<span>· ' + net + '</span></div>' +
+      '<button class="wallet" data-wallet aria-label="Раскрыть кошельки">' + card('c2', 'ak', Math.abs(tot), (tot < -0.5 ? 'переплата' : 'ещё должны мне') + '<br>' + dueNote) +
+        card('c1', 'ip', W.bank, 'в банках<br>долги всем ' + fmt(W.debts)) + '</button>' +
+      '<div class="wallet-h"><span>Нажмите на карты — раскроются</span><button data-open="wallets">Как делятся</button></div>' +
+      '<div class="qa">' + q('calc', 'Посчитать<br>концерт', 'data-tab="pcalc"') + q('send', 'Отправить<br>заявку', 'data-shareform') +
+        q('cal', 'Занятые<br>даты', 'data-tab="pcal"') + q('refresh', S.net === 'loading' ? 'Обновляю…' : 'Обновить<br>цифры', 'data-refresh') + '</div>' +
+      '<div class="brief"><div class="h">' + SPARK + 'Коротко<small>по двум таблицам</small></div><p>' + esc(pBrief()) + '</p></div>' +
+      '<div class="bento">' +
+        '<button class="bx w" data-open="ipw"><h5><span><i style="background:var(--ip)"></i>ИП Петрушенко · кому что причитается</span><span>подробнее ›</span></h5>' + restBar() +
+          '<div class="kv three"><div><span class="lbl">Свободно</span><b style="color:var(--in)">' + fmt(W.free) + '</b></div><div><span class="lbl">Мне (Петрушенко)</span><b>' + fmt(W.mine) + '</b></div>' +
+          '<div><span class="lbl">Налоги + НДС</span><b>' + fmt(W.taxNeed) + '</b></div></div></button>' +
+        (W.taxGap > 0.5 ? '<button class="bx w warnbx" data-open="iptax"><h5><span>На налоги и НДС не хватает</span><span>подробнее ›</span></h5><div class="bv l">' + rub(W.taxGap) + '</div>' +
+          '<div class="bs">должны ' + fmt(W.taxNeed) + ' · в копилках ' + fmt(W.reserved) + '</div></button>' : '') +
+        '<button class="bx blue" data-open="pdue"><h5>АК-47 · ' + (tot < -0.5 ? 'переплата' : 'ещё должны') + '<span>›</span></h5><div class="bv">' + compact(Math.abs(tot)) + '</div><div class="bs">' + dueNote + '</div></button>' +
+        '<button class="bx" data-open="ipowed"><h5><span><i style="background:var(--ip)"></i>Нам должны</span></h5><div class="bv">' + (W.owed != null ? compact(W.owed) : '—') + '</div><div class="bs">' + esc(W.owedNote) + '</div></button>' +
+        (next ? '<button class="bx dark" data-open="' + (next.w === 'ip' ? 'ipc:' : 'concert:') + next.id + '"><h5>Ближайший концерт</h5><div class="bv" style="font-size:24px;white-space:normal">' + esc(String(next.city).split(',')[0]) + '</div>' +
+          '<div class="bs">' + dm(next.date) + ' · ' + daysWord(daysTo(next.date)) + '<br>' + WAL[next.w === 'ip' ? 'ip' : 'ak'].name + (next.mine ? ' · мне ' + fmt(next.mine) : '') + '</div></button>' : '') +
+        (W.tour.length ? '<button class="bx" data-open="iptour"><h5><span><i style="background:var(--ip)"></i>Тур осень ' + W.tour[0].date.slice(0, 4) + '</span></h5><div class="bv">' + compact(W.tourSum) + '</div>' +
+          '<div class="bs">' + nWord(W.tour.length, 'концерт', 'концерта', 'концертов') + ' · мне ' + fmt(W.tourPetr) + '</div></button>' : '') +
+      '</div>' +
+      '<div class="sec"><span>Последние операции моего ИП</span></div><div class="g list">' + W.last.map(ipOpRow).join('') + '</div>' +
+      '<p class="small">Журнал Оплат: ' + fmt(W.opsCount) + ' операций, реестр: ' + fmt(W.incomesCount) + ' приходов. Касса-факт по выпискам на ' + esc(W.asOf) + '.</p>';
+  },
+  phomeAk() {
     const F = petrYear(P.curY), up = P.conc.upcoming, tot = P.total, n = P.due.length;
     const lastAcc = P.accruals.filter(a => a.share > 0).slice(-1)[0], lastPay = P.payouts.slice(-1)[0];
     const next = up[0];
@@ -1078,9 +1216,26 @@ const SCREENS = {
       '<p class="small">Отправлять лично заказчику, не в общие чаты. Цены в форме нет — её называете вы по калькулятору. Когда заказчик заполнит форму, заявка придёт в группу «Концерты/документы».</p></div>';
   },
   pcal() {
+    if (W) { const all = pAll(); return previewBar() + lt('Календарь', 'занятые даты по АК-47 и ТГК вместе') + calWallets(all); }
     return previewBar() + lt('Календарь', P.conc.upcoming.length + ' концертов впереди') + calMonths(P.conc);
   },
   pmoney() {
+    if (!W) return SCREENS.pmoneyAk('');
+    const head = previewBar() + lt('Мои деньги', 'два кошелька, каждый из своей таблицы') + '<div class="stack">' + wseg() + '</div>';
+    if (S.wal === 'ak') return head + SCREENS.pmoneyAk('<div class="mt12"></div>');
+    return head + '<div class="stack mt12">' +
+      '<div class="g pad"><div class="tile-hh"><span class="lbl">Свободно (живая оборотка)</span>' + wchip('ip') + '</div><div class="num big' + bigCls(rub(W.free)) + '" style="color:var(--in)">' + rub(W.free) + '</div>' +
+        '<div class="kv three"><div><span class="lbl">В банках</span><b>' + fmt(W.bank) + '</b></div><div><span class="lbl">Долги всем</span><b>' + fmt(W.debts) + '</b></div><div><span class="lbl">Нам должны</span><b>' + (W.owed != null ? fmt(W.owed) : '—') + '</b></div></div></div>' +
+      '<div class="sec"><span>Кому что причитается</span><button data-open="ipw">Счета</button></div><div class="g list">' + restList() + '</div>' +
+      (W.taxGap != null ? '<div class="sec"><span>Налоги и НДС</span><button data-open="iptax">Подробнее</button></div><div class="g list"><div class="row"><div class="t"><b>' + (W.taxGap > 0.5 ? 'Не хватает в копилках' : 'Копилки покрывают долг') + '</b>' +
+        '<span>должны ' + fmt(W.taxNeed) + ' · отложено ' + fmt(W.reserved) + '</span></div><div class="v"' + (W.taxGap > 0.5 ? ' style="color:var(--bad)"' : '') + '>' + rub(Math.abs(W.taxGap)) + '</div></div></div>' : '') +
+      (W.tour.length ? '<div class="sec"><span>Тур ТГК</span><button data-open="iptour">Подробнее</button></div><div class="g list"><div class="row"><div class="t"><b>' + nWord(W.tour.length, 'концерт', 'концерта', 'концертов') + '</b>' +
+        '<span>' + dm(W.tour[0].date) + ' – ' + dm(W.tour[W.tour.length - 1].date) + '</span></div><div class="v">' + rub(W.tourSum) + '<small>НДС 5 % внутри: ' + fmt(W.tourNds) + '</small></div></div>' +
+        '<div class="row"><div class="t"><b>Мой фикс за тур</b><span>сумма колонки «Петрушенко»</span></div><div class="v">' + rub(W.tourPetr) + '</div></div></div>' : '') +
+      '<div class="sec"><span>Последние операции</span></div><div class="g list">' + W.last.map(ipOpRow).join('') + '</div>' +
+      '<p class="small">Таблица «ИП Петрушенко (Тбанк)». Журнал Оплат: ' + fmt(W.opsCount) + ' операций, касса-факт по выпискам на ' + esc(W.asOf) + '.</p></div>';
+  },
+  pmoneyAk(pre) {
     const y = S.gyear, F = petrYear(y), months = y === 'all' ? monthsUpTo(D.today) : monthsUpTo(D.today).filter(m => m.slice(0, 4) === y);
     const vals = months.map(m => sum(F.accY.filter(a => ym(a.date) === m), a => a.share));
     const sel = S.gbar != null && S.gbar < months.length ? S.gbar : null, rm = sel != null ? months[sel] : null;
@@ -1088,7 +1243,9 @@ const SCREENS = {
     const byP = {}; F.accY.forEach(a => { const k = kindOf(a.project).key === 'oth' ? 'Возвраты и прочее' : a.project; byP[k] = byP[k] || { v: 0, n: 0, c: kindOf(a.project).c }; byP[k].v += a.share; byP[k].n++; });
     const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: o.c })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
     const lastPays = F.payY.slice(-5).reverse(), lastAcc = F.accY.filter(a => a.share !== 0).slice(-5).reverse();
-    return previewBar() + lt('Мои деньги', 'доля с приходов и выплаты') + '<div class="stack">' + yearSeg('data-gyear', y, P.years) +
+    return (pre === '' ? previewBar() + lt('Мои деньги', 'доля с приходов и выплаты') : pre + '<div class="stack"><div class="g pad"><div class="tile-hh"><span class="lbl">АК-47 · ' + (tot < -0.5 ? 'переплата' : 'ещё должны мне') + '</span>' + wchip('ak') + '</div>' +
+      '<div class="num big' + bigCls(rub(Math.abs(tot))) + '">' + rub(Math.abs(tot)) + '</div><div class="lbl mt4">начислено минус выплачено, лист «Сверка» · выплаченное уже лежит в ИП Петрушенко</div></div></div><div class="mt12"></div>') +
+      '<div class="stack">' + yearSeg('data-gyear', y, P.years) +
       '<div class="g pad"><div class="lbl">Моя доля ' + (y === 'all' ? 'за всё время' : 'за ' + y + ' год') + '</div><div class="num big' + bigCls(rub(F.accrued)) + '">' + rub(F.accrued) + '</div>' +
       '<div class="lbl mt4">' + nWord(F.accY.length, 'приход', 'прихода', 'приходов') + ' на счёт ИП</div></div>' +
       '<div class="two"><button class="g pad tile" data-open="ppaid"><div class="lbl">Выплачено</div><div class="num mid">' + rub(F.paid) + '</div></button>' +
@@ -1143,6 +1300,65 @@ function owedItems() {
   });
 }
 const SHEETS = {
+  wallets() {
+    return backBtn + lt('Как делятся кошельки', 'кошелёк определяется тем, на чьё ИП платит заказчик') + '<div class="stack">' +
+      '<div class="rule"><div class="ak"><b>АК-47</b><span>заказчик платит ИП Гостюхин. Вижу только свою долю: начислено и сколько ещё должны</span></div>' +
+        '<div class="ip"><b>ИП Петрушенко</b><span>заказчик платит моему ИП (ТГК, тур, реклама). Вижу всё: банки, остатки людей, свободно</span></div></div>' +
+      sec('Где одно перетекает в другое') + '<div class="g list">' +
+        '<div class="row"><div class="t wrap"><b>Выплата доли</b><span>Гостюхин переводит долю на счёт моего ИП. В АК-47 это «выплачено», в моём ИП — приход. Одни деньги, два взгляда: в АК-47 показываем только «ещё должны»</span></div></div>' +
+        '<div class="row"><div class="t wrap"><b>Совместный концерт</b><span>заказчик платит двум ИП отдельно. Одна дата, две строки: АК-47 у Гостюхина, ТГК у меня</span></div></div>' +
+        '<div class="row"><div class="t wrap"><b>Переносы между ИП</b><span>стоят в обеих таблицах; это перевод, не доход и не расход</span></div></div>' +
+        '<div class="row"><div class="t wrap"><b>Калькулятор</b><span>переключатель АК-47 | ТГК и есть выбор таблицы, куда встанет строка</span></div></div></div>' +
+      '<p class="small">Каждая цифра живёт ровно в одной таблице, касса только показывает их рядом.</p></div>';
+  },
+  ipw() {
+    if (!W) return backBtn;
+    return backBtn + lt('ИП Петрушенко', 'кому что причитается из денег в банках') + '<div class="stack">' +
+      '<div class="g pad"><div class="tile-hh"><span class="lbl">В банках</span>' + wchip('ip') + '</div><div class="num big' + bigCls(rub2(W.bank)) + '">' + rub2(W.bank) + '</div>' + restBar() + '</div>' +
+      sec('Счета') + '<div class="g list">' + W.cash.map(c => '<div class="row"><div class="t"><b>' + esc(c.name) + '</b></div><div class="v">' + rub2(c.sum) + '</div></div>').join('') + '</div>' +
+      sec('Кому причитается') + '<div class="g list">' + restList() + '</div>' +
+      '<p class="small">Касса-факт — лист «Сверка», по выпискам на ' + esc(W.asOf) + '.</p>' +
+      '<a class="more" href="' + IP_SHEET_URL + '" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">Открыть таблицу моего ИП</a></div>';
+  },
+  iptax() {
+    if (!W) return backBtn;
+    const gap = W.taxGap || 0, tax = W.rest.filter(r => r.key === 'tax')[0], nds = W.rest.filter(r => r.key === 'nds')[0];
+    return backBtn + lt('Налоги и НДС', 'сколько должны и сколько отложено') + '<div class="stack">' +
+      '<div class="g pad"><span class="lbl">' + (gap > 0.5 ? 'Не хватает в копилках' : 'Запас в копилках') + '</span><div class="num big"' + (gap > 0.5 ? ' style="color:var(--bad)"' : '') + '>' + rub2(Math.abs(gap)) + '</div></div>' +
+      '<div class="g list"><div class="row"><span class="dot" style="background:' + WCOL.tax + '"></span><div class="t"><b>Долг по налогам</b><span>начислено минус уплачено</span></div><div class="v">' + rub2(tax ? tax.sum : 0) + '</div></div>' +
+        '<div class="row"><span class="dot" style="background:' + WCOL.nds + '"></span><div class="t"><b>НДС 5 %</b><span>начислен, ещё не уплачен</span></div><div class="v">' + rub2(nds ? nds.sum : 0) + '</div></div>' +
+        '<div class="row total"><div class="t"><b>Отложено в копилках</b><span>Точка «Налоги» + копилка ТБанка</span></div><div class="v">' + rub2(W.reserved || 0) + '</div></div></div>' +
+      '<p class="small">В таблице строка «Не покрыто копилками» считает только налоги; здесь к ним добавлен начисленный НДС.</p></div>';
+  },
+  ipowed() {
+    if (!W) return backBtn;
+    return backBtn + lt('Нам должны', 'кто и сколько должен моему ИП') + '<div class="stack">' +
+      '<div class="g pad"><div class="tile-hh"><span class="lbl">' + esc(W.owedNote || 'по дашборду таблицы') + '</span>' + wchip('ip') + '</div><div class="num big' + bigCls(rub(W.owed || 0)) + '">' + rub(W.owed || 0) + '</div></div>' +
+      '<p class="small">Цифра с дашборда таблицы «ИП Петрушенко (Тбанк)». В свободные деньги и в тур не входит.</p></div>';
+  },
+  iptour() {
+    if (!W || !W.tour.length) return backBtn;
+    return backBtn + lt('Тур ТГК осень ' + W.tour[0].date.slice(0, 4), nWord(W.tour.length, 'концерт', 'концерта', 'концертов') + ' · ' + dm(W.tour[0].date) + ' – ' + dm(W.tour[W.tour.length - 1].date)) + '<div class="stack">' +
+      '<div class="g pad"><div class="tile-hh"><span class="lbl">Итого по туру</span>' + wchip('ip') + '</div><div class="num big' + bigCls(rub(W.tourSum)) + '">' + rub(W.tourSum) + '</div>' +
+        '<div class="kv three"><div><span class="lbl">НДС 5 % внутри</span><b>' + fmt(W.tourNds) + '</b></div><div><span class="lbl">Мой фикс за тур</span><b>' + fmt(W.tourPetr) + '</b></div><div><span class="lbl">Остаток тура</span><b>' + fmt(W.tourTail) + '</b></div></div></div>' +
+      sec('Концерты') + '<div class="g list">' + W.conc.filter(c => c.tour).map(wRow).join('') + '</div>' +
+      '<p class="small">Лист «АК47-ТГК Осень 2026» таблицы ИП Петрушенко. Оплата каждого концерта — за один банковский день до даты.</p></div>';
+  },
+  ipc(id) {
+    const c = W && W.conc.filter(x => x.id === id)[0];
+    if (!c) return backBtn;
+    return backBtn + lt(esc(c.city), dm(c.date) + ' ' + c.date.slice(0, 4) + ' · ' + esc(c.type)) + '<div class="stack">' +
+      '<div class="g pad"><div class="tile-hh"><span class="lbl">Мне (Петрушенко)</span>' + wchip('ip') + '</div><div class="num big">' + rub2(c.mine) + '</div><div class="lbl mt4">' + WAL.ip.sub + '</div></div>' +
+      '<div class="g list"><div class="row"><div class="t"><b>Цена по договору</b><span>' + esc(c.cp || 'платит заказчик моему ИП') + '</span></div><div class="v">' + rub2(c.price) + '</div></div></div>' +
+      sec('Как делится') + '<div class="g list">' + c.parts.filter(p => Math.abs(p[1]) > 0.004).map(p => '<div class="row"><span class="dot" style="background:' + p[2] + '"></span><div class="t"><b>' + p[0] + '</b></div><div class="v">' + rub2(p[1]) + '</div></div>').join('') + '</div>' +
+      '<p class="small">Таблица «ИП Петрушенко (Тбанк)», лист «' + (c.tour ? 'АК47-ТГК Осень 2026' : 'Концерты/корпоративы') + '».</p></div>';
+  },
+  day(iso) {
+    const cs = pAll().filter(c => c.date === iso);
+    return backBtn + lt(dm(iso) + ' ' + iso.slice(0, 4), cs.length > 1 ? 'обе группы в один день — две строки в двух таблицах' : '') + '<div class="stack">' +
+      '<div class="g list">' + cs.map(wRow).join('') + '</div>' +
+      '<p class="small">Заказчик платит каждому ИП отдельно: за АК-47 — Гостюхину, за ТГК — мне.</p></div>';
+  },
   calendar() {
     return backBtn + lt('Календарь', 'занятые даты на четыре месяца') + calMonths(M.conc);
   },
@@ -1413,10 +1629,11 @@ function setTab(id) { closeSheet(); S.tab = id; S.gbar = null; S.showAll = false
 function paint() { renderTabs(); renderView(false); if (STACK.length) showTop(false, true); }
 
 $('app').addEventListener('click', e => {
-  const el = e.target.closest('[data-wallet],[data-calc],[data-ask],[data-tab],[data-open],[data-back],[data-seg],[data-month],[data-mbar],[data-year],[data-gyear],[data-gbar],[data-more],[data-refresh],[data-gostview],[data-petrview],[data-exitpreview],[data-shareform],[data-copyform],[data-openform]');
+  const el = e.target.closest('[data-wallet],[data-wal],[data-calc],[data-ask],[data-tab],[data-open],[data-back],[data-seg],[data-month],[data-mbar],[data-year],[data-gyear],[data-gbar],[data-more],[data-refresh],[data-gostview],[data-petrview],[data-exitpreview],[data-shareform],[data-copyform],[data-openform]');
   if (!el) return;
   const d = el.dataset;
   if (d.wallet !== undefined) { el.classList.toggle('open'); return; }
+  if (d.wal) { S.wal = d.wal; S.gbar = null; renderView(false); return; }
   if (d.calc !== undefined) { if (D.calcKey) { try { window.open(CALC_URL + '?k=' + encodeURIComponent(D.calcKey), '_blank', 'noopener'); } catch (err) {} } else toast('Калькулятор не подключён к этому ключу'); return; }
   if (d.ask !== undefined) { toast(d.ask); return; }
   if (d.tab !== undefined) { if (TABS[S.view].some(t => t[0] === d.tab)) setTab(d.tab); }
@@ -1489,6 +1706,7 @@ function load(key) {
 function boot(d) {
   const first = !D;
   D = d; S.role = d.role;
+  W = d.role === 'gost' ? null : modelIp(d.ip);
   if (d.role === 'gost') { M = null; P = null; G = modelGost(d); }
   else if (d.role === 'petr') { M = null; G = null; P = modelPetr(d); }
   else { M = modelFull(d); G = modelGost(slimForGost(d)); P = modelPetr(slimForPetr(d)); }
@@ -1541,6 +1759,7 @@ try { TEST = JSON.parse($('testdata').textContent); } catch (e) { TEST = null; }
 if (TEST) {
   boot(TEST);
   const q = new URLSearchParams(location.search);
+  if (q.get('wal') === 'ak' || q.get('wal') === 'ip') S.wal = q.get('wal');
   if (q.get('view') === 'gost') { S.view = 'gost'; setTab(q.get('tab') || 'me'); }
   else if (q.get('view') === 'petr' && P) { S.view = 'petr'; setTab(q.get('tab') || 'phome'); }
   else if (q.get('tab')) setTab(q.get('tab'));
