@@ -10,7 +10,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Касса">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" id="sbstyle">
-<script>try{var c=JSON.parse(localStorage.getItem('kassa_app_data')||'null');if(c&&c.role==='admin'){document.documentElement.className='pm';document.getElementById('sbstyle').content='default';document.querySelector('meta[name=theme-color]').content='#EEEDEA';}}catch(e){}</script>
+<script>document.documentElement.className='pm';document.getElementById('sbstyle').content='default';document.querySelector('meta[name=theme-color]').content='#EEEDEA';</script>
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Сцена». Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-0831). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-0938). -->
 <style>
 :root{
   color-scheme:dark;
@@ -207,6 +207,7 @@ button.g.row{border:1px solid var(--line)}
 .act:active{transform:scale(.985)}
 .act .aic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center}
 .act .aic svg{width:21px;height:21px}
+.act .aic.a1{background:rgba(23,166,115,.22);color:var(--good)}.act .aic.a2{background:rgba(63,134,221,.22);color:#8AB8F5}
 .act b{font-weight:600;font-size:15px;line-height:1.2}
 .act span{font-size:12.5px;color:var(--muted);margin-top:-6px}
 .btns{display:flex;flex-direction:column;gap:10px;margin-top:12px}
@@ -374,7 +375,68 @@ html.pm .back{position:sticky;top:0;z-index:3;background:rgba(255,255,255,.62);b
 .wk u{flex:1;border-radius:4px;min-height:3px}
 @keyframes pmgrow{from{transform:scaleY(.1)}to{transform:none}}
 
-@media (prefers-reduced-motion:reduce){.bg{animation:none}.views.in{animation:none}.sheet,.sheet.open{transition:none}html.pm .views.in>*,html.pm .wk i,html.pm .cd::after{animation:none!important}html.pm .cd,html.pm .tabbar{transition:none}}
+/* ───────── экраны Гостюхина и Петрушенко в «Предметах» (решение Мельникова 17.09.2026: структура прежняя, меняется вид) ───────── */
+html.pm #app.gost{--accent:#2A6FD6}
+html.pm #app.petr{--accent:#12915F}
+html.pm #app.gost .bin{fill:#2A6FD6}
+html.pm #app.petr .bin{fill:#17A673}
+/* карусель сумм — карты, как счета на главной общего вида */
+html.pm .car{gap:10px;padding:4px 16px 36px}
+html.pm .car-card{position:relative;overflow:hidden;min-height:172px;border-radius:24px;padding:18px 20px;color:#fff;border:0;
+  box-shadow:0 18px 30px -16px rgba(0,0,0,.45);transition:transform .35s var(--spring)}
+html.pm .car-card:active{transform:scale(.965);transition-duration:.12s}
+html.pm .car-card::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 2px,transparent 2px 7px);pointer-events:none}
+html.pm .car-card::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.16) 45%,transparent 60%);transform:translateX(-120%);animation:pmshine 6s 1.2s ease-in-out infinite;pointer-events:none}
+html.pm .car-card>*{position:relative}
+html.pm .car-card.blue{background:linear-gradient(140deg,#4C8DF0,#1F4FB8 75%)}
+html.pm .car-card.green{background:linear-gradient(140deg,#2FC08A,#0E7A52 75%)}
+html.pm .car-card.orange{background:linear-gradient(140deg,#FF8A4C,#E0470F 75%)}
+html.pm .car-card.grey{background:linear-gradient(140deg,#3A3A40,#1B1B1F 70%)}
+html.pm .car-card .lbl{color:#fff;font-weight:800;font-size:16px;letter-spacing:-.02em}
+html.pm .car-card .lbl.mt8{font-size:12.5px;font-weight:600;letter-spacing:0;opacity:.75;margin-top:8px}
+html.pm .car-card .car-more{color:rgba(255,255,255,.72);font-weight:700;font-size:12px}
+html.pm .car-card .chev{color:#fff;opacity:.7}
+html.pm .car-num{font:500 29px/1 var(--mono);letter-spacing:-.07em}
+html.pm .car-num.s{font-size:24px}
+html.pm .dots{margin:-22px 0 4px;position:relative}
+html.pm .dots i{background:rgba(0,0,0,.16)}
+html.pm .dots i.on{width:18px;background:var(--ink)}
+/* плитки главной: белые, цветная подпись и полоса слева (цвета утверждены 16.09.2026) */
+html.pm .ht{background:#fff;padding:18px 18px 20px;box-shadow:inset 4px 0 0 var(--tone)}
+html.pm .ht.t1{--tone:#6A5AE0;background:linear-gradient(150deg,rgba(106,90,224,.10),#fff 55%)}
+html.pm .ht.t2{--tone:#0F93A8;background:linear-gradient(150deg,rgba(15,147,168,.10),#fff 55%)}
+html.pm .ht.t3{--tone:#B8468C;background:linear-gradient(150deg,rgba(184,70,140,.10),#fff 55%)}
+html.pm .ht .lbl{font:800 11.5px Manrope,sans-serif;letter-spacing:.07em}
+html.pm .ht .car-more{color:var(--faint);font-weight:700;opacity:1}
+html.pm .ht .ht-row{padding:14px 0 0}
+html.pm .tile.g.pad .lbl{font-weight:700}
+/* кнопки «Посчитать концерт» и «Отправить заявку» */
+html.pm .acts{margin-top:10px}
+html.pm .act{background:#fff;border-radius:var(--r);padding:16px;gap:12px;transition:transform .35s var(--spring)}
+html.pm .act:active{transform:scale(.965);transition-duration:.12s}
+html.pm .act .aic{width:44px;height:44px;border-radius:15px}
+html.pm .act .aic.a1{background:#E1F4EA;color:#12915F}
+html.pm .act .aic.a2{background:#E4EDFC;color:#2A6FD6}
+html.pm .act b{font-weight:800;letter-spacing:-.02em;font-size:15.5px}
+html.pm .act span{font-weight:600}
+/* заявка */
+html.pm .btn{border-radius:18px;font:800 16px Manrope,sans-serif;letter-spacing:-.01em;transition:transform .35s var(--spring)}
+html.pm .btn:active{transform:scale(.97);transition-duration:.12s}
+html.pm .btn.green{background:linear-gradient(140deg,#2FC08A,#12915F);box-shadow:0 10px 22px -10px rgba(18,145,95,.7)}
+html.pm .btn.ghost{background:#F2F1EE;color:var(--ink);border:0;font-weight:700;font-size:15px}
+html.pm .linkbox{background:#F2F1EE;border:0;border-radius:16px}
+html.pm .linkbox b{font:500 14px var(--mono);letter-spacing:-.05em}
+html.pm .msg{background:#fff;border:0;border-radius:var(--r);color:var(--ink);font-weight:500;padding:16px 17px}
+/* календарь, плашка «Так видит…», загрузка калькулятора */
+html.pm .cal{gap:4px}
+html.pm .cal .h{font-weight:700}
+html.pm .cal .d{border-radius:12px;font-weight:600}
+html.pm .cal button.busy{font-weight:800;box-shadow:0 4px 10px -4px rgba(0,0,0,.35)}
+html.pm .cal .today{box-shadow:inset 0 0 0 2px var(--accent)}
+html.pm .preview{border:0;border-radius:16px;font:700 13.5px Manrope,sans-serif}
+html.pm .calcwrap .loadrow{font-weight:600}
+
+@media (prefers-reduced-motion:reduce){.bg{animation:none}.views.in{animation:none}.sheet,.sheet.open{transition:none}html.pm .views.in>*,html.pm .wk i,html.pm .cd::after,html.pm .car-card::after{animation:none!important}html.pm .cd,html.pm .tabbar{transition:none}}
 </style>
 </head>
 <body>
@@ -797,6 +859,7 @@ const SPARK = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><
 let pmCounted = false;
 function setPm(on) {
   document.documentElement.classList.toggle('pm', on);
+  const sb = $('sbstyle'); if (sb) sb.content = on ? 'default' : 'black-translucent';
   const tc = document.querySelector('meta[name=theme-color]');
   if (tc) tc.content = on ? '#EEEDEA' : '#07090F';
 }
@@ -998,8 +1061,8 @@ const SCREENS = {
       carCard('data-tab="pmoney"', 'grey', 'Моя доля в ' + P.curY, rub(F.accrued), 'начислено с приходов за год') +
       '</div><div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>' +
       '<div class="acts">' +
-      '<button class="g act" data-tab="pcalc"><span class="aic" style="background:rgba(23,166,115,.22);color:var(--good)">' + icon('calc') + '</span><b>Посчитать концерт</b><span>цена для договора</span></button>' +
-      '<button class="g act" data-shareform><span class="aic" style="background:rgba(63,134,221,.22);color:#8AB8F5">' + icon('send') + '</span><b>Отправить заявку</b><span>ссылка заказчику</span></button>' +
+      '<button class="g act" data-tab="pcalc"><span class="aic a1">' + icon('calc') + '</span><b>Посчитать концерт</b><span>цена для договора</span></button>' +
+      '<button class="g act" data-shareform><span class="aic a2">' + icon('send') + '</span><b>Отправить заявку</b><span>ссылка заказчику</span></button>' +
       '</div><div class="stack"><div class="tiles">' +
       (next ? homeTile('t1', 'pcal', 'Ближайший концерт', next.date, next.city, next.cp, next.split && next.petr ? rub(next.petr) + '<small>ваша доля</small>' : '<small>после оплаты</small>', '') : '') +
       (lastAcc ? homeTile('t2', 'open:pacc', 'Начисления', lastAcc.date, opTitle(lastAcc.name), lastAcc.project, plus(lastAcc.share), ' plus') : '') +
@@ -1315,7 +1378,8 @@ function renderView(animate) {
   const keep = views.scrollTop;
   views.innerHTML = SCREENS[S.tab]();
   $('app').classList.toggle('petr', S.view === 'petr');
-  setPm(S.view === 'full');
+  setPm(true);
+  $('app').classList.toggle('gost', S.view === 'gost');
   $('app').classList.remove('compact');
   pmAfter();
   syncCalc();
@@ -1323,7 +1387,7 @@ function renderView(animate) {
   else views.scrollTop = keep;
   bindCar();
 }
-views.addEventListener('scroll', () => { if (S.view === 'full') $('app').classList.toggle('compact', views.scrollTop > 60); }, { passive: true });
+views.addEventListener('scroll', () => { $('app').classList.toggle('compact', S.tab !== 'pcalc' && views.scrollTop > 60); }, { passive: true });
 /* карусель сумм на главной: точки показывают, какая карточка перед глазами; позиция сохраняется при обновлении цифр */
 function bindCar() {
   const car = views.querySelector('#car'), dots = views.querySelectorAll('#dots i');
