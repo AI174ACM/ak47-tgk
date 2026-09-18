@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260917-2324). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2000). -->
 <style>
 :root{
   color-scheme:dark;
@@ -476,6 +476,24 @@ html.pm{--ak:#3F86DD;--ak-bg:#E6F0FC;--ip:#1E9E63;--ip-bg:#E1F4EA}
 .rule span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.35;font-weight:600}
 .tile-hh{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .row .t.wrap b,.row .t.wrap span{white-space:normal}
+/* документы (18.09.2026): карточки реквизитов и данных ИП, поле копируется нажатием */
+.ht.t5{--tone:#2A6FD6;background:linear-gradient(145deg,rgba(42,111,214,.20),rgba(42,111,214,.03) 70%),var(--card)}
+html.pm .ht.t5{--tone:#2A6FD6;background:linear-gradient(150deg,rgba(42,111,214,.10),#fff 55%)}
+.docic{width:46px;height:48px;border-radius:14px;background:#F2F1EE;display:grid;place-items:center;flex:none;color:var(--tone,#2A6FD6)}
+.docic svg{width:23px;height:23px}
+.sec .secsub{font:600 12.5px Manrope,sans-serif;color:var(--muted);letter-spacing:0;text-align:right}
+.row.docf{align-items:center}
+.row.docf .t span{font-size:12.5px;color:var(--muted);white-space:normal}
+.row.docf .t b{white-space:normal;overflow:visible;font-size:15.5px;line-height:1.3;margin-top:2px;word-break:break-word}
+.row.docf .t b.mono{font-family:var(--mono);font-weight:500;font-size:16.5px;letter-spacing:-.02em}
+.row.docf .t b .empty{color:var(--faint);font-style:normal;font-weight:500}
+.row.docf .t em.note{display:block;font-size:12px;color:var(--warn);margin-top:3px;font-style:normal;font-weight:600;white-space:normal}
+.row.docf .cp{color:var(--faint);flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:12px;background:#F6F5F2}
+.row.docf .cp svg{width:17px;height:17px}
+.row.docf[disabled]{opacity:.6;cursor:default}
+html.pm .row.docf .t b{font-weight:700}
+html.pm .row.docf .t b.mono{font-weight:500}
+html.pm .bx.docbx h5 span:first-child{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -1077,6 +1095,53 @@ function pmAfter() {
   const st = t => { const k = Math.min(1, (t - t0) / 1300), e = 1 - Math.pow(1 - k, 4); tv.textContent = rub(to * e); if (k < 1) requestAnimationFrame(st); };
   requestAnimationFrame(st);
 }
+/* документы (решение Мельникова 18.09.2026, регламент 08): реквизиты банков, данные ИП, личные данные — из таблицы «Документы ИП Гостюхин».
+   Кто что видит, решает «Касса — данные» (колонка «Кому видно»); здесь только показ, копирование и «Поделиться». */
+const DOC_SECS = { 'Реквизиты': ['Реквизиты', 'для договоров и счетов', '#2A6FD6'], 'ИП': ['Данные ИП', 'регистрация, налоги, коды', '#12915F'], 'Личные': ['Личные', 'паспорт, СНИЛС — только для своих', '#B8468C'] };
+const DOC_HEAD = 'ИП Гостюхин';   // документ-шапка раздела «Реквизиты»: идёт первым в тексте каждой карточки банка
+const docMeta = sec => DOC_SECS[sec] || [sec, '', '#8A8987'];
+function docList() {
+  const out = [], idx = {};
+  ((D && D.docs) || []).forEach(r => { if (!r || !r.doc) return; const k = r.sec + '|' + r.doc; if (idx[k] == null) { idx[k] = out.length; out.push({ sec: r.sec, doc: r.doc, rows: [] }); } out[idx[k]].rows.push(r); });
+  return out;
+}
+const docFind = name => docList().filter(d => d.doc === name)[0];
+const docIsBank = d => d.sec === 'Реквизиты' && d.doc !== DOC_HEAD;
+function docText(d) {
+  const head = docIsBank(d) ? docFind(DOC_HEAD) : null, lines = [];
+  if (head) { head.rows.filter(r => r.value).forEach(r => lines.push(r.field + ': ' + r.value)); lines.push('', 'Банковские реквизиты'); }
+  else lines.push(d.doc === DOC_HEAD ? 'Реквизиты ИП Гостюхин' : d.doc);
+  d.rows.filter(r => r.value).forEach(r => lines.push(r.field + ': ' + r.value));
+  return lines.join('\n');
+}
+function shareDoc(name) {
+  const d = docFind(name); if (!d) return;
+  const msg = docText(d), title = docIsBank(d) ? 'Реквизиты ИП Гостюхин · ' + d.doc : d.doc;
+  const fallback = () => copyText(msg, 'Текст скопирован — вставьте в чат');
+  if (navigator.share) navigator.share({ title: title, text: msg }).catch(err => { if (err && err.name !== 'AbortError') fallback(); });
+  else fallback();
+}
+function docRow(d) {
+  const filled = d.rows.filter(r => r.value), acc = docIsBank(d) ? filled.filter(r => /расч/i.test(r.field))[0] : null;
+  const sub = acc ? 'счёт …' + acc.value.slice(-4) : filled.length ? nWord(filled.length, 'поле', 'поля', 'полей') + (filled.length < d.rows.length ? ' · ' + (d.rows.length - filled.length) + ' не заполнено' : '') : 'не заполнено';
+  return '<button class="row" data-open="doc:' + esc(d.doc) + '"><span class="dot" style="background:' + docMeta(d.sec)[2] + '"></span><div class="t"><b>' + esc(d.doc) + '</b><span>' + esc(sub) + '</span></div>' + chev + '</button>';
+}
+function docsTileBx() {
+  const list = docList(); if (!list.length) return '';
+  const banks = list.filter(docIsBank), n = s => list.filter(d => d.sec === s).length;
+  return '<button class="bx w docbx" data-open="docs"><h5><span><i style="background:#2A6FD6"></i>Документы</span><span>открыть ›</span></h5>' +
+    '<div class="kv three"><div><span class="lbl">Реквизиты</span><b>' + (banks.length ? nWord(banks.length, 'банк', 'банка', 'банков') : '—') + '</b></div>' +
+    '<div><span class="lbl">Данные ИП</span><b>' + (n('ИП') ? nWord(n('ИП'), 'карточка', 'карточки', 'карточек') : '—') + '</b></div>' +
+    '<div><span class="lbl">Личные</span><b>' + (n('Личные') ? nWord(n('Личные'), 'карточка', 'карточки', 'карточек') : '—') + '</b></div></div>' +
+    '<div class="bs">нажал на карточку — отправил из окна «Поделиться»</div></button>';
+}
+function docsTileHt() {
+  const list = docList(); if (!list.length) return '';
+  const banks = list.filter(docIsBank);
+  return '<button class="g tile ht t5" data-open="docs"><div class="tile-h"><span class="lbl">Документы</span><span class="car-more">открыть' + chev + '</span></div>' +
+    '<div class="row ht-row"><span class="docic">' + icon('form') + '</span><div class="t"><b>Реквизиты и данные ИП</b><span>' + (banks.length ? nWord(banks.length, 'банк', 'банка', 'банков') + ' · ' : '') + 'нажал — отправил</span></div>' +
+    '<div class="v"><small>' + nWord(list.length, 'карточка', 'карточки', 'карточек') + '</small></div></div></button>';
+}
 /* плитка «Наличные» на главных: отдельно от денег ИП */
 function cashTileBx() {
   const t = cashTotals(); if (!t.n) return '';
@@ -1127,7 +1192,7 @@ const SCREENS = {
         '<button class="bx" data-tab="money"><h5>' + MONF[+m.slice(5, 7) - 1] + '</h5><div class="bv" style="font-size:19px;color:var(--in)">+' + compact(M.inc[m]) + '</div>' +
           '<div class="wk">' + wk.map(x => '<i><u style="height:' + (x.i / wmax * 100).toFixed(0) + '%;background:var(--in)"></u><u style="height:' + (x.o / wmax * 100).toFixed(0) + '%;background:#D6D4CE"></u></i>').join('') + '</div>' +
           '<div class="bs">ушло ' + compact(M.out[m]) + ' ₽ · по неделям</div></button>' +
-        cashTileBx() +
+        cashTileBx() + docsTileBx() +
       '</div>' +
       sec('Последние операции', ['money', 'Все']) + '<div class="g list">' + M.ops.slice(0, 4).map((o, i) => opRow(o, i)).join('') + '</div>';
   },
@@ -1184,6 +1249,7 @@ const SCREENS = {
       (obor >= 0 ? '' : '') +
       (S.role === 'admin' ? '<button class="row" data-gostview><span class="dot" style="background:' + col('gost') + '"></span><div class="t"><b>Экран Гостюхина</b><span>посмотреть, что видит он</span></div>' + chev + '</button>' : '') +
       (S.role === 'admin' && P ? '<button class="row" data-petrview><span class="dot" style="background:' + col('petr') + '"></span><div class="t"><b>Экран Петрушенко</b><span>посмотреть, что видит он</span></div>' + chev + '</button>' : '') +
+      '<button class="row" data-open="docs"><span class="dot" style="background:#2A6FD6"></span><div class="t"><b>Документы</b><span>реквизиты, данные ИП, личные</span></div>' + chev + '</button>' +
       '<button class="row" data-refresh><div class="t"><b>Обновить цифры</b><span>прочитаны ' + esc(D.generated || '') + '</span></div>' + (S.net === 'loading' ? '<span class="spin"></span>' : '') + '</button></div>' +
       '<p class="small">Данные: Google-таблица «ИП Гостюхин» — реестр приходов, журнал оплат, «Сверка», «Концерты 2026», лист тура осени 2026.</p></div>';
   },
@@ -1205,7 +1271,7 @@ const SCREENS = {
       (up.length ? homeTile('t1', 'calendar', 'Ближайший концерт', up[0].date, up[0].city, up[0].cp,
         up[0].split ? rub(up[0].gost) + '<small>вам</small>' : '<small>после оплаты</small>', '') : '') +
       (lastAcc.length ? homeTile('t2', 'open:gacc', 'Начисления', lastAcc[0].date, opTitle(lastAcc[0].name), lastAcc[0].project, plus(lastAcc[0].gost), ' plus') : '') +
-      (lastPay.length ? homeTile('t3', 'open:gplist:pers', 'Оплаты', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + cashTileHt() + '</div></div>';
+      (lastPay.length ? homeTile('t3', 'open:gplist:pers', 'Оплаты', lastPay[0].date, opTitle(lastPay[0].name), PT[lastPay[0].type][0], minus(lastPay[0].sum), '') : '') + cashTileHt() + docsTileHt() + '</div></div>';
   },
   calendar() {
     return previewBar() + lt('Календарь', G.conc.upcoming.length + ' концертов впереди') + calMonths(G.conc);
@@ -1241,7 +1307,7 @@ const SCREENS = {
           '<div class="bs">' + dm(next.date) + ' · ' + daysWord(daysTo(next.date)) + '<br>' + WAL[next.w === 'ip' ? 'ip' : 'ak'].name + (next.mine ? ' · мне ' + fmt(next.mine) : '') + '</div></button>' : '') +
         (W.tour.length ? '<button class="bx" data-open="iptour"><h5><span><i style="background:var(--ip)"></i>Тур осень ' + W.tour[0].date.slice(0, 4) + '</span></h5><div class="bv">' + compact(W.tourSum) + '</div>' +
           '<div class="bs">' + nWord(W.tour.length, 'концерт', 'концерта', 'концертов') + ' · мне ' + fmt(W.tourPetr) + '</div></button>' : '') +
-        cashTileBx() +
+        cashTileBx() + docsTileBx() +
       '</div>' +
       '<div class="sec"><span>Последние операции моего ИП</span></div><div class="g list">' + W.last.map(ipOpRow).join('') + '</div>' +
       '<p class="small">Журнал Оплат: ' + fmt(W.opsCount) + ' операций, реестр: ' + fmt(W.incomesCount) + ' приходов. Касса-факт по выпискам на ' + esc(W.asOf) + '.</p>';
@@ -1262,7 +1328,7 @@ const SCREENS = {
       '</div><div class="stack"><div class="tiles">' +
       (next ? homeTile('t1', 'pcal', 'Ближайший концерт', next.date, next.city, next.cp, next.split && next.petr ? rub(next.petr) + '<small>ваша доля</small>' : '<small>после оплаты</small>', '') : '') +
       (lastAcc ? homeTile('t2', 'open:pacc', 'Начисления', lastAcc.date, opTitle(lastAcc.name), lastAcc.project, plus(lastAcc.share), ' plus') : '') +
-      (lastPay ? homeTile('t3', 'open:ppaid', 'Последняя выплата', lastPay.date, lastPay.label, PPT[lastPay.type][0], rub(lastPay.sum), '') : '') + cashTileHt() + '</div></div>';
+      (lastPay ? homeTile('t3', 'open:ppaid', 'Последняя выплата', lastPay.date, lastPay.label, PPT[lastPay.type][0], rub(lastPay.sum), '') : '') + cashTileHt() + docsTileHt() + '</div></div>';
   },
   pcalc() { return ''; },
   pform() {
@@ -1358,6 +1424,28 @@ function owedItems() {
   });
 }
 const SHEETS = {
+  docs() {
+    const list = docList();
+    if (!list.length) return backBtn + lt('Документы') + '<p class="small">' + (D && D.docsError ? 'Таблица «Документы» не прочиталась: ' + esc(D.docsError) : 'Документов пока нет — строки добавляются в таблицу «Документы ИП Гостюхин».') + '</p>';
+    const secs = Object.keys(DOC_SECS).filter(s => list.some(d => d.sec === s)).concat(list.map(d => d.sec).filter((s, i, a) => !DOC_SECS[s] && a.indexOf(s) === i));
+    return backBtn + lt('Документы', 'нажмите на карточку — внутри поля и кнопка «Отправить»') + '<div class="stack">' +
+      secs.map(s => { const m = docMeta(s); return '<div class="sec"><span>' + esc(m[0]) + '</span><span class="secsub">' + esc(m[1]) + '</span></div><div class="g list">' + list.filter(d => d.sec === s).map(docRow).join('') + '</div>'; }).join('') +
+      '<p class="small">Нажатие на поле копирует его значение. «Отправить» открывает окно «Поделиться» с текстом карточки, как у заявки. Данные — таблица «Документы ИП Гостюхин»' + (S.view === 'full' ? '; правки в ней видны после «Обновить цифры»' : '') + '.</p></div>';
+  },
+  doc(name) {
+    const d = docFind(name); if (!d) return backBtn + lt('Документ') + '<p class="small">Карточка не найдена — обновите цифры.</p>';
+    const m = docMeta(d.sec), bank = docIsBank(d), head = bank ? docFind(DOC_HEAD) : null;
+    const field = r => '<button class="row docf" data-copyval="' + esc(r.value) + '"' + (r.value ? '' : ' disabled') + '><div class="t"><span>' + esc(r.field) + '</span>' +
+      '<b' + (/^[\d\s]{9,}$/.test(r.value) ? ' class="mono"' : '') + '>' + (r.value ? esc(r.value) : '<i class="empty">не заполнено</i>') + '</b>' + (r.note ? '<em class="note">' + esc(r.note) + '</em>' : '') + '</div>' +
+      (r.value ? '<span class="cp">' + icon('copy') + '</span>' : '') + '</button>';
+    return backBtn + lt(esc(d.doc), m[0] + (bank ? ' · банк' : '')) + '<div class="stack">' +
+      '<div class="g pad"><div class="tile-hh"><span class="lbl">' + esc(bank ? 'Реквизиты для оплаты' : m[0]) + '</span><span class="chip" style="background:' + m[2] + ';color:#fff">' + esc(String(d.sec).toLowerCase()) + '</span></div>' +
+        '<div class="btns"><button class="btn green" data-docshare="' + esc(d.doc) + '">' + icon('share') + 'Отправить</button><button class="btn ghost" data-doccopy="' + esc(d.doc) + '">' + icon('copy') + 'Скопировать всё</button></div></div>' +
+      (head ? sec('ИП Гостюхин') + '<div class="g list">' + head.rows.map(field).join('') + '</div>' + sec(d.doc) : '') +
+      '<div class="g list">' + d.rows.map(field).join('') + '</div>' +
+      sec('Что уйдёт при отправке') + '<div class="msg">' + esc(docText(d)) + '</div>' +
+      '<p class="small">Нажмите на поле — оно скопируется. ' + (d.sec === 'Личные' ? 'Личные данные пересылайте только тем, кому они действительно нужны, и не в общие чаты.' : 'Отправлять лично заказчику или бухгалтеру, не в общие чаты.') + '</p></div>';
+  },
   wallets() {
     return backBtn + lt('Как делятся кошельки', 'кошелёк определяется тем, на чьё ИП платит заказчик') + '<div class="stack">' +
       '<div class="rule"><div class="ak"><b>АК-47</b><span>заказчик платит ИП Гостюхин. Вижу только свою долю: начислено и сколько ещё должны</span></div>' +
@@ -1721,7 +1809,7 @@ function setTab(id) { closeSheet(); S.tab = id; S.gbar = null; S.showAll = false
 function paint() { renderTabs(); renderView(false); if (STACK.length) showTop(false, true); }
 
 $('app').addEventListener('click', e => {
-  const el = e.target.closest('[data-wallet],[data-wal],[data-calc],[data-ask],[data-tab],[data-open],[data-back],[data-seg],[data-month],[data-mbar],[data-year],[data-gyear],[data-gbar],[data-more],[data-refresh],[data-gostview],[data-petrview],[data-exitpreview],[data-shareform],[data-copyform],[data-openform]');
+  const el = e.target.closest('[data-wallet],[data-wal],[data-calc],[data-ask],[data-tab],[data-open],[data-back],[data-seg],[data-month],[data-mbar],[data-year],[data-gyear],[data-gbar],[data-more],[data-refresh],[data-gostview],[data-petrview],[data-exitpreview],[data-shareform],[data-copyform],[data-openform],[data-docshare],[data-doccopy],[data-copyval]');
   if (!el) return;
   const d = el.dataset;
   if (d.wallet !== undefined) { el.classList.toggle('open'); return; }
@@ -1742,6 +1830,9 @@ $('app').addEventListener('click', e => {
   else if (d.gostview !== undefined) { S.view = 'gost'; setTab('me'); }
   else if (d.petrview !== undefined) { S.view = 'petr'; setTab('phome'); }
   else if (d.shareform !== undefined) shareForm();
+  else if (d.docshare !== undefined) shareDoc(d.docshare);
+  else if (d.doccopy !== undefined) { const dd = docFind(d.doccopy); if (dd) copyText(docText(dd), 'Карточка скопирована — вставьте в чат'); }
+  else if (d.copyval !== undefined) { if (d.copyval) copyText(d.copyval, 'Скопировано: ' + (d.copyval.length > 30 ? d.copyval.slice(0, 28) + '…' : d.copyval)); }
   else if (d.copyform !== undefined) copyText(FORM_URL, 'Ссылка скопирована');
   else if (d.openform !== undefined) { try { window.open(FORM_URL, '_blank', 'noopener'); } catch (err) {} }
   else if (d.exitpreview !== undefined) { S.view = 'full'; setTab('more'); }
