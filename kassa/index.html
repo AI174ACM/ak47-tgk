@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2307). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2314). -->
 <style>
 :root{
   color-scheme:dark;
@@ -1179,7 +1179,7 @@ const SCREENS = {
       '<div class="total-s' + (ok ? '' : ' bad') + '"><i></i>' + (ok ? 'Сходится с таблицей' : 'Не сходится с таблицей') + '<span>· ' + netText() + '</span></div>' +
       '<button class="wallet" data-wallet aria-label="Раскрыть счета">' + card('c2', 'Точка', c.tochka) + card('c1', 'ТБанк', c.tbank) + '</button>' +
       '<div class="wallet-h"><span>Нажмите на карты — раскроются</span><button data-open="bank">Оба счёта</button></div>' +
-      '<div class="qa">' + q('calc', 'Посчитать<br>концерт', 'data-calc') + q('send', 'Отправить<br>заявку', 'data-shareform') +
+      '<div class="qa hot">' + q('calc', 'Посчитать<br>концерт', 'data-calc') + q('send', 'Отправить<br>заявку', 'data-shareform') +
         q('cal', 'Календарь', 'data-open="calendar"') + q('refresh', S.net === 'loading' ? 'Обновляю…' : 'Обновить<br>цифры', 'data-refresh') + '</div>' +
       '<div class="brief"><div class="h">' + SPARK + 'Коротко<small>по таблице и выпискам</small></div><p>' + esc(brief()) + '</p></div>' +
       '<div class="bento">' +
