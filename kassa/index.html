@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2314). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2322). -->
 <style>
 :root{
   color-scheme:dark;
@@ -482,6 +482,16 @@ html.pm .ht.t5{--tone:#2A6FD6;background:linear-gradient(150deg,rgba(42,111,214,
 .docic{width:46px;height:48px;border-radius:14px;background:#F2F1EE;display:grid;place-items:center;flex:none;color:var(--tone,#2A6FD6)}
 .docic svg{width:23px;height:23px}
 .sec .secsub{font:600 12.5px Manrope,sans-serif;color:var(--muted);letter-spacing:0;text-align:right}
+.docsec{margin-top:6px}
+.docsec-h{display:flex;align-items:center;gap:12px;padding:6px 4px 10px}
+.docsec-h .docic{background:color-mix(in srgb,var(--tone) 14%,#fff);color:var(--tone);width:44px;height:44px;border-radius:14px}
+.docsec-h div{flex:1;min-width:0}
+.docsec-h b{display:block;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.03em;color:var(--ink)}
+.docsec-h span{display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-top:2px}
+.docsec-h em{font:800 13px Manrope,sans-serif;font-style:normal;color:var(--tone);background:color-mix(in srgb,var(--tone) 12%,#fff);padding:5px 10px;border-radius:999px}
+html.pm .docsec-list{box-shadow:inset 4px 0 0 var(--tone);background:linear-gradient(150deg,color-mix(in srgb,var(--tone) 9%,#fff),#fff 45%)}
+.docsec-list .row .dot{display:none}
+.docsec-list .row{padding-left:18px}
 .row.docf{align-items:center}
 .row.docf .t span{font-size:12.5px;color:var(--muted);white-space:normal}
 .row.docf .t b{white-space:normal;overflow:visible;font-size:15.5px;line-height:1.3;margin-top:2px;word-break:break-word}
@@ -1103,9 +1113,9 @@ function pmAfter() {
 }
 /* документы (решение Мельникова 18.09.2026, регламент 08): реквизиты банков, данные ИП, личные данные — из таблицы «Документы ИП Гостюхин».
    Кто что видит, решает «Касса — данные» (колонка «Кому видно»); здесь только показ, копирование и «Поделиться». */
-const DOC_SECS = { 'Реквизиты': ['Реквизиты', 'для договоров и счетов', '#2A6FD6'], 'ИП': ['Данные ИП', 'регистрация, налоги, коды', '#12915F'], 'Личные': ['Личные', 'паспорт, СНИЛС — только для своих', '#B8468C'] };
+const DOC_SECS = { 'Реквизиты': ['Реквизиты', 'для договоров и счетов', '#2A6FD6', 'wallet'], 'ИП': ['Данные ИП', 'регистрация, налоги, коды', '#12915F', 'form'], 'Личные': ['Личные', 'паспорт, СНИЛС — только для своих', '#B8468C', 'people'] };
 const DOC_HEAD = 'ИП Гостюхин';   // документ-шапка раздела «Реквизиты»: идёт первым в тексте каждой карточки банка
-const docMeta = sec => DOC_SECS[sec] || [sec, '', '#8A8987'];
+const docMeta = sec => DOC_SECS[sec] || [sec, '', '#8A8987', 'list'];
 function docList() {
   const out = [], idx = {};
   ((D && D.docs) || []).forEach(r => { if (!r || !r.doc) return; const k = r.sec + '|' + r.doc; if (idx[k] == null) { idx[k] = out.length; out.push({ sec: r.sec, doc: r.doc, rows: [] }); } out[idx[k]].rows.push(r); });
@@ -1435,7 +1445,7 @@ const SHEETS = {
     if (!list.length) return backBtn + lt('Документы') + '<p class="small">' + (D && D.docsError ? 'Таблица «Документы» не прочиталась: ' + esc(D.docsError) : 'Документов пока нет — строки добавляются в таблицу «Документы ИП Гостюхин».') + '</p>';
     const secs = Object.keys(DOC_SECS).filter(s => list.some(d => d.sec === s)).concat(list.map(d => d.sec).filter((s, i, a) => !DOC_SECS[s] && a.indexOf(s) === i));
     return backBtn + lt('Документы', 'нажмите на карточку — внутри поля и кнопка «Отправить»') + '<div class="stack">' +
-      secs.map(s => { const m = docMeta(s); return '<div class="sec"><span>' + esc(m[0]) + '</span><span class="secsub">' + esc(m[1]) + '</span></div><div class="g list">' + list.filter(d => d.sec === s).map(docRow).join('') + '</div>'; }).join('') +
+      secs.map(s => { const m = docMeta(s); return '<div class="docsec" style="--tone:' + m[2] + '"><div class="docsec-h"><span class="docic">' + icon(m[3]) + '</span><div><b>' + esc(m[0]) + '</b><span>' + esc(m[1]) + '</span></div><em>' + list.filter(d => d.sec === s).length + '</em></div><div class="g list docsec-list">' + list.filter(d => d.sec === s).map(docRow).join('') + '</div></div>'; }).join('') +
       '<p class="small">Нажатие на поле копирует его значение. «Отправить» открывает окно «Поделиться» с текстом карточки, как у заявки. Данные — таблица «Документы ИП Гостюхин»' + (S.view === 'full' ? '; правки в ней видны после «Обновить цифры»' : '') + '.</p></div>';
   },
   doc(name) {
