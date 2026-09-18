@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2000). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2246). -->
 <style>
 :root{
   color-scheme:dark;
@@ -1436,7 +1436,7 @@ const SHEETS = {
     const d = docFind(name); if (!d) return backBtn + lt('Документ') + '<p class="small">Карточка не найдена — обновите цифры.</p>';
     const m = docMeta(d.sec), bank = docIsBank(d), head = bank ? docFind(DOC_HEAD) : null;
     const field = r => '<button class="row docf" data-copyval="' + esc(r.value) + '"' + (r.value ? '' : ' disabled') + '><div class="t"><span>' + esc(r.field) + '</span>' +
-      '<b' + (/^[\d\s]{9,}$/.test(r.value) ? ' class="mono"' : '') + '>' + (r.value ? esc(r.value) : '<i class="empty">не заполнено</i>') + '</b>' + (r.note ? '<em class="note">' + esc(r.note) + '</em>' : '') + '</div>' +
+      '<b' + (/^[\d\s]{9,}$/.test(r.value) ? ' class="mono"' : '') + '>' + (r.value ? esc(r.value) : '<i class="empty">не заполнено</i>') + '</b>' + (r.note && !(r.value && /^заполняет/i.test(r.note)) ? '<em class="note">' + esc(r.note) + '</em>' : '') + '</div>' +
       (r.value ? '<span class="cp">' + icon('copy') + '</span>' : '') + '</button>';
     return backBtn + lt(esc(d.doc), m[0] + (bank ? ' · банк' : '')) + '<div class="stack">' +
       '<div class="g pad"><div class="tile-hh"><span class="lbl">' + esc(bank ? 'Реквизиты для оплаты' : m[0]) + '</span><span class="chip" style="background:' + m[2] + ';color:#fff">' + esc(String(d.sec).toLowerCase()) + '</span></div>' +
