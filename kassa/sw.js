@@ -1,6 +1,6 @@
 /* Служебный работник кассы. Страница берётся из сети, при отсутствии сети — из запаса.
    Данные (script.google.com) и шрифты идут мимо: цифры хранит сама страница в localStorage. */
-const CACHE = 'kassa-20260918-2314';
+const CACHE = 'kassa-20260918-2322';
 const ASSETS = ['./', './index.html', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {
