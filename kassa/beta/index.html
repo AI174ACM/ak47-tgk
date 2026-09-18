@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2258). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2259). -->
 <style>
 :root{
   color-scheme:dark;
@@ -496,10 +496,12 @@ html.pm .row.docf .t b.mono{font-weight:500}
 html.pm .bx.docbx h5 span:first-child{color:var(--ink)}
 /* варианты нижней панели вкладок (18.09.2026, на выбор Мельникова: панель сливалась с содержимым): ?bar=1|2|3 */
 html.pm.bar1 .tabbar::before,html.pm.bar2 .tabbar::before{content:"";position:absolute;left:-16px;right:-16px;bottom:-18px;height:calc(100% + 56px);z-index:-1;pointer-events:none;background:linear-gradient(to top,#EEEDEA 52%,rgba(238,237,234,0))}
-html.pm.bar1 .tabbar{background:#fff;border:0;box-shadow:0 10px 30px rgba(0,0,0,.16),0 0 0 1px rgba(0,0,0,.05);-webkit-backdrop-filter:none;backdrop-filter:none}
+html.pm.bar1 .tabbar,html.pm.bar2 .tabbar{background:transparent;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+html.pm.bar1 .tabbar::after,html.pm.bar2 .tabbar::after{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1}
+html.pm.bar1 .tabbar::after{background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.16),0 0 0 1px rgba(0,0,0,.05)}
 html.pm.bar1 .tab{color:#3A3A3F}
 html.pm.bar1 .tab[aria-selected="true"]{background:var(--accent);color:#fff;box-shadow:0 8px 18px -8px var(--accent)}
-html.pm.bar2 .tabbar{background:#1E1E22;border:0;box-shadow:0 14px 34px rgba(0,0,0,.28);-webkit-backdrop-filter:none;backdrop-filter:none}
+html.pm.bar2 .tabbar::after{background:#1E1E22;box-shadow:0 14px 34px rgba(0,0,0,.28)}
 html.pm.bar2 .tab{color:rgba(255,255,255,.62)}
 html.pm.bar2 .tab[aria-selected="true"]{background:rgba(255,255,255,.14);color:#fff;box-shadow:none}
 html.pm.bar3 .tabbar{left:0;right:0;bottom:0;padding:8px 10px calc(var(--bottom) + 8px);border-radius:26px 26px 0 0;background:#fff;border:0;border-top:1px solid rgba(0,0,0,.06);box-shadow:0 -10px 30px rgba(0,0,0,.09);-webkit-backdrop-filter:none;backdrop-filter:none}
