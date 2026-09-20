@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Martian+Mono:wght@500&display=swap">
-<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260918-2307). -->
+<!-- Касса ИП Гостюхин, стиль «Предметы» для всех видов с 17.09.2026 (стили «Сцены» ниже оставлены как основа). Исходник: Дашборд/app_scene.html, сборка: build_app.py (20260920-2241). -->
 <style>
 :root{
   color-scheme:dark;
@@ -481,7 +481,23 @@ html.pm{--ak:#3F86DD;--ak-bg:#E6F0FC;--ip:#1E9E63;--ip-bg:#E1F4EA}
 html.pm .ht.t5{--tone:#2A6FD6;background:linear-gradient(150deg,rgba(42,111,214,.10),#fff 55%)}
 .docic{width:46px;height:48px;border-radius:14px;background:#F2F1EE;display:grid;place-items:center;flex:none;color:var(--tone,#2A6FD6)}
 .docic svg{width:23px;height:23px}
+.sec .secv{font:600 13px Manrope,sans-serif;color:var(--muted);letter-spacing:0}
+.row.miss .t b{color:var(--muted);font-weight:500}.row.miss .v{color:var(--faint)}
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.qchip{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;border-radius:10px;background:var(--sep);font-size:11.5px;color:var(--faint);line-height:1.1}
+.qchip b{font:600 12.5px Manrope,sans-serif;color:var(--faint)}
+.qchip.on{background:var(--ground);color:var(--muted)}.qchip.on b{color:var(--ink)}
 .sec .secsub{font:600 12.5px Manrope,sans-serif;color:var(--muted);letter-spacing:0;text-align:right}
+.docsec{margin-top:6px}
+.docsec-h{display:flex;align-items:center;gap:12px;padding:6px 4px 10px}
+.docsec-h .docic{background:color-mix(in srgb,var(--tone) 14%,#fff);color:var(--tone);width:44px;height:44px;border-radius:14px}
+.docsec-h div{flex:1;min-width:0}
+.docsec-h b{display:block;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.03em;color:var(--ink)}
+.docsec-h span{display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-top:2px}
+.docsec-h em{font:800 13px Manrope,sans-serif;font-style:normal;color:var(--tone);background:color-mix(in srgb,var(--tone) 12%,#fff);padding:5px 10px;border-radius:999px}
+html.pm .docsec-list{box-shadow:inset 4px 0 0 var(--tone);background:linear-gradient(150deg,color-mix(in srgb,var(--tone) 9%,#fff),#fff 45%)}
+.docsec-list .row .dot{display:none}
+.docsec-list .row{padding-left:18px}
 .row.docf{align-items:center}
 .row.docf .t span{font-size:12.5px;color:var(--muted);white-space:normal}
 .row.docf .t b{white-space:normal;overflow:visible;font-size:15.5px;line-height:1.3;margin-top:2px;word-break:break-word}
@@ -875,7 +891,7 @@ function splitBlock(parts, total, desc) {
   if (!parts.length) return '';
   const t = total || sum(parts, p => p[2]);
   return '<div class="g pad"><div class="split">' + parts.map(p => '<i style="flex:' + p[2] + ';background:' + col(p[1]) + '"></i>').join('') + '</div>' +
-    '<div class="list inset">' + parts.map(p => '<div class="row"><span class="dot" style="background:' + col(p[1]) + '"></span><div class="t"><b>' + esc(p[0]) + '</b></div><div class="v">' + rub(p[2]) + '<small>' + pct(p[2] / t) + '</small></div></div>').join('') + '</div></div>';
+    '<div class="list inset">' + parts.map(p => (p[3] ? '<button class="row" data-open="' + p[3] + '">' : '<div class="row">') + '<span class="dot" style="background:' + col(p[1]) + '"></span><div class="t"><b>' + esc(p[0]) + '</b></div><div class="v">' + rub(p[2]) + '<small>' + pct(p[2] / t) + '</small></div>' + (p[3] ? chev + '</button>' : '</div>')).join('') + '</div></div>';
 }
 function hbars(rows) {
   const max = Math.max(1, ...rows.map(r => r.v));
@@ -1103,9 +1119,9 @@ function pmAfter() {
 }
 /* документы (решение Мельникова 18.09.2026, регламент 08): реквизиты банков, данные ИП, личные данные — из таблицы «Документы ИП Гостюхин».
    Кто что видит, решает «Касса — данные» (колонка «Кому видно»); здесь только показ, копирование и «Поделиться». */
-const DOC_SECS = { 'Реквизиты': ['Реквизиты', 'для договоров и счетов', '#2A6FD6'], 'ИП': ['Данные ИП', 'регистрация, налоги, коды', '#12915F'], 'Личные': ['Личные', 'паспорт, СНИЛС — только для своих', '#B8468C'] };
+const DOC_SECS = { 'Реквизиты': ['Реквизиты', 'для договоров и счетов', '#2A6FD6', 'wallet'], 'ИП': ['Данные ИП', 'регистрация, налоги, коды', '#12915F', 'form'], 'Личные': ['Личные', 'паспорт, СНИЛС — только для своих', '#B8468C', 'people'] };
 const DOC_HEAD = 'ИП Гостюхин';   // документ-шапка раздела «Реквизиты»: идёт первым в тексте каждой карточки банка
-const docMeta = sec => DOC_SECS[sec] || [sec, '', '#8A8987'];
+const docMeta = sec => DOC_SECS[sec] || [sec, '', '#8A8987', 'list'];
 function docList() {
   const out = [], idx = {};
   ((D && D.docs) || []).forEach(r => { if (!r || !r.doc) return; const k = r.sec + '|' + r.doc; if (idx[k] == null) { idx[k] = out.length; out.push({ sec: r.sec, doc: r.doc, rows: [] }); } out[idx[k]].rows.push(r); });
@@ -1179,7 +1195,7 @@ const SCREENS = {
       '<div class="total-s' + (ok ? '' : ' bad') + '"><i></i>' + (ok ? 'Сходится с таблицей' : 'Не сходится с таблицей') + '<span>· ' + netText() + '</span></div>' +
       '<button class="wallet" data-wallet aria-label="Раскрыть счета">' + card('c2', 'Точка', c.tochka) + card('c1', 'ТБанк', c.tbank) + '</button>' +
       '<div class="wallet-h"><span>Нажмите на карты — раскроются</span><button data-open="bank">Оба счёта</button></div>' +
-      '<div class="qa">' + q('calc', 'Посчитать<br>концерт', 'data-calc') + q('send', 'Отправить<br>заявку', 'data-shareform') +
+      '<div class="qa hot">' + q('calc', 'Посчитать<br>концерт', 'data-calc') + q('send', 'Отправить<br>заявку', 'data-shareform') +
         q('cal', 'Календарь', 'data-open="calendar"') + q('refresh', S.net === 'loading' ? 'Обновляю…' : 'Обновить<br>цифры', 'data-refresh') + '</div>' +
       '<div class="brief"><div class="h">' + SPARK + 'Коротко<small>по таблице и выпискам</small></div><p>' + esc(brief()) + '</p></div>' +
       '<div class="bento">' +
@@ -1240,7 +1256,7 @@ const SCREENS = {
     const parts = [['Гостюхин', 'gost', sum(incY, i => i.gost)], ['Брылин', 'bryl', sum(incY, i => i.bryl)], ['Петрушенко', 'petr', sum(incY, i => i.petr)], ['Админ', 'adm', sum(incY, i => i.adm)],
       ['Налоги и НДС', 'tax', sum(incY, i => i.nds + i.usn)], ['Менеджер и оборотка', 'oth', sum(incY, i => i.mgr + i.extra + i.obor)]];
     const byP = {}; incY.forEach(i => { const k = i.project || 'Без проекта'; byP[k] = byP[k] || { v: 0, n: 0 }; byP[k].v += i.sum; byP[k].n++; });
-    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: 'gost' })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: 'gost', open: 'kind:' + kindOf(k).key })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
     const ck = (ok, t, okT, badT) => '<div class="row"><span class="ic ' + (ok ? 'good">✓' : 'bad">!') + '</span><div class="t"><b>' + t + '</b><span>' + (ok ? okT : badT) + '</span></div></div>';
     const obor = M.people.findIndex(p => p.name === 'Оборотка');
     const years = []; for (let k = 2024; k <= +M.curY; k++) years.push(String(k));
@@ -1371,7 +1387,7 @@ const SCREENS = {
     const sel = S.gbar != null && S.gbar < months.length ? S.gbar : null, rm = sel != null ? months[sel] : null;
     const byT = pTypes(F.payY), tot = P.total;
     const byP = {}; F.accY.forEach(a => { const k = kindOf(a.project).key === 'oth' ? 'Возвраты и прочее' : a.project; byP[k] = byP[k] || { v: 0, n: 0, c: kindOf(a.project).c }; byP[k].v += a.share; byP[k].n++; });
-    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: o.c })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: o.c, open: 'kind:' + kindOf(k).key })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
     const lastPays = F.payY.slice(-5).reverse(), lastAcc = F.accY.filter(a => a.share !== 0).slice(-5).reverse();
     return (pre === '' ? previewBar() + lt('Мои деньги', 'доля с приходов и выплаты') : pre + '<div class="stack"><div class="g pad"><div class="tile-hh"><span class="lbl">АК-47 · ' + (tot < -0.5 ? 'переплата' : 'ещё должны мне') + '</span>' + wchip('ak') + '</div>' +
       '<div class="num big' + bigCls(rub(Math.abs(tot))) + '">' + rub(Math.abs(tot)) + '</div><div class="lbl mt4">начислено минус выплачено, лист «Сверка» · выплаченное уже лежит в ИП Петрушенко</div></div></div><div class="mt12"></div>') +
@@ -1406,9 +1422,9 @@ const SCREENS = {
     const y = S.gyear, F = gostYear(y), months = y === 'all' ? monthsUpTo(D.today) : monthsUpTo(D.today).filter(m => m.slice(0, 4) === y);
     const vals = months.map(m => sum(F.accY.filter(a => ym(a.date) === m), a => a.gost));
     const sel = S.gbar != null && S.gbar < months.length ? S.gbar : null, rm = sel != null ? months[sel] : null;
-    const kinds = KIND.map(k => [k.label, k.c, sum(F.accY.filter(a => kindOf(a.project) === k), a => a.gost)]);
+    const kinds = KIND.map(k => [k.label, k.c, sum(F.accY.filter(a => kindOf(a.project) === k), a => a.gost), 'kind:' + k.key]);
     const byP = {}; F.accY.forEach(a => { const k = kindOf(a.project).key === 'oth' ? 'Возвраты и прочее' : a.project; byP[k] = byP[k] || { v: 0, n: 0, c: kindOf(a.project).c }; byP[k].v += a.gost; byP[k].n++; });
-    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: o.c })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    const prow = Object.entries(byP).map(([k, o]) => ({ name: k, v: o.v, sub: o.n + ' пл.', c: o.c, open: 'kind:' + kindOf(k).key })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
     return previewBar() + lt('Моя доля', 'из чего сложились начисления') + '<div class="stack">' + yearSeg('data-gyear', y, G.years) +
       '<div class="g pad"><div class="lbl">Начислено ' + (y === 'all' ? 'за всё время' : 'за ' + y + ' год') + '</div><div class="num big' + bigCls(rub(F.accrued)) + '">' + rub(F.accrued) + '</div></div>' +
       (months.length ? sec('По месяцам') + '<div class="g pad chart"><div class="readout">' + (rm ? '<b>' + MONF[+rm.slice(5, 7) - 1] + ' ' + rm.slice(0, 4) + '</b> · ' + rub(vals[sel]) : 'Нажмите на столбик') + '</div>' +
@@ -1421,6 +1437,34 @@ const SCREENS = {
 function previewBar() {
   return S.role === 'admin' ? '<button class="preview" data-exitpreview>' + chevL + 'Так видит ' + (S.view === 'petr' ? 'Петрушенко' : 'Гостюхин') + ' · вернуться к общему виду</button>' : '';
 }
+
+/* ───────── тип дохода по контрагентам и кварталам (Монетизация и др.; просьба Мельникова 20.09.2026) ─────────
+   Контрагенты в реестре записаны по-разному («ООО "ВК Мьюзик Рекордз"», «ВК Мьюзик Рекордс»…) — здесь сводятся к одному имени.
+   Квартал — по дате прихода на счёт ИП, как в таблице. */
+const CP_ALIAS = [[/вк\s*мьюзик/i, 'ВК Мьюзик Рекордз'], [/ленград/i, 'Ленград'], [/^ооо\s*[«"']?а\+/i, 'А+'], [/ворнер/i, 'Ворнер Мьюзик'], [/сп\s*диджитал/i, 'СП Диджитал'], [/^ооо\s*[«"']?\s*э\.\s*р|эффектив/i, 'Эффектив Рекорд']];
+function cpName(s) {
+  s = String(s || '').trim();
+  for (const a of CP_ALIAS) if (a[0].test(s)) return a[1];
+  return s.replace(/^(ООО|ИП|АО|ОАО|ЗАО|ПАО)\s*/i, '').replace(/[«»"']/g, '').trim() || 'без контрагента';
+}
+const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+const qOf = d => d.slice(0, 4) + '-' + Math.ceil(+d.slice(5, 7) / 3);
+const qLabel = q => q.slice(5) + ' кв. ' + q.slice(0, 4);
+const qShort = q => q.slice(5) + 'кв ' + q.slice(2, 4);
+function qNext(q) { let y = +q.slice(0, 4), k = +q.slice(5) + 1; if (k > 4) { k = 1; y++; } return y + '-' + k; }
+function qPrev(q, n) { let y = +q.slice(0, 4), k = +q.slice(5); for (let i = 0; i < n; i++) { k--; if (k < 1) { k = 4; y--; } } return y + '-' + k; }
+function qRange(from, to) { const out = []; let q = from; while (q <= to && out.length < 60) { out.push(q); q = qNext(q); } return out; }
+function kindSrc() {
+  if (S.view === 'gost') return { rows: G.accruals, val: a => a.gost, years: G.years, lbl: 'Ваша доля' };
+  if (S.view === 'petr') return { rows: P.accruals, val: a => a.share, years: P.years, lbl: 'Ваша доля' };
+  const years = []; for (let y = 2024; y <= +M.curY; y++) years.push(String(y));
+  return { rows: M.incomes, val: i => i.sum, years, lbl: 'Сумма приходов', full: true };
+}
+function kindRows(k) {
+  const K = KIND.find(x => x.key === k) || KIND[KIND.length - 1], src = kindSrc();
+  return { K, src, all: src.rows.filter(r => kindOf(r.project) === K && src.val(r) !== 0).slice().sort(byDate) };
+}
+const nPay = n => nWord(n, 'платёж', 'платежа', 'платежей');
 
 /* ───────── подробные экраны ───────── */
 function owedItems() {
@@ -1435,7 +1479,7 @@ const SHEETS = {
     if (!list.length) return backBtn + lt('Документы') + '<p class="small">' + (D && D.docsError ? 'Таблица «Документы» не прочиталась: ' + esc(D.docsError) : 'Документов пока нет — строки добавляются в таблицу «Документы ИП Гостюхин».') + '</p>';
     const secs = Object.keys(DOC_SECS).filter(s => list.some(d => d.sec === s)).concat(list.map(d => d.sec).filter((s, i, a) => !DOC_SECS[s] && a.indexOf(s) === i));
     return backBtn + lt('Документы', 'нажмите на карточку — внутри поля и кнопка «Отправить»') + '<div class="stack">' +
-      secs.map(s => { const m = docMeta(s); return '<div class="sec"><span>' + esc(m[0]) + '</span><span class="secsub">' + esc(m[1]) + '</span></div><div class="g list">' + list.filter(d => d.sec === s).map(docRow).join('') + '</div>'; }).join('') +
+      secs.map(s => { const m = docMeta(s); return '<div class="docsec" style="--tone:' + m[2] + '"><div class="docsec-h"><span class="docic">' + icon(m[3]) + '</span><div><b>' + esc(m[0]) + '</b><span>' + esc(m[1]) + '</span></div><em>' + list.filter(d => d.sec === s).length + '</em></div><div class="g list docsec-list">' + list.filter(d => d.sec === s).map(docRow).join('') + '</div></div>'; }).join('') +
       '<p class="small">Нажатие на поле копирует его значение. «Отправить» открывает окно «Поделиться» с текстом карточки, как у заявки. Данные — таблица «Документы ИП Гостюхин»' + (S.view === 'full' ? '; правки в ней видны после «Обновить цифры»' : '') + '.</p></div>';
   },
   doc(name) {
@@ -1679,7 +1723,7 @@ const SHEETS = {
     const tot = G.total, n = G.advances.length;
     const partE = Math.min(G.earned, Math.max(tot, 0)), partA = Math.min(G.advSum, Math.max(tot, 0));
     const items = freeItems();
-    const kinds = KIND.map(k => [k.label, k.c, sum(items.filter(x => kindOf(x.a.project) === k), x => x.take)]);
+    const kinds = KIND.map(k => [k.label, k.c, sum(items.filter(x => kindOf(x.a.project) === k), x => x.take), 'kind:' + k.key]);
     return backBtn + lt('Мой остаток', 'по выпискам на ' + D.asOf) + '<div class="stack">' +
       '<div class="g pad"><div class="lbl">Начислено, но ещё не выведено</div><div class="num big' + bigCls(rub(tot)) + '">' + rub(tot) + '</div></div>' +
       splitBlock([['Можно выводить', 'gost', partE], ['Аванс за концерты впереди', 'adm', partA]], Math.max(partE + partA, 1)) +
@@ -1724,6 +1768,52 @@ const SHEETS = {
       '<p class="small">Все операции — во вкладке «Выплаты».</p></div>';
   },
   /* все начисления: за какой концерт сколько пришло (решение Мельникова 16.09.2026) */
+  /* тип дохода: контрагенты, кварталы, кто не заплатил */
+  kind(k) {
+    const { K, src, all } = kindRows(k), y = S.gyear, cur = qOf(D.today), curY = D.today.slice(0, 4);
+    if (!all.length) return backBtn + lt(K.label) + '<p class="small" style="margin:12px 6px">Приходов этого типа нет.</p>';
+    const rows = y === 'all' ? all : all.filter(r => r.date.slice(0, 4) === y);
+    const tot = sum(rows, src.val);
+    const byCp = {}; rows.forEach(r => { const n = cpName(r.cp), o = byCp[n] = byCp[n] || { v: 0, n: 0, last: '' }; o.v += src.val(r); o.n++; if (r.date > o.last) o.last = r.date; });
+    const cprows = Object.entries(byCp).map(([n, o]) => ({ name: n, v: o.v, sub: nPay(o.n) + ' · последний ' + dmy(o.last), c: K.c, open: 'kcp:' + k + '|' + n })).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    const qs = qRange(y === 'all' ? qOf(all[0].date) : y + '-1', (y === 'all' || y === curY) ? cur : y + '-4');
+    const qv = qs.map(q => sum(rows.filter(r => qOf(r.date) === q), src.val));
+    const sel = S.gbar != null && S.gbar < qs.length ? S.gbar : null;
+    const cards = qs.map((q, i) => {
+      if (sel != null && sel !== i) return '';
+      const got = {}; rows.filter(r => qOf(r.date) === q).forEach(r => { const n = cpName(r.cp); got[n] = got[n] || { v: 0, n: 0 }; got[n].v += src.val(r); got[n].n++; });
+      const prev = {}; all.forEach(r => { const rq = qOf(r.date); if (rq < q && rq >= qPrev(q, 4)) prev[cpName(r.cp)] = 1; });
+      const miss = Object.keys(prev).filter(n => !got[n]).sort();
+      const gotRows = Object.entries(got).sort((a, b) => b[1].v - a[1].v);
+      return '<div class="sec"><span>' + qLabel(q) + (q === cur ? ' · идёт' : '') + '</span><b class="secv">' + rub(qv[i]) + '</b></div><div class="g list">' +
+        gotRows.map(([n, o]) => '<button class="row" data-open="kcp:' + esc(k + '|' + n) + '"><span class="dot" style="background:' + col(K.c) + '"></span><div class="t"><b>' + esc(n) + '</b><span>' + nPay(o.n) + '</span></div><div class="v plus">' + plus(o.v) + '</div>' + chev + '</button>').join('') +
+        miss.map(n => '<button class="row miss" data-open="kcp:' + esc(k + '|' + n) + '"><span class="dot" style="background:var(--faint)"></span><div class="t"><b>' + esc(n) + '</b><span>' + (q === cur ? 'пока не пришло' : 'не пришло') + '</span></div><div class="v">—</div>' + chev + '</button>').join('') +
+        (!gotRows.length && !miss.length ? '<div class="row"><div class="t"><span>Приходов не было</span></div></div>' : '') + '</div>';
+    }).reverse().join('');
+    return backBtn + lt(K.label, 'кто платит и когда') + '<div class="stack">' + yearSeg('data-gyear', y, src.years) +
+      '<div class="g pad"><div class="lbl">' + src.lbl + (y === 'all' ? ' за всё время' : ' за ' + y + ' год') + '</div><div class="num big' + bigCls(rub(tot)) + '">' + rub(tot) + '</div>' +
+      '<div class="lbl mt4">' + nWord(rows.length, 'приход', 'прихода', 'приходов') + ' · ' + nWord(cprows.length, 'контрагент', 'контрагента', 'контрагентов') + '</div></div>' +
+      (qs.length > 1 ? sec('По кварталам') + '<div class="g pad chart"><div class="readout">' + (sel != null ? '<b>' + qLabel(qs[sel]) + '</b> · ' + rub(qv[sel]) : 'Нажмите на столбик, чтобы оставить один квартал') + '</div>' +
+        barChart(qs.map(qShort), [{ cls: 'bin', values: qv }], sel, 'data-gbar') + '</div>' : '') +
+      sec('По контрагентам') + (cprows.length ? hbars(cprows) : '<p class="small">Приходов за этот период нет.</p>') +
+      cards +
+      '<p class="small">Квартал — по дате прихода денег на счёт ИП, как в таблице. «Не пришло» — контрагент платил в одном из четырёх предыдущих кварталов, а в этом платежа пока нет.</p></div>';
+  },
+  /* один контрагент внутри типа дохода */
+  kcp(arg) {
+    const i = arg.indexOf('|'), k = arg.slice(0, i), name = arg.slice(i + 1);
+    const { K, src, all } = kindRows(k), cur = qOf(D.today);
+    const rows = all.filter(r => cpName(r.cp) === name).slice().reverse();
+    const tot = sum(rows, src.val);
+    const qs = rows.length ? qRange(qOf(rows[rows.length - 1].date), cur) : [];
+    const byQ = {}; rows.forEach(r => { const q = qOf(r.date); byQ[q] = (byQ[q] || 0) + src.val(r); });
+    const chips = qs.slice().reverse().map(q => '<span class="qchip' + (byQ[q] ? ' on' : '') + '">' + qShort(q) + '<b>' + (byQ[q] ? compact(byQ[q]) : (q === cur ? '…' : '—')) + '</b></span>').join('');
+    return backBtn + lt(esc(name), K.label) + '<div class="stack">' +
+      '<div class="g pad"><div class="lbl">' + src.lbl + ' за всё время</div><div class="num big' + bigCls(rub(tot)) + '">' + rub(tot) + '</div><div class="lbl mt4">' + nPay(rows.length) + (rows.length ? ' · с ' + dmy(rows[rows.length - 1].date) : '') + '</div></div>' +
+      (qs.length ? sec('По кварталам') + '<div class="g pad qgrid">' + chips + '</div>' : '') +
+      sec('Платежи') + (rows.length ? '<div class="g list">' + rows.map(r => '<div class="row">' + dateBadge(r.date) + '<div class="t"><b>' + esc(cap(String(r.name || '').trim())) + '</b><span>' + qLabel(qOf(r.date)) + (src.full ? ' · Гостюхин ' + fmt(r.gost) + NB + '₽' : '') + '</span></div><div class="v plus">' + plus(src.val(r)) + '</div></div>').join('') + '</div>' : '<p class="small">Платежей нет.</p>') +
+      '<p class="small">Кварталы — по дате прихода на счёт ИП. «—» — в этом квартале платежа не было, «…» — квартал ещё идёт.</p></div>';
+  },
   gacc() {
     const y = S.gyear, F = gostYear(y);
     const rows = F.accY.filter(a => a.gost !== 0).slice().reverse(), shown = S.showAll ? rows : rows.slice(0, 50);
@@ -1808,7 +1898,7 @@ function showTop(animate, keepScroll) {
   if (animate) { sheetViews.classList.remove('in'); void sheetViews.offsetWidth; sheetViews.classList.add('in'); }
   sheet.style.transform = '';
 }
-function openSheet(k, arg) { S.showAll = false; STACK.push([k, arg]); showTop(STACK.length > 1, false); sheet.classList.add('open'); sheet.setAttribute('aria-hidden', 'false'); }
+function openSheet(k, arg) { S.showAll = false; S.gbar = null; STACK.push([k, arg]); showTop(STACK.length > 1, false); sheet.classList.add('open'); sheet.setAttribute('aria-hidden', 'false'); }
 function goBack() { S.showAll = false; STACK.pop(); if (STACK.length) showTop(true, false); else closeSheet(); }
 function closeSheet() { STACK.length = 0; sheet.style.transform = ''; sheet.classList.remove('open'); sheet.setAttribute('aria-hidden', 'true'); }
 function setTab(id) { closeSheet(); S.tab = id; S.gbar = null; S.showAll = false; renderTabs(); renderView(true); }
