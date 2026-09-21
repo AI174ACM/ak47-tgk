@@ -1,6 +1,6 @@
 /* Служебный работник кассы. Страница берётся из сети, при отсутствии сети — из запаса.
    Данные (script.google.com) идут мимо: цифры хранит сама страница в localStorage. Шрифты (fonts/) кладутся в запас заранее. */
-const CACHE = 'kassa-20260921-1136';
+const CACHE = 'kassa-20260921-1147';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './fonts/Geologica-500-cyrillic.woff2', './fonts/Geologica-500-latin.woff2', './fonts/Geologica-600-cyrillic.woff2', './fonts/Geologica-600-latin.woff2', './fonts/Geologica-700-cyrillic.woff2', './fonts/Geologica-700-latin.woff2', './fonts/GolosText-400-cyrillic.woff2', './fonts/GolosText-400-latin.woff2', './fonts/GolosText-500-cyrillic.woff2', './fonts/GolosText-500-latin.woff2', './fonts/GolosText-600-cyrillic.woff2', './fonts/GolosText-600-latin.woff2', './fonts/Manrope-500-cyrillic.woff2', './fonts/Manrope-500-latin.woff2', './fonts/Manrope-600-cyrillic.woff2', './fonts/Manrope-600-latin.woff2', './fonts/Manrope-700-cyrillic.woff2', './fonts/Manrope-700-latin.woff2', './fonts/Manrope-800-cyrillic.woff2', './fonts/Manrope-800-latin.woff2', './fonts/MartianMono-500-cyrillic.woff2', './fonts/MartianMono-500-latin.woff2', './fonts/Unbounded-500-cyrillic.woff2', './fonts/Unbounded-500-latin.woff2', './fonts/Unbounded-600-cyrillic.woff2', './fonts/Unbounded-600-latin.woff2', './fonts/fonts.css'];
 
 self.addEventListener('install', e => {
