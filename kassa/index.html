@@ -1372,7 +1372,7 @@ function bankTileBx() {
   const cell = (k, v) => '<div><span class="lbl">' + k + '</span><b>' + (v == null ? '—' : fmt(v)) + '</b></div>';
   const line = u.n ? 'не разнесено ' + u.n + ' ' + opsWord(u.n) + (u.inSum ? ' · пришло ' + compact(u.inSum) : '') + (u.outSum ? ' · ушло ' + compact(u.outSum) : '')
     : 'всё разнесено' + (tot == null ? '' : Math.abs(tot - table) < 0.5 ? ' · сходится с таблицей' : ' · с таблицей расходится на ' + compact(Math.abs(tot - table)));
-  return '<button class="bx w" data-open="bankapi"><h5><span><i style="background:' + BANK_COL + '"></i>В банке сейчас · по API</span><span>' + (when ? 'на ' + esc(when) + ' ›' : '›') + '</span></h5>' +
+  return '<button class="bx w" data-open="bankapi"><h5><span><i style="background:' + BANK_COL + '"></i>В банке сейчас</span><span>' + (when ? 'на ' + esc(when) + ' ›' : '›') + '</span></h5>' +
     '<div class="kv three">' + cell('ТБанк', tb) + cell('Точка', tc) + cell('Всего', tot) + '</div><div class="bs">' + line + '</div></button>';
 }
 const netText = () => S.net === 'loading' ? 'обновляю цифры' : S.net === 'offline' ? 'нет связи, цифры на ' + D.asOf : 'выписки на ' + D.asOf;
@@ -1817,7 +1817,7 @@ const SHEETS = {
     const when = x => x && x.when ? ' · ' + dm(x.when.slice(0, 10)) + ', ' + x.when.slice(11, 16) : '';
     const row = (name, x, v) => '<div class="row"><div class="t"><b>' + name + '</b><span>' + (x ? 'счёт ' + esc(x.acct || '') + when(x) : 'нет данных') + '</span></div><div class="v">' + (v == null ? '—' : rub(v)) + '</div></div>';
     const list = (u.list || []).slice().reverse();
-    return backBtn + lt('В банке сейчас', 'по API банков, до разноски в таблицу') + '<div class="stack">' +
+    return backBtn + lt('В банке сейчас', 'до разноски в таблицу') + '<div class="stack">' +
       '<div class="g pad"><div class="lbl">Всего в банках</div><div class="num big">' + (tot == null ? '—' : rub(tot)) + '</div>' +
         (b.tochka && typeof b.tochka.avail === 'number' && tc != null && Math.abs(b.tochka.avail - tc) > 0.5 ? '<div class="lbl mt4">доступно в Точке ' + rub(b.tochka.avail) + '</div>' : '') + '</div>' +
       '<div class="g list">' + row('ТБанк', b.tbank, tb) + row('Точка', b.tochka, tc) + '</div>' +
